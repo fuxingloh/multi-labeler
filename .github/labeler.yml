@@ -65,8 +65,8 @@ labels:
 
       - label: "chore"
         matcher:
-          title: "^chore:.*"
-          commits: "^chore:.*"
+          title: "^chore(\((deps|ci)\))?:.*"
+          commits: "^chore(\((deps|ci)\))?:.*"
 
       - label: "docs"
         matcher:
