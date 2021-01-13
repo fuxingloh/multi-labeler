@@ -97,3 +97,11 @@ Thumbs.db
 # Ignore built ts files
 __tests__/runner/*
 lib/**/*
+
+# IntelliJ
+.idea/*
+!.idea/inspectionProfiles/
+!.idea/dictionaries/
+!.idea/vcs.xml
+!.idea/modules.xml
+!.idea/*.iml

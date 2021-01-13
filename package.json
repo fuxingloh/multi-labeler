@@ -1,8 +1,8 @@
 {
-  "name": "typescript-action",
+  "name": "multi-labeler",
   "version": "0.0.0",
   "private": true,
-  "description": "TypeScript template action",
+  "description": "Multi labeler for title, comments, description, commit messages or files.",
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",
@@ -15,14 +15,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/typescript-action.git"
+    "url": "git+https://github.com/fuxingloh/multi-labeler.git"
   },
   "keywords": [
     "actions",
     "node",
     "setup"
   ],
-  "author": "",
+  "author": "Fuxing Loh",
   "license": "MIT",
   "dependencies": {
     "@actions/core": "^1.2.6"
