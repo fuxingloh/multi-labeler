@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/labeler.iml" filepath="$PROJECT_DIR$/.idea/labeler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/multi-labeler.iml" filepath="$PROJECT_DIR$/.idea/multi-labeler.iml" />
     </modules>
   </component>
 </project>
