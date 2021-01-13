@@ -1,0 +1,75 @@
+version: 1
+
+labels:
+  - label: "WIP"
+    matcher:
+      title: "\[WIP\] .*"
+    status-success:
+      context: WIP
+      condition: always
+      description: PR is work in progress, remove [WIP] title to proceed.
+    fail: always # whether to fail action
+    sync: true # whether to remove label and status when matcher fails.
+
+  - label: "branch"
+    matcher:
+      branch: "^branch/.*"
+
+  - label: "app"
+    matcher:
+      files: "app/**"
+
+  - label: "web"
+    matcher:
+      files: [ "frontend/**", "web/**" ]
+
+  - label: "description"
+    matcher:
+      description: ".*|DESCRIPTION REGEX|.*"
+
+  - label: "comments"
+    matcher:
+      comments: ".*|COMMENTS REGEX|.*"
+
+  - status-failure:
+      context: Security
+      condition: any
+      description: Requires administrator override.
+    labels:
+      - label: "security"
+        matcher:
+          files: [ ".github/**", "security/**" ]
+
+      - label: "ci"
+        matcher:
+          files: [ ".github/workflow/**" ]
+
+  - status-failure:
+      context: Conventional Commits
+      condition: any
+      description: Missing conventional commits.
+    status-success:
+      context: Conventional Commits
+      condition: none
+      description: Ready for review & merge.
+    labels:
+      - label: "feat"
+        matcher:
+          title: "^feat:.*"
+          commits: "^feat:.*"
+
+      - label: "fix"
+        matcher:
+          title: "^fix:.*"
+          commits: "^fix:.*"
+
+      - label: "chore"
+        matcher:
+          title: "^chore:.*"
+          commits: "^chore:.*"
+
+      - label: "docs"
+        matcher:
+          title: "^docs:.*"
+          commits: "^docs:.*"
+

@@ -1,11 +1,16 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Multi Labeler'
+description: 'Multi labeler for title, comments, description, commit messages or files.'
+author: 'Fuxing Loh'
+
 inputs:
-  milliseconds: # change this
-    required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+  repo-token:
+    required: false
+    description: 'The GITHUB_TOKEN secret'
+  config-path:
+    description: 'The path for the label configurations'
+    default: '.github/labeler.yml'
+    required: false
+
 runs:
   using: 'node12'
   main: 'dist/index.js'
