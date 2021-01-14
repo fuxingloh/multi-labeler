@@ -54,6 +54,17 @@ labels:
       body: "(\\n|.)*- \\[x\\] bug(\\n|.)*"
 ```
 
+### PR Branch: RegEx
+
+```yml
+version: v1
+
+labels:
+  - label: "feat"
+    matcher:
+      branch: "^feat/.*"
+```
+
 ## Features
 
 - Append based multi-labeler, using `.github/labeler.yml` as config.

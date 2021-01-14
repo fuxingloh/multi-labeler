@@ -38,7 +38,7 @@ export async function run(
 
   const labels: string[] = getLabels(client, config)
 
-  if (labels) {
+  if (labels.length) {
     await client.issues.addLabels({
       owner: github.context.repo.owner,
       repo: github.context.repo.repo,

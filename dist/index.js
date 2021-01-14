@@ -224,6 +224,52 @@ exports.default = match;
 
 /***/ }),
 
+/***/ 5832:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const github = __importStar(__nccwpck_require__(5438));
+const utils_1 = __nccwpck_require__(5165);
+function match(client, config) {
+    var _a;
+    const payload = github.context.payload.pull_request;
+    const ref = (_a = payload === null || payload === void 0 ? void 0 : payload.head) === null || _a === void 0 ? void 0 : _a.ref;
+    if (!ref) {
+        return [];
+    }
+    return config.labels
+        .filter(value => {
+        var _a;
+        return utils_1.matcherRegex({ regex: (_a = value.matcher) === null || _a === void 0 ? void 0 : _a.branch, text: ref });
+    })
+        .map(value => value.label);
+}
+exports.default = match;
+
+
+/***/ }),
+
 /***/ 6897:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -237,11 +283,9 @@ exports.getLabels = void 0;
 const lodash_1 = __nccwpck_require__(250);
 const title_1 = __importDefault(__nccwpck_require__(7351));
 const body_1 = __importDefault(__nccwpck_require__(5404));
+const branch_1 = __importDefault(__nccwpck_require__(5832));
 function getLabels(client, config) {
-    return lodash_1.uniq([
-        ...title_1.default(client, config),
-        ...body_1.default(client, config),
-    ]);
+    return lodash_1.uniq([...title_1.default(client, config), ...body_1.default(client, config), ...branch_1.default(client, config)]);
 }
 exports.getLabels = getLabels;
 
@@ -5436,7 +5480,7 @@ exports.some = RA.some;
 /**
  * @since 2.9.0
  */
-exports.Do = 
+exports.Do =
 /*#__PURE__*/
 exports.of({});
 /**
@@ -6039,7 +6083,7 @@ exports.chainFirst = exports.chainFirstW;
  * @category combinators
  * @since 2.0.0
  */
-exports.flatten = 
+exports.flatten =
 /*#__PURE__*/
 exports.chain(function_1.identity);
 /**
@@ -6072,7 +6116,7 @@ exports.extend = extend;
  * @category combinators
  * @since 2.0.0
  */
-exports.duplicate = 
+exports.duplicate =
 /*#__PURE__*/
 exports.extend(function_1.identity);
 /**
@@ -6648,7 +6692,7 @@ exports.exists = exists;
 /**
  * @since 2.9.0
  */
-exports.Do = 
+exports.Do =
 /*#__PURE__*/
 exports.of({});
 /**
@@ -6756,7 +6800,7 @@ exports.traverseArray = traverseArray;
  *
  * @since 2.9.0
  */
-exports.sequenceArray = 
+exports.sequenceArray =
 /*#__PURE__*/
 exports.traverseArray(function_1.identity);
 
@@ -7497,7 +7541,7 @@ exports.nonEmptyArray = {
 /**
  * @since 2.9.0
  */
-exports.Do = 
+exports.Do =
 /*#__PURE__*/
 exports.of({});
 /**
@@ -8008,7 +8052,7 @@ exports.chainFirst = chainFirst;
  * @category combinators
  * @since 2.0.0
  */
-exports.flatten = 
+exports.flatten =
 /*#__PURE__*/
 exports.chain(function_1.identity);
 /**
@@ -8076,7 +8120,7 @@ exports.extend = extend;
  * @category combinators
  * @since 2.0.0
  */
-exports.duplicate = 
+exports.duplicate =
 /*#__PURE__*/
 exports.extend(function_1.identity);
 /**
@@ -8632,7 +8676,7 @@ exports.getRefinement = getRefinement;
 /**
  * @since 2.9.0
  */
-exports.Do = 
+exports.Do =
 /*#__PURE__*/
 exports.of({});
 /**
@@ -8715,7 +8759,7 @@ exports.traverseArray = traverseArray;
  *
  * @since 2.9.0
  */
-exports.sequenceArray = 
+exports.sequenceArray =
 /*#__PURE__*/
 exports.traverseArray(function_1.identity);
 
@@ -9009,9 +9053,9 @@ exports.URI = 'Ord';
  * @category instances
  * @since 2.0.0
  */
-exports.ordDate = 
+exports.ordDate =
 /*#__PURE__*/
-function_1.pipe(exports.ordNumber, 
+function_1.pipe(exports.ordNumber,
 /*#__PURE__*/
 exports.contramap(function (date) { return date.valueOf(); }));
 /**
@@ -10535,7 +10579,7 @@ exports.filterMap = filterMap;
  * @category Compactable
  * @since 2.5.0
  */
-exports.compact = 
+exports.compact =
 /*#__PURE__*/
 exports.filterMap(function_1.identity);
 /**
@@ -10622,7 +10666,7 @@ exports.extend = extend;
  * @category combinators
  * @since 2.5.0
  */
-exports.duplicate = 
+exports.duplicate =
 /*#__PURE__*/
 exports.extend(function_1.identity);
 /**
@@ -11067,7 +11111,7 @@ exports.some = some;
 /**
  * @since 2.9.0
  */
-exports.Do = 
+exports.Do =
 /*#__PURE__*/
 exports.of({});
 /**
@@ -11762,7 +11806,7 @@ exports.readonlyNonEmptyArray = {
 /**
  * @since 2.9.0
  */
-exports.Do = 
+exports.Do =
 /*#__PURE__*/
 exports.of({});
 /**
@@ -11888,7 +11932,7 @@ exports.collect = collect;
  * @category destructors
  * @since 2.5.0
  */
-exports.toReadonlyArray = 
+exports.toReadonlyArray =
 /*#__PURE__*/
 collect(function (k, a) { return [k, a]; });
 function toUnfoldable(U) {
@@ -13487,7 +13531,7 @@ exports.constant = constant;
  *
  * @since 2.0.0
  */
-exports.constTrue = 
+exports.constTrue =
 /*#__PURE__*/
 constant(true);
 /**
@@ -13495,7 +13539,7 @@ constant(true);
  *
  * @since 2.0.0
  */
-exports.constFalse = 
+exports.constFalse =
 /*#__PURE__*/
 constant(false);
 /**
@@ -13503,7 +13547,7 @@ constant(false);
  *
  * @since 2.0.0
  */
-exports.constNull = 
+exports.constNull =
 /*#__PURE__*/
 constant(null);
 /**
@@ -13511,7 +13555,7 @@ constant(null);
  *
  * @since 2.0.0
  */
-exports.constUndefined = 
+exports.constUndefined =
 /*#__PURE__*/
 constant(undefined);
 /**
@@ -14118,11 +14162,11 @@ var Either_1 = __nccwpck_require__(7534);
 var Type = /** @class */ (function () {
     function Type(
     /** a unique name for this codec */
-    name, 
+    name,
     /** a custom type guard */
-    is, 
+    is,
     /** succeeds if a value of type I can be decoded to a value of type A */
-    validate, 
+    validate,
     /** converts a value of type A to a value of type O */
     encode) {
         this.name = name;
@@ -14347,7 +14391,7 @@ exports.number = new NumberType();
 var BigIntType = /** @class */ (function (_super) {
     __extends(BigIntType, _super);
     function BigIntType() {
-        var _this = _super.call(this, 'bigint', 
+        var _this = _super.call(this, 'bigint',
         // tslint:disable-next-line: valid-typeof
         function (u) { return typeof u === 'bigint'; }, function (u, c) { return (_this.is(u) ? exports.success(u) : exports.failure(u, c)); }, exports.identity) || this;
         /**
@@ -14439,7 +14483,7 @@ exports.UnknownRecord = new AnyDictionaryType();
 var FunctionType = /** @class */ (function (_super) {
     __extends(FunctionType, _super);
     function FunctionType() {
-        var _this = _super.call(this, 'Function', 
+        var _this = _super.call(this, 'Function',
         // tslint:disable-next-line:strict-type-predicates
         function (u) { return typeof u === 'function'; }, function (u, c) { return (_this.is(u) ? exports.success(u) : exports.failure(u, c)); }, exports.identity) || this;
         /**
@@ -15255,11 +15299,11 @@ exports.strict = function (props, name) {
  */
 var TaggedUnionType = /** @class */ (function (_super) {
     __extends(TaggedUnionType, _super);
-    function TaggedUnionType(name, 
+    function TaggedUnionType(name,
     // tslint:disable-next-line: deprecation
-    is, 
+    is,
     // tslint:disable-next-line: deprecation
-    validate, 
+    validate,
     // tslint:disable-next-line: deprecation
     encode, codecs, tag) {
         var _this = _super.call(this, name, is, validate, encode, codecs) /* istanbul ignore next */ // <= workaround for https://github.com/Microsoft/TypeScript/issues/13455
@@ -15390,7 +15434,7 @@ exports.getDefaultContext /* istanbul ignore next */ = function (decoder) { retu
 var NeverType = /** @class */ (function (_super) {
     __extends(NeverType, _super);
     function NeverType() {
-        var _this = _super.call(this, 'never', function (_) { return false; }, function (u, c) { return exports.failure(u, c); }, 
+        var _this = _super.call(this, 'never', function (_) { return false; }, function (u, c) { return exports.failure(u, c); },
         /* istanbul ignore next */
         function () {
             throw new Error('cannot encode never');
@@ -15516,11 +15560,11 @@ exports.dictionary = record;
  */
 var StrictType = /** @class */ (function (_super) {
     __extends(StrictType, _super);
-    function StrictType(name, 
+    function StrictType(name,
     // tslint:disable-next-line: deprecation
-    is, 
+    is,
     // tslint:disable-next-line: deprecation
-    validate, 
+    validate,
     // tslint:disable-next-line: deprecation
     encode, props) {
         var _this = _super.call(this, name, is, validate, encode) || this;
@@ -39233,7 +39277,7 @@ module.exports = require("zlib");;
 /************************************************************************/
 /******/ 	// The module cache
 /******/ 	var __webpack_module_cache__ = {};
-/******/ 	
+/******/
 /******/ 	// The require function
 /******/ 	function __nccwpck_require__(moduleId) {
 /******/ 		// Check if module is in cache
@@ -39246,7 +39290,7 @@ module.exports = require("zlib");;
 /******/ 			loaded: false,
 /******/ 			exports: {}
 /******/ 		};
-/******/ 	
+/******/
 /******/ 		// Execute the module function
 /******/ 		var threw = true;
 /******/ 		try {
@@ -39255,14 +39299,14 @@ module.exports = require("zlib");;
 /******/ 		} finally {
 /******/ 			if(threw) delete __webpack_module_cache__[moduleId];
 /******/ 		}
-/******/ 	
+/******/
 /******/ 		// Flag the module as loaded
 /******/ 		module.loaded = true;
-/******/ 	
+/******/
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-/******/ 	
+/******/
 /************************************************************************/
 /******/ 	/* webpack/runtime/node module decorator */
 /******/ 	(() => {
@@ -39272,9 +39316,9 @@ module.exports = require("zlib");;
 /******/ 			return module;
 /******/ 		};
 /******/ 	})();
-/******/ 	
+/******/
 /******/ 	/* webpack/runtime/compat */
-/******/ 	
+/******/
 /******/ 	__nccwpck_require__.ab = __dirname + "/";/************************************************************************/
 /******/ 	// module exports must be returned from runtime so entry inlining is disabled
 /******/ 	// startup
