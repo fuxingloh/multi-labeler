@@ -36,6 +36,13 @@ describe('invalid config', () => {
       /bad indentation of a mapping entry at .+/
     )
   })
+
+  it('matcher-branch-invalid.yml', function () {
+    expect(() => parseConfig('invalid/matcher-branch-invalid.yml')).toThrow(
+      /labeler\.yml parse error:/
+    )
+  })
+
   it('matcher-comments-invalid.yml', function () {
     expect(() => parseConfig('invalid/matcher-comments-invalid.yml')).toThrow(
       /labeler\.yml parse error:/

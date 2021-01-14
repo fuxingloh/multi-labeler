@@ -37,9 +37,10 @@ const io_ts_reporters_1 = __importDefault(__nccwpck_require__(51));
 const Either_1 = __nccwpck_require__(7534);
 const Matcher = t.partial({
     title: t.string,
-    commits: t.string,
     description: t.string,
     comments: t.string,
+    commits: t.string,
+    branch: t.string,
     files: t.union([t.string, t.array(t.string)])
 });
 const Label = t.type({
