@@ -5,7 +5,7 @@ author: 'Fuxing Loh'
 inputs:
   github-token:
     description: 'The GITHUB_TOKEN secret'
-    required: true
+    required: false
   config-path:
     description: 'The path for the label configurations'
     default: '.github/labeler.yml'
