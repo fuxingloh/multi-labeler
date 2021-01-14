@@ -10,15 +10,15 @@ export default function match(
 ): Matched | undefined {
   const payload =
     github.context.payload.pull_request || github.context.payload.issue
-  const title = payload?.title
+  const body = payload?.body
 
-  if (!title) {
+  if (!body) {
     return
   }
 
   const labels = config.labels
     .filter(value => {
-      return matcherRegex(value.matcher?.title, title)
+      return matcherRegex(value.matcher?.body, body)
     })
     .map(value => value.label)
 

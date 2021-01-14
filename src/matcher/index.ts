@@ -4,6 +4,7 @@ import {uniq} from 'lodash'
 import {Config} from '../config'
 
 import title from './title'
+import body from './body'
 
 export interface Matched {
   append: string[]
@@ -22,6 +23,7 @@ export function getMatched(
   }
 
   append(labels, title(client, config))
+  append(labels, body(client, config))
 
   return {
     append: uniq(labels.append)
