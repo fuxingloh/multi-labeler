@@ -36,7 +36,7 @@ export async function run(
     )
   }
 
-  const labels: string[] = getLabels(client, config)
+  const labels: string[] = await getLabels(client, config)
 
   if (labels.length) {
     await client.issues.addLabels({
