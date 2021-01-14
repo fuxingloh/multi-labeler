@@ -5,6 +5,7 @@ import {Config} from '../config'
 
 import title from './title'
 import body from './body'
+import comment from './comment'
 import branch from './branch'
 import commits from './commits'
 import files from './files'
@@ -16,6 +17,7 @@ export async function getLabels(
   return uniq([
     ...title(client, config),
     ...body(client, config),
+    ...comment(client, config),
     ...branch(client, config),
     ...(await commits(client, config)),
     ...(await files(client, config))
