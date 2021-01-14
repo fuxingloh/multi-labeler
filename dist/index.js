@@ -179,6 +179,54 @@ labeler_1.run(githubToken, configPath).catch(error => {
 
 /***/ }),
 
+/***/ 5404:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const github = __importStar(__nccwpck_require__(5438));
+const utils_1 = __nccwpck_require__(5165);
+function match(client, config) {
+    const payload = github.context.payload.pull_request || github.context.payload.issue;
+    const body = payload === null || payload === void 0 ? void 0 : payload.body;
+    if (!body) {
+        return;
+    }
+    const labels = config.labels
+        .filter(value => {
+        var _a;
+        return utils_1.matcherRegex((_a = value.matcher) === null || _a === void 0 ? void 0 : _a.body, body);
+    })
+        .map(value => value.label);
+    return {
+        append: labels
+    };
+}
+exports.default = match;
+
+
+/***/ }),
+
 /***/ 6897:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -191,6 +239,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getMatched = void 0;
 const lodash_1 = __nccwpck_require__(250);
 const title_1 = __importDefault(__nccwpck_require__(7351));
+const body_1 = __importDefault(__nccwpck_require__(5404));
 function append(obj, matched) {
     obj.append.push(...((matched === null || matched === void 0 ? void 0 : matched.append) || []));
 }
@@ -199,6 +248,7 @@ function getMatched(client, config) {
         append: []
     };
     append(labels, title_1.default(client, config));
+    append(labels, body_1.default(client, config));
     return {
         append: lodash_1.uniq(labels.append)
     };
@@ -237,13 +287,14 @@ const github = __importStar(__nccwpck_require__(5438));
 const utils_1 = __nccwpck_require__(5165);
 function match(client, config) {
     const payload = github.context.payload.pull_request || github.context.payload.issue;
-    if (!payload) {
+    const title = payload === null || payload === void 0 ? void 0 : payload.title;
+    if (!title) {
         return;
     }
     const labels = config.labels
         .filter(value => {
         var _a;
-        return utils_1.matcherRegex((_a = value.matcher) === null || _a === void 0 ? void 0 : _a.title, payload === null || payload === void 0 ? void 0 : payload.title);
+        return utils_1.matcherRegex((_a = value.matcher) === null || _a === void 0 ? void 0 : _a.title, title);
     })
         .map(value => value.label);
     return {

@@ -21,7 +21,7 @@ const config: Config = {
       matcher: {
         body: '.* something .*'
       }
-    },
+    }
   ]
 }
 
