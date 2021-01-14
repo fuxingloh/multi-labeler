@@ -1,4 +1,3 @@
-import {Matched} from './'
 import {Config} from '../config'
 import {GitHub} from '@actions/github/lib/utils'
 import * as github from '@actions/github'
@@ -7,22 +6,18 @@ import {matcherRegex} from './utils'
 export default function match(
   client: InstanceType<typeof GitHub>,
   config: Config
-): Matched | undefined {
+): string[] {
   const payload =
     github.context.payload.pull_request || github.context.payload.issue
   const body = payload?.body
 
   if (!body) {
-    return
+    return []
   }
 
-  const labels = config.labels
+  return config.labels
     .filter(value => {
-      return matcherRegex(value.matcher?.body, body)
+      return matcherRegex({regex: value.matcher?.body, text: body})
     })
     .map(value => value.label)
-
-  return {
-    append: labels
-  }
 }

@@ -1,9 +1,10 @@
-export function matcherRegex(regex?: string, text?: string): boolean {
-  if (!regex) {
-    return false
-  }
+interface MatcherRegexParams {
+  regex?: string
+  text: string
+}
 
-  if (!text) {
+export function matcherRegex({regex, text}: MatcherRegexParams): boolean {
+  if (!regex) {
     return false
   }
 

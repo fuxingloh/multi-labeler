@@ -1,10 +1,10 @@
-import match from '../src/matcher/title'
+import match from '../../src/matcher/title'
 import * as github from '@actions/github'
-import {Config} from '../src/config'
+import {Config} from '../../src/config'
 
 function getMatchedLabels(config: Config): string[] {
   // @ts-ignore
-  return match(null, config)?.append || []
+  return match(null, config)
 }
 
 const config: Config = {
@@ -37,8 +37,13 @@ const config: Config = {
   ]
 }
 
-describe('pull_request', () => {
-  it('should be empty', async function () {
+describe('empty', function () {
+  it('no payload should be undefined', async function () {
+    github.context.payload = {}
+    expect(getMatchedLabels(config)).toEqual([])
+  })
+
+  it('pull_request should be empty', async function () {
     github.context.payload = {
       pull_request: {
         number: 1,
@@ -46,10 +51,22 @@ describe('pull_request', () => {
       }
     }
 
-    const labels = getMatchedLabels(config)
-    expect(labels).toEqual([])
+    expect(getMatchedLabels(config)).toEqual([])
   })
 
+  it('issue should be empty', async function () {
+    github.context.payload = {
+      issue: {
+        number: 1,
+        title: 'nothing interesting'
+      }
+    }
+
+    expect(getMatchedLabels(config)).toEqual([])
+  })
+});
+
+describe('pull_request', () => {
   it('should have feat', async function () {
     github.context.payload = {
       pull_request: {
@@ -100,18 +117,6 @@ describe('pull_request', () => {
 })
 
 describe('issue', () => {
-  it('should be empty', async function () {
-    github.context.payload = {
-      issue: {
-        number: 1,
-        title: 'nothing interesting'
-      }
-    }
-
-    const labels = getMatchedLabels(config)
-    expect(labels).toEqual([])
-  })
-
   it('should have feat', async function () {
     github.context.payload = {
       issue: {

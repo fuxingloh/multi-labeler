@@ -6,26 +6,9 @@ import {Config} from '../config'
 import title from './title'
 import body from './body'
 
-export interface Matched {
-  append: string[]
-}
-
-function append(obj: Matched, matched?: Matched): void {
-  obj.append.push(...(matched?.append || []))
-}
-
-export function getMatched(
+export function getLabels(
   client: InstanceType<typeof GitHub>,
   config: Config
-): Matched {
-  const labels: Matched = {
-    append: []
-  }
-
-  append(labels, title(client, config))
-  append(labels, body(client, config))
-
-  return {
-    append: uniq(labels.append)
-  }
+): string[] {
+  return uniq([...title(client, config), ...body(client, config)])
 }

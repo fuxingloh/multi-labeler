@@ -126,13 +126,13 @@ function run(githubToken, configPath) {
         if (!(payload === null || payload === void 0 ? void 0 : payload.number)) {
             throw new Error('Could not get issue_number from pull_request or issue from context');
         }
-        const labels = matcher_1.getMatched(client, config);
-        if (labels.append) {
+        const labels = matcher_1.getLabels(client, config);
+        if (labels) {
             yield client.issues.addLabels({
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
                 issue_number: payload.number,
-                labels: labels.append
+                labels: labels
             });
         }
     });
@@ -210,17 +210,14 @@ function match(client, config) {
     const payload = github.context.payload.pull_request || github.context.payload.issue;
     const body = payload === null || payload === void 0 ? void 0 : payload.body;
     if (!body) {
-        return;
+        return [];
     }
-    const labels = config.labels
+    return config.labels
         .filter(value => {
         var _a;
-        return utils_1.matcherRegex((_a = value.matcher) === null || _a === void 0 ? void 0 : _a.body, body);
+        return utils_1.matcherRegex({ regex: (_a = value.matcher) === null || _a === void 0 ? void 0 : _a.body, text: body });
     })
         .map(value => value.label);
-    return {
-        append: labels
-    };
 }
 exports.default = match;
 
@@ -236,24 +233,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getMatched = void 0;
+exports.getLabels = void 0;
 const lodash_1 = __nccwpck_require__(250);
 const title_1 = __importDefault(__nccwpck_require__(7351));
 const body_1 = __importDefault(__nccwpck_require__(5404));
-function append(obj, matched) {
-    obj.append.push(...((matched === null || matched === void 0 ? void 0 : matched.append) || []));
+function getLabels(client, config) {
+    return lodash_1.uniq([
+        ...title_1.default(client, config),
+        ...body_1.default(client, config),
+    ]);
 }
-function getMatched(client, config) {
-    const labels = {
-        append: []
-    };
-    append(labels, title_1.default(client, config));
-    append(labels, body_1.default(client, config));
-    return {
-        append: lodash_1.uniq(labels.append)
-    };
-}
-exports.getMatched = getMatched;
+exports.getLabels = getLabels;
 
 
 /***/ }),
@@ -289,17 +279,14 @@ function match(client, config) {
     const payload = github.context.payload.pull_request || github.context.payload.issue;
     const title = payload === null || payload === void 0 ? void 0 : payload.title;
     if (!title) {
-        return;
+        return [];
     }
-    const labels = config.labels
+    return config.labels
         .filter(value => {
         var _a;
-        return utils_1.matcherRegex((_a = value.matcher) === null || _a === void 0 ? void 0 : _a.title, title);
+        return utils_1.matcherRegex({ regex: (_a = value.matcher) === null || _a === void 0 ? void 0 : _a.title, text: title });
     })
         .map(value => value.label);
-    return {
-        append: labels
-    };
 }
 exports.default = match;
 
@@ -313,11 +300,8 @@ exports.default = match;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.matcherRegex = void 0;
-function matcherRegex(regex, text) {
+function matcherRegex({ regex, text }) {
     if (!regex) {
-        return false;
-    }
-    if (!text) {
         return false;
     }
     return new RegExp(regex).test(text);

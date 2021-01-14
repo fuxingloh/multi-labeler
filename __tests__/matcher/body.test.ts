@@ -1,10 +1,10 @@
-import match from '../src/matcher/body'
+import match from '../../src/matcher/body'
 import * as github from '@actions/github'
-import {Config} from '../src/config'
+import {Config} from '../../src/config'
 
 function getMatchedLabels(config: Config): string[] {
   // @ts-ignore
-  return match(null, config)?.append || []
+  return match(null, config)
 }
 
 const config: Config = {
@@ -25,19 +25,39 @@ const config: Config = {
   ]
 }
 
-describe('pull_request', () => {
-  it('should be empty', async function () {
+describe('empty', function () {
+  it('should be undefined', async function () {
+    github.context.payload = {}
+    expect(getMatchedLabels(config)).toEqual([])
+  })
+
+  it('pull_request should be empty', async function () {
     github.context.payload = {
       pull_request: {
         number: 1,
-        title: 'empty'
+        title: 'empty',
+        body: 'nothing'
       }
     }
 
-    const labels = getMatchedLabels(config)
-    expect(labels).toEqual([])
+    expect(getMatchedLabels(config)).toEqual([])
   })
 
+  it('issue should be empty', async function () {
+    github.context.payload = {
+      issue: {
+        number: 1,
+        title: 'empty',
+        body: 'nothing'
+      }
+    }
+
+    expect(getMatchedLabels(config)).toEqual([])
+  })
+
+});
+
+describe('pull_request', () => {
   it('should have checkbox', async function () {
     github.context.payload = {
       pull_request: {
@@ -79,18 +99,6 @@ describe('pull_request', () => {
 })
 
 describe('issue', () => {
-  it('should be empty', async function () {
-    github.context.payload = {
-      issue: {
-        number: 1,
-        title: 'empty'
-      }
-    }
-
-    const labels = getMatchedLabels(config)
-    expect(labels).toEqual([])
-  })
-
   it('should have checkbox', async function () {
     github.context.payload = {
       issue: {
