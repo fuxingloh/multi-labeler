@@ -1,14 +1,12 @@
 import {GitHub} from '@actions/github/lib/utils'
 
-import {uniq, uniqBy} from 'lodash'
-import {LabelerConfig} from '../config'
+import {uniq} from 'lodash'
+import {Config} from '../config'
 
 import title from './title'
 
 export interface Matched {
-  add: string[]
-  remove: string[]
-  status: Status[]
+  append: string[]
 }
 
 export interface Status {
@@ -18,28 +16,20 @@ export interface Status {
 }
 
 function append(obj: Matched, values: Matched): void {
-  obj.add.push(...values.add)
-  obj.remove.push(...values.remove)
+  obj.append.push(...values.append)
 }
 
 export function getMatched(
   client: InstanceType<typeof GitHub>,
-  config: LabelerConfig
+  config: Config
 ): Matched {
   const labels: Matched = {
-    add: [],
-    remove: [],
-    status: []
+    append: []
   }
 
   append(labels, title(client, config))
 
-  // TODO(fuxing): get all matched conditions then generate add/remove/status
-
-  // Won't attempt to dedupe remove from add, as it is a user labeler.config error.
   return {
-    add: uniq(labels.add),
-    remove: uniq(labels.remove),
-    status: uniqBy(labels.status, 'context')
+    append: uniq(labels.append),
   }
 }
