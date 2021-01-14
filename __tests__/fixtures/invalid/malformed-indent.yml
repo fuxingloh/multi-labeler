@@ -1,0 +1,7 @@
+version: v1
+
+labels:
+  - label: "invalid-indent"
+      matcher:
+        title: "1"
+

@@ -1,0 +1,6 @@
+version: v1
+
+labels:
+  - label: "not escaped properly"
+    matcher:
+      title: "\[0-9\]"
