@@ -33,11 +33,18 @@ describe('main core and context', () => {
           }
         },
         pulls: {
-          listCommits(params) {
-            return {
-              data: []
+          listCommits: {
+            endpoint: {
+              // @ts-ignore
+              merge() {
+                return {}
+              }
             }
           }
+        },
+        // @ts-ignore
+        paginate(params): Promise<any[]> {
+          return Promise.resolve([])
         }
       }
     })
