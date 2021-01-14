@@ -13,7 +13,7 @@ const config: Config = {
     {
       label: 'checkbox',
       matcher: {
-        body: '.*\\n- \\[x\\] checkbox\\n.*'
+        body: '(\\n|.)*- \\[x\\] checkbox(\\n|.)*'
       }
     },
     {

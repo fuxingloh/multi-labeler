@@ -37,7 +37,7 @@ labels:
 
   - label: "test:body"
     matcher:
-      body: ".*\\n- \\[x\\] test\\n.*"
+      body: "(\\n|.)*- \\[x\\] test(\\n|.)*"
 
   - label: "comments"
     matcher:
