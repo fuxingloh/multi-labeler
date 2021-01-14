@@ -1,7 +1,7 @@
 import * as github from '@actions/github'
 import {GitHub} from '@actions/github/lib/utils'
 import {Config, parse} from './config'
-import {Matched, getMatched} from './matcher'
+import {getLabels} from './matcher'
 
 async function getConfig(
   client: InstanceType<typeof GitHub>,
@@ -36,14 +36,14 @@ export async function run(
     )
   }
 
-  const labels: Matched = getMatched(client, config)
+  const labels: string[] = getLabels(client, config)
 
-  if (labels.append) {
+  if (labels) {
     await client.issues.addLabels({
       owner: github.context.repo.owner,
       repo: github.context.repo.repo,
       issue_number: payload!.number,
-      labels: labels.append
+      labels: labels
     })
   }
 }

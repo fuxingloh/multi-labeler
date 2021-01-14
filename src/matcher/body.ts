@@ -9,15 +9,15 @@ export default function match(
 ): string[] {
   const payload =
     github.context.payload.pull_request || github.context.payload.issue
-  const title = payload?.title
+  const body = payload?.body
 
-  if (!title) {
+  if (!body) {
     return []
   }
 
   return config.labels
     .filter(value => {
-      return matcherRegex({regex: value.matcher?.title, text: title})
+      return matcherRegex({regex: value.matcher?.body, text: body})
     })
     .map(value => value.label)
 }

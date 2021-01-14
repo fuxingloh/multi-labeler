@@ -51,7 +51,7 @@ version: v1
 labels:
   - label: "bug"
     matcher:
-      body: "- [x] bug"
+      body: "(\\n|.)*- \\[x\\] bug(\\n|.)*"
 ```
 
 ## Features

@@ -73,6 +73,16 @@ describe('main core and context', () => {
     await run('abc', '.github/labeler.yml')
   })
 
+  it('no issue or pr should fail', async function () {
+    github.context.payload = {}
+
+    await expect(async () => {
+      await run('token', '.github/labeler.yml')
+    }).rejects.toThrow(
+      'Could not get issue_number from pull_request or issue from context'
+    )
+  })
+
   describe('basic.yml', () => {
     beforeEach(async () => {
       labels = []
