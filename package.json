@@ -12,7 +12,7 @@
     "package": "ncc build --source-map --license licenses.txt",
     "test": "jest",
     "all": "npm run build && npm run format && npm run lint && npm run package",
-    "ci": "npm all && jest --ci --coverage && codecov"
+    "ci": "npm run all && jest --ci --coverage && codecov"
   },
   "repository": {
     "type": "git",
