@@ -25,12 +25,12 @@ export default async function match(
     client.pulls.listCommits.endpoint.merge({
       owner: github.context.repo.owner,
       repo: github.context.repo.repo,
-      pull_number: number
+      pull_number: number,
     })
-  )
+  );
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const messages: string[] = responses.map((c: any) => c.commit.message)
+  // @ts-ignore
+  const messages: string[] = responses.map(c => c.commit.message)
 
   return matchers
     .filter(value => {
