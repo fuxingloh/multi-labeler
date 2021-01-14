@@ -320,15 +320,16 @@ function match(client, config) {
         if (!matchers.length) {
             return [];
         }
-        const commits = yield client.pulls.listCommits({
+        const responses = yield client.paginate(client.pulls.listCommits.endpoint.merge({
             owner: github.context.repo.owner,
             repo: github.context.repo.repo,
-            pull_number: number,
-            per_page: 250
-        });
+            pull_number: number
+        }));
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const messages = responses.map((c) => c.commit.message);
         return matchers
             .filter(value => {
-            return utils_1.matcherRegexAny(value.matcher.commits, commits.data.map(c => c.commit.message));
+            return utils_1.matcherRegexAny(value.matcher.commits, messages);
         })
             .map(value => value.label);
     });

@@ -5,11 +5,19 @@ import {Config} from '../../src/config'
 async function getMatchedLabels(config: Config): Promise<string[]> {
   return await match({
     pulls: {
-      // @ts-ignore
-      listCommits(params) {
-        // @ts-ignore
-        return commits[params.pull_number]
+      listCommits: {
+        endpoint: {
+          // @ts-ignore
+          merge(params) {
+            return {pull_number: params.pull_number}
+          }
+        }
       }
+    },
+    // @ts-ignore
+    paginate(params): Promise<any[]> {
+      // @ts-ignore
+      return Promise.resolve(commits[params.pull_number])
     }
   }, config)
 }
@@ -20,33 +28,29 @@ const config: Config = {
     {
       label: 'feat',
       matcher: {
-        commits: '^commit: .*'
+        commits: '^feat: .*'
       }
     }
   ]
 }
 
 const commits = {
-  1: {
-    data: [
-      {
-        commit: {message: 'no-commit:'},
-      },
-      {
-        commit: {message: 'feat: commit'},
-      }
-    ]
-  },
-  2: {
-    data: [
-      {
-        commit: {message: 'init'}
-      },
-      {
-        commit: {message: 'commit: yes yes yes'}
-      }
-    ]
-  },
+  1: [
+    {
+      commit: {message: 'no-commit:'},
+    },
+    {
+      commit: {message: 'commit: commit'},
+    }
+  ],
+  2: [
+    {
+      commit: {message: 'init'}
+    },
+    {
+      commit: {message: 'feat: yes yes yes'}
+    }
+  ],
 }
 
 describe('commits', function () {
