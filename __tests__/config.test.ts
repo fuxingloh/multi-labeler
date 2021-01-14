@@ -37,6 +37,20 @@ describe('invalid config', () => {
     )
   })
 
+  it('version-invalid.yml', function () {
+    expect(() => parseConfig('invalid/version-invalid.yml')).toThrow(
+      'labeler.yml parse error:\\nExpecting "v1" at version but instead got: "v100"'
+    )
+  })
+})
+
+describe('invalid matcher', () => {
+  it('matcher-body-invalid.yml', function () {
+    expect(() => parseConfig('invalid/matcher-body-invalid.yml')).toThrow(
+      /labeler\.yml parse error:/
+    )
+  })
+
   it('matcher-branch-invalid.yml', function () {
     expect(() => parseConfig('invalid/matcher-branch-invalid.yml')).toThrow(
       /labeler\.yml parse error:/
@@ -55,12 +69,6 @@ describe('invalid config', () => {
     )
   })
 
-  it('matcher-description-invalid.yml', function () {
-    expect(() =>
-      parseConfig('invalid/matcher-description-invalid.yml')
-    ).toThrow(/labeler\.yml parse error:/)
-  })
-
   it('matcher-files-invalid.yml', function () {
     expect(() => parseConfig('invalid/matcher-files-invalid.yml')).toThrow(
       /labeler\.yml parse error:/
@@ -70,12 +78,6 @@ describe('invalid config', () => {
   it('matcher-title-invalid.yml', function () {
     expect(() => parseConfig('invalid/matcher-title-invalid.yml')).toThrow(
       /labeler\.yml parse error:/
-    )
-  })
-
-  it('version-invalid.yml', function () {
-    expect(() => parseConfig('invalid/version-invalid.yml')).toThrow(
-      'labeler.yml parse error:\\nExpecting "v1" at version but instead got: "v100"'
     )
   })
 })

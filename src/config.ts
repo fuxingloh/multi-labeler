@@ -5,7 +5,7 @@ import {isRight} from 'fp-ts/Either'
 
 const Matcher = t.partial({
   title: t.string,
-  description: t.string,
+  body: t.string,
   comments: t.string,
   commits: t.string,
   branch: t.string,

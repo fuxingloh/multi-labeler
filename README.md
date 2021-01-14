@@ -1,6 +1,10 @@
 # Multi Labeler
 
-Multi labeler for title, comments, description, commit messages or files.
+[![codecov](https://codecov.io/gh/fuxingloh/multi-labeler/branch/main/graph/badge.svg?token=SOWIV1VVM1)](https://codecov.io/gh/fuxingloh/multi-labeler)
+[![Release](https://img.shields.io/github/v/release/fuxingloh/mutli-labeler)](https://github.com/fuxingloh/multi-labeler/releases)
+[![License MIT](https://img.shields.io/github/license/fuxingloh/vue-horizontal)](https://github.com/fuxingloh/vue-horizontal/blob/main/LICENSE)
+
+Multi labeler for title, body, comments, commit messages, branch or files.
 
 ## Usage
 
@@ -39,7 +43,7 @@ labels:
       title: "^feat:.*"
 ```
 
-### PR/Issue Description: RegEx
+### PR/Issue Body: RegEx
 
 ```yml
 version: v1
@@ -47,7 +51,7 @@ version: v1
 labels:
   - label: "bug"
     matcher:
-      description: "- [x] bug"
+      body: "- [x] bug"
 ```
 
 ## Features
@@ -56,7 +60,7 @@ labels:
 - Automatically fail if `labeler.yml` is malformed, type-checked.
 - Regex Matcher:
   - PR/Issue title
-  - PR/Issue description
+  - PR/Issue body
   - PR/Issue comments
   - PR commit messages
   - PR branch name

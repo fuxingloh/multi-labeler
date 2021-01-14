@@ -1,5 +1,5 @@
 name: 'Multi Labeler'
-description: 'Multi labeler for title, comments, description, commit messages or files.'
+description: 'Multi labeler for title, body, comments, commit messages, branch or files.'
 author: 'Fuxing Loh'
 
 inputs:

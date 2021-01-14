@@ -9,12 +9,6 @@ export interface Matched {
   append: string[]
 }
 
-export interface Status {
-  context: string
-  type: 'success' | 'failure'
-  description?: string
-}
-
 function append(obj: Matched, matched?: Matched): void {
   obj.append.push(...(matched?.append || []))
 }
