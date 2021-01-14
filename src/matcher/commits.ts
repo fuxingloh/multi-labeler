@@ -21,19 +21,20 @@ export default async function match(
     return []
   }
 
-  const commits = await client.pulls.listCommits({
-    owner: github.context.repo.owner,
-    repo: github.context.repo.repo,
-    pull_number: number,
-    per_page: 250
-  })
+  const responses = await client.paginate(
+    client.pulls.listCommits.endpoint.merge({
+      owner: github.context.repo.owner,
+      repo: github.context.repo.repo,
+      pull_number: number,
+    })
+  );
+
+  // @ts-ignore
+  const messages: string[] = responses.map(c => c.commit.message)
 
   return matchers
     .filter(value => {
-      return matcherRegexAny(
-        value.matcher!.commits!,
-        commits.data.map(c => c.commit.message)
-      )
+      return matcherRegexAny(value.matcher!.commits!, messages)
     })
     .map(value => value.label)
 }
