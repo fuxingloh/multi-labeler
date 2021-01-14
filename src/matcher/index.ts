@@ -7,6 +7,7 @@ import title from './title'
 import body from './body'
 import branch from './branch'
 import commits from './commits'
+import files from './files'
 
 export async function getLabels(
   client: InstanceType<typeof GitHub>,
@@ -16,6 +17,7 @@ export async function getLabels(
     ...title(client, config),
     ...body(client, config),
     ...branch(client, config),
-    ...(await commits(client, config))
+    ...(await commits(client, config)),
+    ...(await files(client, config))
   ])
 }

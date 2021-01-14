@@ -6,6 +6,19 @@
 
 Multi labeler for title, body, comments, commit messages, branch or files.
 
+## Features
+
+- Append based multi-labeler, using `.github/labeler.yml` as config.
+- Automatically fail if `labeler.yml` is malformed, type-checked.
+- Regex Matcher:
+  - PR/Issue title
+  - PR/Issue body
+  - PR/Issue comments
+  - PR commit messages
+  - PR branch name
+- Glob Matcher:
+  - Files
+
 ## Usage
 
 ```yml
@@ -78,18 +91,23 @@ labels:
       commits: "^feat: .*"
 ```
 
-## Features
+### PR Files: [Glob Matcher](https://github.com/isaacs/minimatch)
 
-- Append based multi-labeler, using `.github/labeler.yml` as config.
-- Automatically fail if `labeler.yml` is malformed, type-checked.
-- Regex Matcher:
-  - PR/Issue title
-  - PR/Issue body
-  - PR/Issue comments
-  - PR commit messages
-  - PR branch name
-- Glob Matcher:
-  - Files
+Minimatch files, maximum of 3000 only.
+If you use this to audit files changes, that note of the 3000 limit.
+
+```yml
+version: v1
+
+labels:
+  - label: "github"
+    matcher:
+      files: ".github/**"
+
+  - label: "security"
+    matcher:
+      files: ["web/security/**", "security/**"]
+```
 
 ## Why?
 

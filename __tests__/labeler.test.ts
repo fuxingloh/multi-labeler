@@ -40,6 +40,14 @@ describe('main core and context', () => {
                 return {}
               }
             }
+          },
+          listFiles: {
+            endpoint: {
+              // @ts-ignore
+              merge() {
+                return {}
+              }
+            }
           }
         },
         // @ts-ignore
