@@ -36,49 +36,17 @@ const t = __importStar(__nccwpck_require__(5428));
 const io_ts_reporters_1 = __importDefault(__nccwpck_require__(51));
 const Either_1 = __nccwpck_require__(7534);
 const Matcher = t.partial({
-    files: t.union([t.string, t.array(t.string)]),
     title: t.string,
     commits: t.string,
     description: t.string,
-    comments: t.string
+    comments: t.string,
+    files: t.union([t.string, t.array(t.string)])
 });
-const Status = t.intersection([
-    t.type({
-        context: t.string,
-        condition: t.keyof({
-            always: null,
-            any: null,
-            none: null,
-            all: null
-        })
-    }),
-    t.partial({
-        description: t.string
-    })
-]);
-const Label = t.intersection([
-    t.union([
-        t.type({
-            label: t.string,
-            matcher: Matcher
-        }),
-        t.type({
-            group: t.array(t.type({
-                label: t.string,
-                matcher: Matcher
-            }))
-        })
-    ]),
-    t.partial({
-        'status-success': Status,
-        'status-failure': Status,
-        fail: t.keyof({
-            always: null
-        }),
-        sync: t.boolean
-    })
-]);
-const LabelerConfig = t.type({
+const Label = t.type({
+    label: t.string,
+    matcher: t.union([Matcher, t.undefined])
+});
+const Config = t.type({
     version: t.keyof({
         v1: null
     }),
@@ -86,12 +54,12 @@ const LabelerConfig = t.type({
 });
 function parse(content) {
     const config = yaml.load(content);
-    const decoded = LabelerConfig.decode(config);
+    const decoded = Config.decode(config);
     if (Either_1.isRight(decoded)) {
         return decoded.right;
     }
     else {
-        throw new Error(`labeler.yml parse error: ${io_ts_reporters_1.default.report(decoded).join('\\n')}`);
+        throw new Error(`labeler.yml parse error:\\n${io_ts_reporters_1.default.report(decoded).join('\\n')}`);
     }
 }
 exports.parse = parse;
@@ -134,7 +102,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = void 0;
-const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
 const config_1 = __nccwpck_require__(88);
 const matcher_1 = __nccwpck_require__(6897);
@@ -150,40 +117,22 @@ function getConfig(client, configPath) {
         return config_1.parse(content);
     });
 }
-function run() {
+function run(githubToken, configPath) {
     return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const token = core.getInput('github-token', { required: true });
-            const client = github.getOctokit(token);
-            const configPath = core.getInput('config-path', { required: true });
-            const pullRequest = github.context.payload.pull_request;
-            if (!(pullRequest === null || pullRequest === void 0 ? void 0 : pullRequest.number)) {
-                console.log('Could not get pull request number from context, exiting');
-                return;
-            }
-            const config = yield getConfig(client, configPath);
-            const labels = matcher_1.getMatched(client, config);
-            if (labels.remove) {
-                yield Promise.all(labels.remove.map(label => client.issues.removeLabel({
-                    owner: github.context.repo.owner,
-                    repo: github.context.repo.repo,
-                    issue_number: pullRequest.number,
-                    name: label
-                })));
-            }
-            if (labels.add) {
-                yield client.issues.addLabels({
-                    owner: github.context.repo.owner,
-                    repo: github.context.repo.repo,
-                    issue_number: pullRequest.number,
-                    labels: labels.add
-                });
-            }
-            // TODO(fuxing): status messages
+        const client = github.getOctokit(githubToken);
+        const config = yield getConfig(client, configPath);
+        const payload = github.context.payload.pull_request || github.context.payload.issue;
+        if (!(payload === null || payload === void 0 ? void 0 : payload.number)) {
+            throw new Error('Could not get issue_number from pull_request or issue from context');
         }
-        catch (error) {
-            core.error(error);
-            core.setFailed(error.message);
+        const labels = matcher_1.getMatched(client, config);
+        if (labels.append) {
+            yield client.issues.addLabels({
+                owner: github.context.repo.owner,
+                repo: github.context.repo.repo,
+                issue_number: payload.number,
+                labels: labels.append
+            });
         }
     });
 }
@@ -193,14 +142,38 @@ exports.run = run;
 /***/ }),
 
 /***/ 3109:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const labeler_1 = __nccwpck_require__(5272);
-// noinspection JSIgnoredPromiseFromCall
-labeler_1.run();
+const core = __importStar(__nccwpck_require__(2186));
+const githubToken = core.getInput('github-token');
+const configPath = core.getInput('config-path', { required: true });
+labeler_1.run(githubToken, configPath).catch(error => {
+    core.error(error);
+    core.setFailed(error.message);
+});
 
 
 /***/ }),
@@ -216,24 +189,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getMatched = void 0;
 const lodash_1 = __nccwpck_require__(250);
-const title_1 = __importDefault(__nccwpck_require__(9961));
-function append(obj, values) {
-    obj.add.push(...values.add);
-    obj.remove.push(...values.remove);
+const title_1 = __importDefault(__nccwpck_require__(7351));
+function append(obj, matched) {
+    obj.append.push(...((matched === null || matched === void 0 ? void 0 : matched.append) || []));
 }
 function getMatched(client, config) {
     const labels = {
-        add: [],
-        remove: [],
-        status: []
+        append: []
     };
     append(labels, title_1.default(client, config));
-    // TODO(fuxing): get all matched conditions then generate add/remove/status
-    // Won't attempt to dedupe remove from add, as it is a user labeler.config error.
     return {
-        add: lodash_1.uniq(labels.add),
-        remove: lodash_1.uniq(labels.remove),
-        status: lodash_1.uniqBy(labels.status, 'context')
+        append: lodash_1.uniq(labels.append)
     };
 }
 exports.getMatched = getMatched;
@@ -241,19 +207,46 @@ exports.getMatched = getMatched;
 
 /***/ }),
 
-/***/ 9961:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 7351:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-function match(
-/* eslint-disable @typescript-eslint/no-unused-vars */
-client, config) {
+const github = __importStar(__nccwpck_require__(5438));
+const utils_1 = __nccwpck_require__(5165);
+function match(client, config) {
+    const payload = github.context.payload.pull_request || github.context.payload.issue;
+    if (!payload) {
+        return;
+    }
+    const labels = config.labels
+        .filter(value => {
+        var _a;
+        return utils_1.matcherRegex((_a = value.matcher) === null || _a === void 0 ? void 0 : _a.title, payload === null || payload === void 0 ? void 0 : payload.title);
+    })
+        .map(value => value.label);
     return {
-        add: [],
-        remove: [],
-        status: []
+        append: labels
     };
 }
 exports.default = match;
@@ -261,7 +254,28 @@ exports.default = match;
 
 /***/ }),
 
-/***/ 7351:
+/***/ 5165:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.matcherRegex = void 0;
+function matcherRegex(regex, text) {
+    if (!regex) {
+        return false;
+    }
+    if (!text) {
+        return false;
+    }
+    return new RegExp(regex).test(text);
+}
+exports.matcherRegex = matcherRegex;
+
+
+/***/ }),
+
+/***/ 5241:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -369,7 +383,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const command_1 = __nccwpck_require__(7351);
+const command_1 = __nccwpck_require__(5241);
 const file_command_1 = __nccwpck_require__(717);
 const utils_1 = __nccwpck_require__(5278);
 const os = __importStar(__nccwpck_require__(2087));

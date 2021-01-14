@@ -8,12 +8,12 @@ const Matcher = t.partial({
   commits: t.string,
   description: t.string,
   comments: t.string,
-  files: t.union([t.string, t.array(t.string)]),
+  files: t.union([t.string, t.array(t.string)])
 })
 
 const Label = t.type({
   label: t.string,
-  matcher: t.union([Matcher, t.undefined]),
+  matcher: t.union([Matcher, t.undefined])
 })
 
 const Config = t.type({

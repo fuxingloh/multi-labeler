@@ -49,9 +49,9 @@ describe('invalid config', () => {
   })
 
   it('matcher-description-invalid.yml', function () {
-    expect(() => parseConfig('invalid/matcher-description-invalid.yml')).toThrow(
-      /labeler\.yml parse error:/
-    )
+    expect(() =>
+      parseConfig('invalid/matcher-description-invalid.yml')
+    ).toThrow(/labeler\.yml parse error:/)
   })
 
   it('matcher-files-invalid.yml', function () {

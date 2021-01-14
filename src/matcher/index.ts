@@ -15,8 +15,8 @@ export interface Status {
   description?: string
 }
 
-function append(obj: Matched, values: Matched): void {
-  obj.append.push(...values.append)
+function append(obj: Matched, matched?: Matched): void {
+  obj.append.push(...(matched?.append || []))
 }
 
 export function getMatched(
@@ -30,6 +30,6 @@ export function getMatched(
   append(labels, title(client, config))
 
   return {
-    append: uniq(labels.append),
+    append: uniq(labels.append)
   }
 }

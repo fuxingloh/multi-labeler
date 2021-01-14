@@ -21,13 +21,19 @@ async function getConfig(
   return parse(content)
 }
 
-export async function run(githubToken: string, configPath: string): Promise<void> {
+export async function run(
+  githubToken: string,
+  configPath: string
+): Promise<void> {
   const client = github.getOctokit(githubToken)
   const config = await getConfig(client, configPath)
-  const payload = github.context.payload.pull_request || github.context.payload.issue
+  const payload =
+    github.context.payload.pull_request || github.context.payload.issue
 
-  if (payload?.number) {
-    throw new Error('Could not get issue_number from pull_request or issue from context');
+  if (!payload?.number) {
+    throw new Error(
+      'Could not get issue_number from pull_request or issue from context'
+    )
   }
 
   const labels: Matched = getMatched(client, config)
