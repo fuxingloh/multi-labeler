@@ -24,6 +24,8 @@ Multi labeler for title, body, comments, commit messages, branch or files.
 ```yml
 on:
   pull_request:
+  issues:
+  issue_comment:
 
 jobs:
   labeler:
@@ -33,10 +35,121 @@ jobs:
       - uses: fuxingloh/multi-labeler@v1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-
 ```
 
-- [ ] Various use case 
+### Examples
+
+<details>
+  <summary>PR Triage</summary>
+
+#### `.github/workflow/pr-triage.yml`
+
+```yml
+on:
+  pull_request:
+    types: [ opened, edited, synchronize, ready_for_review ]
+    branches: [ master, main ]
+
+jobs:
+  labeler:
+    name: Labeler
+    runs-on: ubuntu-latest
+    steps:
+      - uses: fuxingloh/multi-labeler@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+```
+
+#### `.github/labeler.yml`
+
+```yml
+version: v1
+
+labels:
+  - label: "feat"
+    matcher:
+      title: "^feat:.*"
+      branch: "^feat/.*"
+      commits: "^feat:.*"
+
+  - label: "fix"
+    matcher:
+      title: "^fix:.*"
+      branch: "^fix/.*"
+      commits: "^fix:.*"
+```
+
+</details>
+
+<details>
+  <summary>Issue Triage</summary>
+
+#### `.github/workflow/issue-triage.yml`
+
+```yml
+on:
+  issues:
+    types: [opened, edited]
+
+jobs:
+  labeler:
+    name: Labeler
+    runs-on: ubuntu-latest
+    steps:
+      - uses: fuxingloh/multi-labeler@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+```
+
+#### `.github/labeler.yml`
+
+```yml
+version: v1
+
+labels:
+  - label: "bug"
+    matcher:
+      body: "(\\n|.)*- \\[x\\] bug(\\n|.)*"
+```
+
+</details>
+
+<details>
+  <summary>Comment Triage</summary>
+
+#### `.github/workflow/comment-slash.yml`
+
+```yml
+on:
+  issue_comment:
+    types: [created, edited]
+
+jobs:
+  labeler:
+    name: Labeler
+    runs-on: ubuntu-latest
+    steps:
+      - uses: fuxingloh/multi-labeler@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+```
+
+#### `.github/labeler.yml`
+
+```yml
+version: v1
+
+labels:
+  - label: "coverage"
+    matcher:
+      comment: "# \\[Codecov\\] .*"
+
+  - label: "stale"
+    matcher:
+      comment: "/stale"
+```
+
+</details>
 
 ## Configuration
 
@@ -104,8 +217,7 @@ labels:
 
 ### PR Files: [Glob Matcher](https://github.com/isaacs/minimatch)
 
-Maximum of 3000 files only.
-If you use this to audit changes, take note of the 3000 files limitation.
+Maximum of 3000 files only. If you use this to audit changes, take note of the 3000 files limitation.
 
 ```yml
 version: v1
@@ -117,7 +229,7 @@ labels:
 
   - label: "security"
     matcher:
-      files: ["web/security/**", "security/**"]
+      files: [ "web/security/**", "security/**" ]
 ```
 
 ## Why?
@@ -128,8 +240,7 @@ labels:
    runs.
 2. I want a simple match first append based multi-labeler without it being a turing complete solution.
 3. I want to write my rules with `.github/labeler.yml` for a single source of label truth.
-4. I want to use it together with [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/).
-5. I don't want it to do anything else, labels only.
+4. I don't want it to do anything else, labels only.
     1. Assume you are using GitHub branch protection (labels only).
     2. I want to run this in PR triage before everything else (labels only).
     3. Chain this action with another action; this should just be for (labels only). 
