@@ -70,7 +70,7 @@ describe('main core and context', () => {
   })
 
   it('should be able to load default config', async function () {
-    await run('abc', '.github/labeler.yml')
+    await run('token', '.github/labeler.yml')
   })
 
   it('no issue or pr should fail', async function () {
@@ -82,6 +82,18 @@ describe('main core and context', () => {
       'Could not get issue_number from pull_request or issue from context'
     )
   })
+
+  it('empty should not fail', async function () {
+    github.context.payload = {
+      pull_request: {
+        number: 1,
+        title: 'nothing',
+        body: 'nothing'
+      }
+    }
+
+    await run('token', '__tests__/fixtures/empty.yml')
+  });
 
   describe('basic.yml', () => {
     beforeEach(async () => {
