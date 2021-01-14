@@ -1,7 +1,7 @@
 import match from '../src/matcher/title'
-import * as github from "@actions/github";
-import {run} from "../src/labeler";
-import {Config} from "../src/config";
+import * as github from '@actions/github'
+import {run} from '../src/labeler'
+import {Config} from '../src/config'
 
 function getMatchedLabels(config: Config): string[] {
   // @ts-ignore
@@ -12,25 +12,29 @@ const config: Config = {
   version: 'v1',
   labels: [
     {
-      label: 'feat', matcher: {
+      label: 'feat',
+      matcher: {
         title: '^feat: .+'
       }
     },
     {
-      label: 'fix', matcher: {
+      label: 'fix',
+      matcher: {
         title: '^fix: .+'
       }
     },
     {
-      label: 'docs', matcher: {
+      label: 'docs',
+      matcher: {
         title: '^docs: .+'
       }
     },
     {
-      label: 'chore', matcher: {
+      label: 'chore',
+      matcher: {
         title: '^chore: .+'
       }
-    },
+    }
   ]
 }
 

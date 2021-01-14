@@ -35,9 +35,9 @@ labels:
     matcher:
       files: [ "frontend/**", "web/**" ]
 
-  - label: "description"
+  - label: "body"
     matcher:
-      description: ".*|DESCRIPTION REGEX|.*"
+      body: ".*|DESCRIPTION REGEX|.*"
 
   - label: "comments"
     matcher:

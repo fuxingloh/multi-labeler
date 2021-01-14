@@ -2,7 +2,7 @@
   "name": "multi-labeler",
   "version": "0.0.0",
   "private": true,
-  "description": "Multi labeler for title, comments, description, commit messages or files.",
+  "description": "Multi labeler for title, body, comments, commit messages, branch or files.",
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",
@@ -11,7 +11,8 @@
     "lint": "eslint --fix src/**/*.ts",
     "package": "ncc build --source-map --license licenses.txt",
     "test": "jest",
-    "all": "npm run build && npm run format && npm run lint && npm run package && npm test"
+    "all": "npm run build && npm run format && npm run lint && npm run package",
+    "ci": "npm run all && jest --ci --coverage && codecov"
   },
   "repository": {
     "type": "git",
@@ -40,6 +41,7 @@
     "@types/node": "^14.14.20",
     "@typescript-eslint/parser": "^4.13.0",
     "@vercel/ncc": "^0.27.0",
+    "codecov": "^3.8.1",
     "eslint": "^7.17.0",
     "eslint-plugin-github": "^4.1.1",
     "eslint-plugin-jest": "^23.20.0",
