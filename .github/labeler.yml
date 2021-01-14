@@ -1,7 +1,6 @@
 version: v1
 
 labels:
-  ### Actually using for workflow
   - label: "feat"
     matcher:
       title: "^feat:.*"
