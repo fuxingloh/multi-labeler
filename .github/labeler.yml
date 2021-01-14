@@ -1,9 +1,9 @@
-version: 1
+version: v1
 
 labels:
   - label: "WIP"
     matcher:
-      title: "\[WIP\] .*"
+      title: "\\[WIP\\] .*"
     status-success:
       context: WIP
       condition: always
@@ -35,7 +35,7 @@ labels:
       context: Security
       condition: any
       description: Requires administrator override.
-    labels:
+    group:
       - label: "security"
         matcher:
           files: [ ".github/**", "security/**" ]
@@ -52,7 +52,7 @@ labels:
       context: Conventional Commits
       condition: none
       description: Ready for review & merge.
-    labels:
+    group:
       - label: "feat"
         matcher:
           title: "^feat:.*"
@@ -65,8 +65,8 @@ labels:
 
       - label: "chore"
         matcher:
-          title: "^chore(\((deps|ci)\))?:.*"
-          commits: "^chore(\((deps|ci)\))?:.*"
+          title: "^chore(\\((deps|ci)\\))?:.*"
+          commits: "^chore(\\((deps|ci)\\))?:.*"
 
       - label: "docs"
         matcher:

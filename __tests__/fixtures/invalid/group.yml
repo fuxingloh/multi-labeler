@@ -1,0 +1,9 @@
+version: v1
+
+labels:
+  - group:
+      - label: "no-matcher"
+
+  - group:
+      - matcher:
+          title: "no-label"

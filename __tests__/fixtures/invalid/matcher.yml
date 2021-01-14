@@ -1,0 +1,23 @@
+version: v1
+
+labels:
+  - label: "title"
+    matcher:
+      title: []
+
+  - label: "commits"
+    matcher:
+      commits: []
+
+  - label: "description"
+    matcher:
+      description: []
+
+  - label: "comments"
+    matcher:
+      comments: []
+
+  - label: "files"
+    matcher:
+      files:
+        any: []

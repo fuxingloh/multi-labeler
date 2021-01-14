@@ -3,9 +3,9 @@ description: 'Multi labeler for title, comments, description, commit messages or
 author: 'Fuxing Loh'
 
 inputs:
-  repo-token:
-    required: false
+  github-token:
     description: 'The GITHUB_TOKEN secret'
+    required: true
   config-path:
     description: 'The path for the label configurations'
     default: '.github/labeler.yml'

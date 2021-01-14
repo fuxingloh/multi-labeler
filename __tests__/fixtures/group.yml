@@ -1,0 +1,27 @@
+version: v1
+
+labels:
+  - status-failure:
+      context: Conventional Commits
+      condition: any
+      description: Missing conventional commits.
+    status-success:
+      context: Conventional Commits
+      condition: none
+      description: Ready for review & merge.
+    group:
+      - label: "feat"
+        matcher:
+          title: "^feat:.*"
+
+      - label: "fix"
+        matcher:
+          title: "^fix:.*"
+
+      - label: "chore"
+        matcher:
+          title: "^chore(\\((deps|ci)\\))?:.*"
+
+      - label: "docs"
+        matcher:
+          title: "^docs:.*"

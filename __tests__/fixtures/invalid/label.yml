@@ -1,0 +1,17 @@
+version: v1
+
+labels:
+  - matcher:
+      title: "no-label-or-group"
+
+  - label: "no-matcher"
+
+  - label: "invalid-fail"
+    matcher:
+      title: ""
+    fail: invalid
+
+  - label: "invalid-sync"
+    matcher:
+      title: ""
+    sync: invalid
