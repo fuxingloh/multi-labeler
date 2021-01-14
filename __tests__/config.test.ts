@@ -57,8 +57,8 @@ describe('invalid matcher', () => {
     )
   })
 
-  it('matcher-comments-invalid.yml', function () {
-    expect(() => parseConfig('invalid/matcher-comments-invalid.yml')).toThrow(
+  it('matcher-comment-invalid.yml', function () {
+    expect(() => parseConfig('invalid/matcher-comment-invalid.yml')).toThrow(
       /labeler\.yml parse error:/
     )
   })
