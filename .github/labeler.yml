@@ -26,14 +26,17 @@ labels:
       branch: "^docs/.*"
       commits: "^docs:.*"
 
-  ### Examples
+  - label: "test:labeler"
+    matcher:
+      files: ".github/labeler.yml"
+
   - label: "test:dist"
     matcher:
-      files: "dist/**"
+      files: ["dist/*"]
 
-  - label: "test:security"
+  - label: "test:tests"
     matcher:
-      files: [ ".github/**", "security/**" ]
+      files: [ "__tests__/matcher/**", "__tests__/*.ts" ]
 
   - label: "test:body"
     matcher:
