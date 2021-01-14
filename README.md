@@ -65,6 +65,19 @@ labels:
       branch: "^feat/.*"
 ```
 
+### PR Commits: RegEx
+
+Check all commits and find any match, max of 250 commits only.
+
+```yml
+version: v1
+
+labels:
+  - label: "feat"
+    matcher:
+      commits: "^feat: .*"
+```
+
 ## Features
 
 - Append based multi-labeler, using `.github/labeler.yml` as config.

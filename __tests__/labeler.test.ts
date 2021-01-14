@@ -31,6 +31,13 @@ describe('main core and context', () => {
               }
             }
           }
+        },
+        pulls: {
+          listCommits(params) {
+            return {
+              data: []
+            }
+          }
         }
       }
     })

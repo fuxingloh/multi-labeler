@@ -6,14 +6,16 @@ import {Config} from '../config'
 import title from './title'
 import body from './body'
 import branch from './branch'
+import commits from './commits'
 
-export function getLabels(
+export async function getLabels(
   client: InstanceType<typeof GitHub>,
   config: Config
-): string[] {
+): Promise<string[]> {
   return uniq([
     ...title(client, config),
     ...body(client, config),
-    ...branch(client, config)
+    ...branch(client, config),
+    ...(await commits(client, config))
   ])
 }

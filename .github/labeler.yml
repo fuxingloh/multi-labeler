@@ -27,30 +27,20 @@ labels:
       commits: "^docs:.*"
 
   ### Examples
-  - label: "branch"
+  - label: "test:dist"
     matcher:
-      branch: "^branch/.*"
+      files: "dist/**"
 
-  - label: "app"
+  - label: "test:security"
     matcher:
-      files: "app/**"
-
-  - label: "web"
-    matcher:
-      files: [ "frontend/**", "web/**" ]
+      files: [ ".github/**", "security/**" ]
 
   - label: "test:body"
     matcher:
       body: "(\\n|.)*- \\[x\\] test(\\n|.)*"
 
-  - label: "comments"
+  - label: "test:comments"
     matcher:
-      comments: ".*|COMMENTS REGEX|.*"
+      comments: "# \\[Codecov\\] .*"
 
-  - label: "security"
-    matcher:
-      files: [ ".github/**", "security/**" ]
 
-  - label: "ci"
-    matcher:
-      files: [ ".github/workflow/**" ]
