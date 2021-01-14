@@ -38,7 +38,7 @@ const Either_1 = __nccwpck_require__(7534);
 const Matcher = t.partial({
     title: t.string,
     body: t.string,
-    comments: t.string,
+    comment: t.string,
     commits: t.string,
     branch: t.string,
     files: t.union([t.string, t.array(t.string)])
@@ -270,6 +270,51 @@ exports.default = match;
 
 /***/ }),
 
+/***/ 5921:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const github = __importStar(__nccwpck_require__(5438));
+const utils_1 = __nccwpck_require__(5165);
+function match(client, config) {
+    var _a;
+    const body = (_a = github.context.payload.comment) === null || _a === void 0 ? void 0 : _a.body;
+    if (!body) {
+        return [];
+    }
+    return config.labels
+        .filter(value => {
+        var _a;
+        return utils_1.matcherRegex({ regex: (_a = value.matcher) === null || _a === void 0 ? void 0 : _a.comment, text: body });
+    })
+        .map(value => value.label);
+}
+exports.default = match;
+
+
+/***/ }),
+
 /***/ 747:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -444,6 +489,7 @@ exports.getLabels = void 0;
 const lodash_1 = __nccwpck_require__(250);
 const title_1 = __importDefault(__nccwpck_require__(7351));
 const body_1 = __importDefault(__nccwpck_require__(5404));
+const comment_1 = __importDefault(__nccwpck_require__(5921));
 const branch_1 = __importDefault(__nccwpck_require__(5832));
 const commits_1 = __importDefault(__nccwpck_require__(747));
 const files_1 = __importDefault(__nccwpck_require__(1180));
@@ -452,6 +498,7 @@ function getLabels(client, config) {
         return lodash_1.uniq([
             ...title_1.default(client, config),
             ...body_1.default(client, config),
+            ...comment_1.default(client, config),
             ...branch_1.default(client, config),
             ...(yield commits_1.default(client, config)),
             ...(yield files_1.default(client, config))

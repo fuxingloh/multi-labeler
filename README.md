@@ -67,6 +67,17 @@ labels:
       body: "(\\n|.)*- \\[x\\] bug(\\n|.)*"
 ```
 
+### PR/Issue Comment: Regex
+
+```yml
+version: v1
+
+labels:
+  - label: "stale"
+    matcher:
+      comment: "/stale"
+```
+
 ### PR Branch: RegEx
 
 ```yml
@@ -93,8 +104,8 @@ labels:
 
 ### PR Files: [Glob Matcher](https://github.com/isaacs/minimatch)
 
-Minimatch files, maximum of 3000 only.
-If you use this to audit files changes, that note of the 3000 limit.
+Maximum of 3000 files only.
+If you use this to audit changes, take note of the 3000 files limitation.
 
 ```yml
 version: v1

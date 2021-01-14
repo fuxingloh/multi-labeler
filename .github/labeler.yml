@@ -42,8 +42,10 @@ labels:
     matcher:
       body: "(\\n|.)*- \\[x\\] test(\\n|.)*"
 
-  - label: "test:comments"
+  - label: "test:comment"
     matcher:
-      comments: "# \\[Codecov\\] .*"
+      comment: "# \\[Codecov\\] .*"
 
-
+  - label: "test:stale"
+    matcher:
+      comment: "/stale"
