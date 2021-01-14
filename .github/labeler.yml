@@ -5,21 +5,25 @@ labels:
   - label: "feat"
     matcher:
       title: "^feat:.*"
+      branch: "^feat/.*"
       commits: "^feat:.*"
 
   - label: "fix"
     matcher:
       title: "^fix:.*"
+      branch: "^fix/.*"
       commits: "^fix:.*"
 
   - label: "chore"
     matcher:
       title: "^chore(\\((deps|ci)\\))?:.*"
+      branch: "^chore/.*"
       commits: "^chore(\\((deps|ci)\\))?:.*"
 
   - label: "docs"
     matcher:
       title: "^docs:.*"
+      branch: "^docs/.*"
       commits: "^docs:.*"
 
   ### Examples

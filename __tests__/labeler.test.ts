@@ -93,7 +93,7 @@ describe('main core and context', () => {
     }
 
     await run('token', '__tests__/fixtures/empty.yml')
-  });
+  })
 
   describe('basic.yml', () => {
     beforeEach(async () => {
