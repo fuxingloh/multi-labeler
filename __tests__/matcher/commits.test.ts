@@ -3,7 +3,7 @@ import * as github from '@actions/github'
 import {Config} from '../../src/config'
 
 async function getMatchedLabels(config: Config): Promise<string[]> {
-  return await match({
+  return match({
     pulls: {
       listCommits: {
         endpoint: {
