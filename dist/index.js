@@ -148,6 +148,7 @@ function run(githubToken, configPath) {
                 labels: labels
             });
         }
+        return labels;
     });
 }
 exports.run = run;
@@ -184,7 +185,11 @@ const labeler_1 = __nccwpck_require__(5272);
 const core = __importStar(__nccwpck_require__(2186));
 const githubToken = core.getInput('github-token');
 const configPath = core.getInput('config-path', { required: true });
-labeler_1.run(githubToken, configPath).catch(error => {
+labeler_1.run(githubToken, configPath)
+    .then(value => {
+    core.setOutput('labels', value);
+})
+    .catch(error => {
     core.error(error);
     core.setFailed(error.message);
 });
