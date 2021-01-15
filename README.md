@@ -24,6 +24,8 @@ Multi labeler for title, body, comments, commit messages, branch or files.
 
 ## Usage
 
+#### `.github/workflow/labeler.yml`
+
 ```yml
 on:
   pull_request:
@@ -36,6 +38,30 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: fuxingloh/multi-labeler@v1
+```
+
+#### `.github/labeler.yml`
+
+```yml
+# .github/labeler.yml
+
+version: v1
+
+labels:
+  - label: "feat"
+    matcher: 
+      # Matcher will match on any 6 matcher
+      title: "^feat:.*"
+      body: "/feat"
+      comment: "/feat"
+      branch: "^feat/.*"
+      commits: "^feat:.*"
+      files:
+        any: ["app/*"]
+        all: ["!app/config/**"]
+        count:
+          gte: 1
+          lte: 1000
 ```
 
 ### Examples
