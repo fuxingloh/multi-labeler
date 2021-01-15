@@ -38,6 +38,28 @@ jobs:
       - uses: fuxingloh/multi-labeler@v1
 ```
 
+### `.github/labeler.yml`
+
+```yml
+version: v1
+
+labels:
+  - label: "feat"
+    matcher: 
+      # Matcher will match on any 6 matcher
+      title: "^feat:.*"
+      body: "/feat"
+      comments: "/feat"
+      branch: "^feat/.*"
+      commits: "^feat:.*"
+      files:
+        any: ["app/*"]
+        all: ["!app/config/**"]
+        count:
+          gte: 1
+          lte: 1000
+```
+
 ### Examples
 
 <details>
