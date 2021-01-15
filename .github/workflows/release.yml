@@ -17,18 +17,17 @@ jobs:
         with:
           result-encoding: string
           script: |
-            return context.ref.match(/\/refs\/tags\/(v[0-9]+)\.[0-9]+\.[0-9]+/)[1];
+            return context.ref.match(/refs\/tags\/(v[0-9]+)\.[0-9]+\.[0-9]+/)[1];
 
       - uses: actions/github-script@v3
         id: get-long-version
         with:
           result-encoding: string
           script: |
-            return context.ref.match(/\/refs\/tags\/(v[0-9]+\.[0-9]+\.[0-9]+)/)[1];
+            return context.ref.match(/refs\/tags\/(v[0-9]+\.[0-9]+\.[0-9]+)/)[1];
 
       - uses: EndBug/add-and-commit@v6
         with:
-          add: 'dist'
           author_name: release
           author_email: oss@fuxing.dev
           message: "${{steps.get-long-version.outputs.result}} release"
