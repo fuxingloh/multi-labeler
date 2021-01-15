@@ -24,7 +24,7 @@ async function getConfig(
 export async function run(
   githubToken: string,
   configPath: string
-): Promise<void> {
+): Promise<string[]> {
   const client = github.getOctokit(githubToken)
   const config = await getConfig(client, configPath)
   const payload =
@@ -46,4 +46,6 @@ export async function run(
       labels: labels
     })
   }
+
+  return labels
 }
