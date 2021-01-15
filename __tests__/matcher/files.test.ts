@@ -78,7 +78,10 @@ const complex: Config = {
       matcher: {
         files: {
           any: ['security/**', 'setup/**'],
-          all: ['!app/**']
+          all: ['!app/**'],
+          count: {
+
+          }
         }
       }
     },
@@ -134,8 +137,96 @@ const complex: Config = {
             lte: 4,
           },
         }
-      }
-    }
+      },
+    },
+    {
+      label: 'invalid-1',
+      matcher: {
+        files: {
+          any: ['app/**'],
+          all: ['!setup/**'],
+          count: {
+            eq: 1,
+            neq: 1,
+            gte: 1,
+            lte: 1,
+          },
+        }
+      },
+    },
+    {
+      label: 'invalid-2',
+      matcher: {
+        files: {
+          any: [],
+          all: [],
+          count: {
+            eq: 1,
+            neq: 1,
+            gte: 1,
+            lte: 1,
+          },
+        }
+      },
+    },
+    {
+      label: 'invalid-3',
+      matcher: {
+        files: {
+          any: [],
+          all: ['!setup/**'],
+          count: {
+            eq: 1,
+            neq: 1,
+            gte: 1,
+            lte: 1,
+          },
+        }
+      },
+    },
+    {
+      label: 'invalid-4',
+      matcher: {
+        files: {
+          all: ['!setup/**'],
+          count: {
+            eq: 1,
+            neq: 1,
+            gte: 1,
+            lte: 1,
+          },
+        }
+      },
+    },
+    {
+      label: 'invalid-5',
+      matcher: {
+        files: {
+          any: ['!setup/**'],
+          all: [],
+          count: {
+            eq: 1,
+            neq: 1,
+            gte: 1,
+            lte: 1,
+          },
+        }
+      },
+    },
+    {
+      label: 'invalid-6',
+      matcher: {
+        files: {
+          any: ['!setup/**'],
+          count: {
+            eq: 1,
+            neq: 1,
+            gte: 1,
+            lte: 1,
+          },
+        }
+      },
+    },
   ]
 }
 
