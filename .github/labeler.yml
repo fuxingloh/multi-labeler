@@ -48,3 +48,23 @@ labels:
   - label: "test:stale"
     matcher:
       comment: "/stale"
+
+  - label: "test: s"
+    matcher:
+      files:
+        count:
+          gte: 1
+          lte: 4
+
+  - label: "test: m"
+    matcher:
+      files:
+        count:
+          gte: 5
+          lte: 10
+
+  - label: "test: l"
+    matcher:
+      files:
+        count:
+          gte: 11

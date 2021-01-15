@@ -9,7 +9,20 @@ const Matcher = t.partial({
   comment: t.string,
   commits: t.string,
   branch: t.string,
-  files: t.union([t.string, t.array(t.string)])
+  files: t.union([
+    t.string,
+    t.array(t.string),
+    t.partial({
+      any: t.array(t.string),
+      all: t.array(t.string),
+      count: t.partial({
+        lte: t.number,
+        gte: t.number,
+        eq: t.number,
+        neq: t.number
+      })
+    })
+  ])
 })
 
 const Label = t.type({

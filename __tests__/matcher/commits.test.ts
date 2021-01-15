@@ -78,6 +78,12 @@ describe('commits', function () {
     expect(await getMatchedLabels(config)).toEqual([])
   })
 
+  it('payload empty should be empty', async function () {
+    github.context.payload = {}
+    expect(await getMatchedLabels(config)).toEqual([])
+  })
+
+
   it('should have feat', async function () {
     github.context.payload = {
       pull_request: {

@@ -3,5 +3,4 @@ version: v1
 labels:
   - label: "files"
     matcher:
-      files:
-        any: []
+      files: false
