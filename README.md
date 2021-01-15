@@ -24,6 +24,8 @@ Multi labeler for title, body, comments, commit messages, branch or files.
 
 ## Usage
 
+#### `.github/workflow/labeler.yml`
+
 ```yml
 on:
   pull_request:
@@ -41,6 +43,8 @@ jobs:
 #### `.github/labeler.yml`
 
 ```yml
+# .github/labeler.yml
+
 version: v1
 
 labels:
