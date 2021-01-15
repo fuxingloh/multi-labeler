@@ -38,7 +38,7 @@ jobs:
       - uses: fuxingloh/multi-labeler@v1
 ```
 
-### `.github/labeler.yml`
+#### `.github/labeler.yml`
 
 ```yml
 version: v1
@@ -49,7 +49,7 @@ labels:
       # Matcher will match on any 6 matcher
       title: "^feat:.*"
       body: "/feat"
-      comments: "/feat"
+      comment: "/feat"
       branch: "^feat/.*"
       commits: "^feat:.*"
       files:
