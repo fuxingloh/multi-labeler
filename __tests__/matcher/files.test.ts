@@ -224,6 +224,11 @@ describe('basic', () => {
     jest.restoreAllMocks()
   })
 
+  it('payload empty should be empty', async function () {
+    github.context.payload = {}
+    expect(await getMatchedLabels(basic)).toEqual([])
+  })
+
   it('1 should have security/app/labeler', async function () {
     github.context.payload = {
       pull_request: {
