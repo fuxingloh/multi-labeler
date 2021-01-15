@@ -6,13 +6,14 @@ branding:
   color: yellow
 
 inputs:
-  github-token:
-    description: 'The GITHUB_TOKEN secret'
-    required: true
   config-path:
     description: 'The path for the label configurations'
     default: '.github/labeler.yml'
     required: false
+  github-token:
+    description: 'GITHUB_TOKEN or a `repo` scoped Personal Access Token (PAT)'
+    required: false
+    default: ${{ github.token }}
 
 runs:
   using: 'node12'

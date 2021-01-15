@@ -36,8 +36,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: fuxingloh/multi-labeler@v1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ### Examples
@@ -59,8 +57,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: fuxingloh/multi-labeler@v1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 #### `.github/labeler.yml`
@@ -100,8 +96,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: fuxingloh/multi-labeler@v1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 #### `.github/labeler.yml`
@@ -133,8 +127,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: fuxingloh/multi-labeler@v1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 #### `.github/labeler.yml`
