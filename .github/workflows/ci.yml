@@ -25,4 +25,3 @@ jobs:
           author_email: oss@fuxing.dev
           message: 'npm run ncc, dist updated'
           signoff: true
-          token: ${{ secrets.GITHUB_TOKEN }}

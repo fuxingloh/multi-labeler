@@ -1,0 +1,29 @@
+name: release
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/github-script@v3
+        id: get-version
+        with:
+          result-encoding: string
+          script: |
+            return context.payload.ref.match(/\/refs\/tags\/(v[0-9]+)\.[0-9]+\.[0-9]+/)[1];
+
+      - uses: EndBug/add-and-commit@v6
+        with:
+          add: 'dist'
+          author_name: release
+          author_email: oss@fuxing.dev
+          message: 'auto release'
+          signoff: true
+          branch: ${{steps.get-version.outputs.result}}
