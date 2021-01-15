@@ -1,0 +1,20 @@
+name: release
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: EndBug/add-and-commit@v6
+        with:
+          add: 'dist'
+          author_name: release
+          author_email: oss@fuxing.dev
+          message: 'auto release'
+          signoff: true
+          branch: v1
