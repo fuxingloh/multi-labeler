@@ -22,7 +22,7 @@ async function getMatchedLabels(config: Config): Promise<string[]> {
   }, config)
 }
 
-const config: Config = {
+const basic: Config = {
   version: 'v1',
   labels: [
     {
@@ -41,6 +41,99 @@ const config: Config = {
       label: 'labeler',
       matcher: {
         files: '.github/labeler.yml'
+      }
+    }
+  ]
+}
+
+const complex: Config = {
+  version: 'v1',
+  labels: [
+    {
+      label: 'all-app',
+      matcher: {
+        files: {
+          all: ['app/**']
+        }
+      }
+    },
+    {
+      label: 'any-app',
+      matcher: {
+        files: {
+          any: ['app/**']
+        }
+      }
+    },
+    {
+      label: 'none-app',
+      matcher: {
+        files: {
+          all: ['!app/**']
+        }
+      }
+    },
+    {
+      label: 'all-any',
+      matcher: {
+        files: {
+          any: ['security/**', 'setup/**'],
+          all: ['!app/**']
+        }
+      }
+    },
+    {
+      label: 'S',
+      matcher: {
+        files: {
+          count: {
+            eq: 1
+          }
+        }
+      }
+    },
+    {
+      label: 'NEQ1',
+      matcher: {
+        files: {
+          count: {
+            neq: 1
+          }
+        }
+      }
+    },
+    {
+      label: 'M',
+      matcher: {
+        files: {
+          count: {
+            gte: 2,
+            lte: 5,
+          }
+        }
+      }
+    },
+    {
+      label: 'L',
+      matcher: {
+        files: {
+          count: {
+            gte: 6,
+          }
+        }
+      }
+    },
+    {
+      label: 'mixed-1',
+      matcher: {
+        files: {
+          any: ['app/**'],
+          all: ['!setup/**'],
+          count: {
+            gte: 2,
+            lte: 4,
+          },
+        }
       }
     }
   ]
@@ -79,6 +172,9 @@ const files = {
     {
       filename: 'setup/abc/abc.js',
     },
+    {
+      filename: 'test/abc/abc.js',
+    }
   ],
   4: [
     {
@@ -99,10 +195,21 @@ const files = {
     {
       filename: 'setup/abc/abc.js',
     },
+    {
+      filename: '1/abc/abc.js',
+    },
+    {
+      filename: '3/abc/abc.js',
+    },
+  ],
+  8: [
+    {filename: 'app/1.js'},
+    {filename: 'app/2.js'},
+    {filename: 'app/3.js'},
   ]
 }
 
-describe('files', function () {
+describe('basic', () => {
   beforeEach(() => {
     // Mock github context
     jest.spyOn(github.context, 'repo', 'get').mockImplementation(() => {
@@ -111,13 +218,10 @@ describe('files', function () {
         repo: 'repo-name'
       }
     })
+  })
 
-    github.context.payload = {
-      pull_request: {
-        number: 1,
-        title: 'nothing interesting',
-      }
-    }
+  afterAll(() => {
+    jest.restoreAllMocks()
   })
 
   it('1 should have security/app/labeler', async function () {
@@ -126,7 +230,7 @@ describe('files', function () {
         number: 1
       }
     }
-    const labels = await getMatchedLabels(config)
+    const labels = await getMatchedLabels(basic)
     expect(labels).toEqual(['security', 'app', 'labeler'])
   })
 
@@ -136,7 +240,7 @@ describe('files', function () {
         number: 2
       }
     }
-    const labels = await getMatchedLabels(config)
+    const labels = await getMatchedLabels(basic)
     expect(labels).toEqual(['labeler'])
   })
 
@@ -146,7 +250,7 @@ describe('files', function () {
         number: 3
       }
     }
-    const labels = await getMatchedLabels(config)
+    const labels = await getMatchedLabels(basic)
     expect(labels).toEqual(['app'])
   })
 
@@ -156,7 +260,7 @@ describe('files', function () {
         number: 4
       }
     }
-    const labels = await getMatchedLabels(config)
+    const labels = await getMatchedLabels(basic)
     expect(labels).toEqual(['security'])
   })
 
@@ -166,7 +270,7 @@ describe('files', function () {
         number: 5
       }
     }
-    const labels = await getMatchedLabels(config)
+    const labels = await getMatchedLabels(basic)
     expect(labels).toEqual(['security'])
   })
 
@@ -176,7 +280,7 @@ describe('files', function () {
         number: 6
       }
     }
-    const labels = await getMatchedLabels(config)
+    const labels = await getMatchedLabels(basic)
     expect(labels).toEqual([])
   })
 
@@ -186,9 +290,137 @@ describe('files', function () {
         number: 7
       }
     }
-    const labels = await getMatchedLabels(config)
+    const labels = await getMatchedLabels(basic)
     expect(labels).toEqual([])
   })
 });
 
+describe('complex', () => {
+  beforeEach(() => {
+    // Mock github context
+    jest.spyOn(github.context, 'repo', 'get').mockImplementation(() => {
+      return {
+        owner: 'owner-name',
+        repo: 'repo-name'
+      }
+    })
+  })
 
+  afterAll(() => {
+    jest.restoreAllMocks()
+  })
+
+  it('1 should have complex labels', async function () {
+    github.context.payload = {
+      pull_request: {
+        number: 1
+      }
+    }
+    const labels = await getMatchedLabels(complex)
+    expect(labels).toEqual([
+      'any-app',
+      'NEQ1',
+      'L',
+    ])
+  })
+
+  it('2 should have complex labels', async function () {
+    github.context.payload = {
+      pull_request: {
+        number: 2
+      }
+    }
+    const labels = await getMatchedLabels(complex)
+    expect(labels).toEqual([
+      'none-app',
+      'S'
+    ])
+  })
+
+  it('3 should have complex labels', async function () {
+    github.context.payload = {
+      pull_request: {
+        number: 3
+      }
+    }
+    const labels = await getMatchedLabels(complex)
+    expect(labels).toEqual([
+      'any-app',
+      'NEQ1',
+      'M'
+    ])
+  })
+
+  it('4 should have complex labels', async function () {
+    github.context.payload = {
+      pull_request: {
+        number: 4
+      }
+    }
+    const labels = await getMatchedLabels(complex)
+    expect(labels).toEqual([
+         "none-app",
+         "all-any",
+         "S",
+    ])
+  })
+
+  it('5 should have complex labels', async function () {
+    github.context.payload = {
+      pull_request: {
+        number: 5
+      }
+    }
+    const labels = await getMatchedLabels(complex)
+    expect(labels).toEqual([
+      "none-app",
+      "all-any",
+      "S",
+    ])
+  })
+
+  it('6 should have complex labels', async function () {
+    github.context.payload = {
+      pull_request: {
+        number: 6
+      }
+    }
+    const labels = await getMatchedLabels(complex)
+    expect(labels).toEqual([
+      "none-app",
+      "all-any",
+      "S",
+    ])
+  })
+
+  it('7 should have complex labels', async function () {
+    github.context.payload = {
+      pull_request: {
+        number: 7
+      }
+    }
+    const labels = await getMatchedLabels(complex)
+    expect(labels).toEqual([
+         "none-app",
+         "all-any",
+         "NEQ1",
+         "M",
+    ])
+  })
+
+  it('8 should have complex labels', async function () {
+    github.context.payload = {
+      pull_request: {
+        number: 8
+      }
+    }
+    const labels = await getMatchedLabels(complex)
+    expect(labels).toEqual([
+         "all-app",
+         "any-app",
+         "NEQ1",
+         "M",
+         "mixed-1",
+    ])
+  })
+})

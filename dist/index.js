@@ -41,7 +41,20 @@ const Matcher = t.partial({
     comment: t.string,
     commits: t.string,
     branch: t.string,
-    files: t.union([t.string, t.array(t.string)])
+    files: t.union([
+        t.string,
+        t.array(t.string),
+        t.partial({
+            any: t.array(t.string),
+            all: t.array(t.string),
+            count: t.partial({
+                lte: t.number,
+                gte: t.number,
+                eq: t.number,
+                neq: t.number
+            })
+        })
+    ])
 });
 const Label = t.type({
     label: t.string,
@@ -420,16 +433,109 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const github = __importStar(__nccwpck_require__(5438));
 const minimatch_1 = __nccwpck_require__(3973);
-function anyMatch(globs, files) {
+/**
+ * Get a type-safe FileMatcher
+ */
+function getMatchers(config) {
+    return config.labels
+        .filter(value => {
+        var _a, _b, _c;
+        if (Array.isArray((_a = value.matcher) === null || _a === void 0 ? void 0 : _a.files)) {
+            return (_b = value.matcher) === null || _b === void 0 ? void 0 : _b.files.length;
+        }
+        return (_c = value.matcher) === null || _c === void 0 ? void 0 : _c.files;
+    })
+        .map(({ label, matcher }) => {
+        var _a, _b, _c, _d;
+        const files = matcher.files;
+        if (typeof files === 'string') {
+            return {
+                label,
+                any: [files],
+                all: []
+            };
+        }
+        if (Array.isArray(files)) {
+            return {
+                label,
+                any: files,
+                all: []
+            };
+        }
+        return {
+            label,
+            any: files.any || [],
+            all: files.all || [],
+            count: {
+                lte: (_a = files.count) === null || _a === void 0 ? void 0 : _a.lte,
+                gte: (_b = files.count) === null || _b === void 0 ? void 0 : _b.gte,
+                eq: (_c = files.count) === null || _c === void 0 ? void 0 : _c.eq,
+                neq: (_d = files.count) === null || _d === void 0 ? void 0 : _d.neq
+            }
+        };
+    })
+        .filter(({ any, all, count }) => {
+        return (any.length ||
+            all.length || (count === null || count === void 0 ? void 0 : count.lte) || (count === null || count === void 0 ? void 0 : count.gte) || (count === null || count === void 0 ? void 0 : count.eq) || (count === null || count === void 0 ? void 0 : count.neq));
+    });
+}
+function getFiles(client, pr_number) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const responses = yield client.paginate(client.pulls.listFiles.endpoint.merge({
+            owner: github.context.repo.owner,
+            repo: github.context.repo.repo,
+            pull_number: pr_number
+        }));
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return responses.map((c) => c.filename);
+    });
+}
+/**
+ * if globs is empty = matched
+ * if globs is not empty, any files must match
+ */
+function anyMatch(files, globs) {
+    if (!globs.length) {
+        return true;
+    }
     const matchers = globs.map(g => new minimatch_1.Minimatch(g));
-    for (const file of files) {
-        for (const matcher of matchers) {
+    for (const matcher of matchers) {
+        for (const file of files) {
             if (matcher.match(file)) {
                 return true;
             }
         }
     }
     return false;
+}
+/**
+ * if globs is empty = matched
+ * if globs is not empty, all files must match
+ */
+function allMatch(files, globs) {
+    const matchers = globs.map(g => new minimatch_1.Minimatch(g));
+    for (const matcher of matchers) {
+        for (const file of files) {
+            if (!matcher.match(file)) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+/**
+ * if count not available, return true
+ * else all count pattern must match,
+ * ignored if any are undefined
+ */
+function countMatch(files, count) {
+    if (!count) {
+        return true;
+    }
+    return (((count === null || count === void 0 ? void 0 : count.eq) === undefined || count.eq === files.length) &&
+        ((count === null || count === void 0 ? void 0 : count.neq) === undefined || count.neq !== files.length) &&
+        ((count === null || count === void 0 ? void 0 : count.lte) === undefined || count.lte >= files.length) &&
+        ((count === null || count === void 0 ? void 0 : count.gte) === undefined || count.gte <= files.length));
 }
 function match(client, config) {
     var _a;
@@ -438,26 +544,16 @@ function match(client, config) {
         if (!pr_number) {
             return [];
         }
-        const matchers = config.labels.filter(value => {
-            var _a;
-            return (_a = value.matcher) === null || _a === void 0 ? void 0 : _a.files;
-        });
+        const matchers = getMatchers(config);
         if (!matchers.length) {
             return [];
         }
-        const responses = yield client.paginate(client.pulls.listFiles.endpoint.merge({
-            owner: github.context.repo.owner,
-            repo: github.context.repo.repo,
-            pull_number: pr_number
-        }));
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const files = responses.map((c) => c.filename);
+        const files = yield getFiles(client, pr_number);
         return matchers
-            .filter(value => {
-            const globs = Array.isArray(value.matcher.files)
-                ? value.matcher.files
-                : [value.matcher.files];
-            return anyMatch(globs, files);
+            .filter(matcher => {
+            return (allMatch(files, matcher.all) &&
+                anyMatch(files, matcher.any) &&
+                countMatch(files, matcher.count));
         })
             .map(value => value.label);
     });

@@ -16,8 +16,10 @@ Multi labeler for title, body, comments, commit messages, branch or files.
   - PR/Issue comments
   - PR commit messages
   - PR branch name
-- Glob Matcher:
-  - Files
+- File Matcher:
+  - Files count
+  - Files any glob match
+  - Files all glob match
 
 ## Usage
 
@@ -89,7 +91,7 @@ labels:
 ```yml
 on:
   issues:
-    types: [opened, edited]
+    types: [ opened, edited ]
 
 jobs:
   labeler:
@@ -122,7 +124,7 @@ labels:
 ```yml
 on:
   issue_comment:
-    types: [created, edited]
+    types: [ created, edited ]
 
 jobs:
   labeler:
@@ -177,6 +179,7 @@ version: v1
 labels:
   - label: "bug"
     matcher:
+      # e.g. '- [x] bug'
       body: "(\\n|.)*- \\[x\\] bug(\\n|.)*"
 ```
 
@@ -217,7 +220,10 @@ labels:
 
 ### PR Files: [Glob Matcher](https://github.com/isaacs/minimatch)
 
-Maximum of 3000 files only. If you use this to audit changes, take note of the 3000 files limitation.
+Maximum of 3000 files only. If you use this to audit changes, take note of the 3000 files limitation. Matcher within
+files are 'and condition', all must match.
+
+#### PR Files Basic
 
 ```yml
 version: v1
@@ -225,11 +231,60 @@ version: v1
 labels:
   - label: "github"
     matcher:
+      # This is shorthand for any: [".github/**"]
       files: ".github/**"
 
   - label: "security"
     matcher:
+      # This is shorthand for any: ["web/security/**", "security/**"]
       files: [ "web/security/**", "security/**" ]
+```
+
+#### PR Files Count
+
+```yml
+version: v1
+
+labels:
+  - label: "size: s"
+    matcher:
+      files:
+        count:
+          gte: 1
+          lte: 4
+
+  - label: "size: m"
+    matcher:
+      files:
+        count:
+          gte: 5
+          lte: 10
+
+  - label: "size: l"
+    matcher:
+      files:
+        count:
+          gte: 11
+```
+
+#### PR Files Any & All
+
+```yml
+version: v1
+
+labels:
+  - label: "ci"
+    matcher:
+      files:
+        any: [ ".github/workflow/**", ".circleci/**" ]
+        all: [ "!app/**" ]
+
+  - label: "attention"
+    matcher:
+      files:
+        any: [ "app/**" ]
+        count:
+          neq: 1
 ```
 
 ## Why?
