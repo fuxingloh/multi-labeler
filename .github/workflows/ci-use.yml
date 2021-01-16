@@ -16,16 +16,15 @@ jobs:
         with:
           debug: true
           script: |
+            const sha = context.payload.pull_request.head.sha
             const response = await github.repos.createCommitStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              sha: context.sha,
+              sha: sha,
               state: 'pending',
-              description: 'validating...',
               target_url: 'https://github.com/fuxingloh/multi-labeler/blob/main/.github/workflows/ci-use.yml',
               context: 'Semantic Pull Request'
             })
-            console.log(response)
 
       - uses: actions/checkout@v2
 
@@ -39,10 +38,11 @@ jobs:
             const success = context.payload.pull_request.labels
               .some(label => ['feat', 'fix', 'chore', 'docs'].includes(label.name))
 
+            const sha = context.payload.pull_request.head.sha
             await github.repos.createCommitStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              sha: context.sha,
+              sha: sha,
               state: success ? 'success' : 'failure',
               description: success ? 'Ready for review & merge.' : 'PR title validation failed.',
               target_url: 'https://github.com/fuxingloh/multi-labeler/blob/main/.github/workflows/ci-use.yml',
