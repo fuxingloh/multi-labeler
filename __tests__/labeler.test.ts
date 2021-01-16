@@ -1,63 +1,60 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
-import {run} from '../src/labeler'
+import {labels} from '../src/labeler'
+import {GitHub} from '@actions/github/lib/utils'
+import {getConfig} from '../src/config'
 import * as fs from 'fs'
 
-let labels: string[] = []
+const client: InstanceType<typeof GitHub> = {
+  repos: {
+    // @ts-ignore
+    getContent(params) {
+      if (params?.path) {
+        return {
+          data: {
+            content: fs.readFileSync(params.path, 'utf8'),
+            encoding: 'utf-8'
+          }
+        }
+      }
+    }
+  },
+  pulls: {
+    listCommits: {
+      endpoint: {
+        // @ts-ignore
+        merge() {
+          return {}
+        }
+      }
+    },
+    listFiles: {
+      endpoint: {
+        // @ts-ignore
+        merge() {
+          return {}
+        }
+      }
+    }
+  },
+  // @ts-ignore
+  paginate(params): Promise<any[]> {
+    return Promise.resolve([])
+  }
+}
 
-describe('main core and context', () => {
+async function runLabels(configPath: string): Promise<string[]> {
+  const config = await getConfig(client, configPath)
+  return labels(client, config)
+}
+
+describe('labeler', () => {
   beforeEach(() => {
     jest.spyOn(core, 'warning').mockImplementation(jest.fn())
     jest.spyOn(core, 'info').mockImplementation(jest.fn())
     jest.spyOn(core, 'debug').mockImplementation(jest.fn())
     jest.spyOn(core, 'setFailed').mockImplementation(jest.fn())
 
-    // @ts-ignore, mock only required github client features
-    jest.spyOn(github, 'getOctokit').mockImplementation((token: string) => {
-      return {
-        issues: {
-          addLabels(params) {
-            labels.push(...(params?.labels || []))
-          }
-        },
-        repos: {
-          getContent(params) {
-            if (params?.path) {
-              return {
-                data: {
-                  content: fs.readFileSync(params.path, 'utf8'),
-                  encoding: 'utf-8'
-                }
-              }
-            }
-          }
-        },
-        pulls: {
-          listCommits: {
-            endpoint: {
-              // @ts-ignore
-              merge() {
-                return {}
-              }
-            }
-          },
-          listFiles: {
-            endpoint: {
-              // @ts-ignore
-              merge() {
-                return {}
-              }
-            }
-          }
-        },
-        // @ts-ignore
-        paginate(params): Promise<any[]> {
-          return Promise.resolve([])
-        }
-      }
-    })
-
-    // Mock github context
     jest.spyOn(github.context, 'repo', 'get').mockImplementation(() => {
       return {
         owner: 'owner-name',
@@ -74,35 +71,12 @@ describe('main core and context', () => {
     }
   })
 
-  afterEach(() => {
-    labels = []
-  })
-
   afterAll(() => {
     jest.restoreAllMocks()
   })
 
-  it('should require token, error exit without', async function () {
-    jest.spyOn(github, 'getOctokit').mockRestore()
-
-    await expect(async () => {
-      // @ts-ignore
-      await run(undefined, '.github/labeler.yml')
-    }).rejects.toThrow('Parameter token or opts.auth is required')
-  })
-
   it('should be able to load default config', async function () {
-    await run('token', '.github/labeler.yml')
-  })
-
-  it('no issue or pr should fail', async function () {
-    github.context.payload = {}
-
-    await expect(async () => {
-      await run('token', '.github/labeler.yml')
-    }).rejects.toThrow(
-      'Could not get issue_number from pull_request or issue from context'
-    )
+    await runLabels('.github/labeler.yml')
   })
 
   it('empty should not fail', async function () {
@@ -114,14 +88,10 @@ describe('main core and context', () => {
       }
     }
 
-    await run('token', '__tests__/fixtures/empty.yml')
+    await runLabels('__tests__/fixtures/empty.yml')
   })
 
   describe('basic.yml', () => {
-    beforeEach(async () => {
-      labels = []
-    })
-
     it('should be empty', async function () {
       github.context.payload = {
         pull_request: {
@@ -130,7 +100,7 @@ describe('main core and context', () => {
         }
       }
 
-      await run('token', '__tests__/fixtures/basic.yml')
+      const labels = await runLabels('__tests__/fixtures/empty.yml')
       expect(labels).toEqual([])
     })
 
@@ -142,7 +112,7 @@ describe('main core and context', () => {
         }
       }
 
-      await run('token', '__tests__/fixtures/basic.yml')
+      const labels = await runLabels('__tests__/fixtures/basic.yml')
       expect(labels).toEqual(['feat'])
     })
 
@@ -154,7 +124,7 @@ describe('main core and context', () => {
         }
       }
 
-      await run('token', '__tests__/fixtures/basic.yml')
+      const labels = await runLabels('__tests__/fixtures/basic.yml')
       expect(labels).toEqual(['chore'])
     })
 
@@ -166,7 +136,7 @@ describe('main core and context', () => {
         }
       }
 
-      await run('token', '__tests__/fixtures/basic.yml')
+      const labels = await runLabels('__tests__/fixtures/basic.yml')
       expect(labels).toEqual(['fix'])
     })
 
@@ -178,7 +148,7 @@ describe('main core and context', () => {
         }
       }
 
-      await run('token', '__tests__/fixtures/basic.yml')
+      const labels = await runLabels('__tests__/fixtures/basic.yml')
       expect(labels).toEqual(['docs'])
     })
   })

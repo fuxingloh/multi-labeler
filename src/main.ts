@@ -1,12 +1,32 @@
-import {run} from './labeler'
 import * as core from '@actions/core'
+import * as github from '@actions/github'
+import {labels} from './labeler'
+import {getConfig} from './config'
 
 const githubToken = core.getInput('github-token')
 const configPath = core.getInput('config-path', {required: true})
 
-run(githubToken, configPath)
-  .then(value => {
-    core.setOutput('labels', value)
+const client = github.getOctokit(githubToken)
+const payload =
+  github.context.payload.pull_request || github.context.payload.issue
+
+getConfig(client, configPath)
+  .then(config => labels(client, config))
+  .then(async labels => {
+    core.setOutput('labels', labels)
+
+    if (labels.length) {
+      await client.issues.addLabels({
+        owner: github.context.repo.owner,
+        repo: github.context.repo.repo,
+        issue_number: payload!.number,
+        labels: labels
+      })
+    }
+    return labels
+  })
+  .then(labels => {
+    // TODO(fuxing): checks
   })
   .catch(error => {
     core.error(error)

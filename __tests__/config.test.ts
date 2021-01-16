@@ -10,6 +10,10 @@ describe('valid config', () => {
   it('basic.yml', function () {
     expect(() => parseConfig('basic.yml')).not.toThrowError()
   })
+
+  it('empty.yml', function () {
+    expect(() => parseConfig('empty.yml')).not.toThrowError()
+  })
 })
 
 describe('invalid config', () => {
