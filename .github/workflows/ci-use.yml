@@ -2,7 +2,7 @@ name: CI
 
 on:
   pull_request:
-    types: [ opened, reopened, synchronize, ready_for_review, labeled, unlabeled ]
+    types: [ opened, reopened, edited, synchronize, ready_for_review, labeled, unlabeled ]
   issues:
   issue_comment:
 
@@ -11,40 +11,5 @@ jobs:
     name: Uses
     runs-on: ubuntu-latest
     steps:
-      - if: github.event_name == 'pull_request'
-        uses: actions/github-script@v3
-        with:
-          debug: true
-          script: |
-            const sha = context.payload.pull_request.head.sha
-            const response = await github.repos.createCommitStatus({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              sha: sha,
-              state: 'pending',
-              target_url: 'https://github.com/fuxingloh/multi-labeler/blob/main/.github/workflows/ci-use.yml',
-              context: 'Semantic Pull Request'
-            })
-
       - uses: actions/checkout@v2
-
       - uses: ./
-
-      - if: github.event_name == 'pull_request'
-        uses: actions/github-script@v3
-        with:
-          debug: true
-          script: |
-            const success = context.payload.pull_request.labels
-              .some(label => ['feat', 'fix', 'chore', 'docs'].includes(label.name))
-
-            const sha = context.payload.pull_request.head.sha
-            await github.repos.createCommitStatus({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              sha: sha,
-              state: success ? 'success' : 'failure',
-              description: success ? 'Ready for review & merge.' : 'PR title validation failed.',
-              target_url: 'https://github.com/fuxingloh/multi-labeler/blob/main/.github/workflows/ci-use.yml',
-              context: 'Semantic Pull Request'
-            })
