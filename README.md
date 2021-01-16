@@ -3,7 +3,7 @@
 [![codecov](https://codecov.io/gh/fuxingloh/multi-labeler/branch/main/graph/badge.svg?token=SOWIV1VVM1)](https://codecov.io/gh/fuxingloh/multi-labeler)
 [![CodeFactor](https://www.codefactor.io/repository/github/fuxingloh/multi-labeler/badge)](https://www.codefactor.io/repository/github/fuxingloh/multi-labeler)
 [![Release](https://img.shields.io/github/v/release/fuxingloh/multi-labeler)](https://github.com/fuxingloh/multi-labeler/releases)
-[![License MIT](https://img.shields.io/github/license/fuxingloh/vue-horizontal)](https://github.com/fuxingloh/vue-horizontal/blob/main/LICENSE)
+[![License MIT](https://img.shields.io/github/license/fuxingloh/multi-labeler)](https://github.com/fuxingloh/multi-labeler/blob/main/LICENSE)
 
 Multi labeler for title, body, comments, commit messages, branch or files.
 
