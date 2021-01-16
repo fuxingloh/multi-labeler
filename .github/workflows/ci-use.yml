@@ -16,7 +16,7 @@ jobs:
         with:
           debug: true
           script: |
-            await github.repos.createCommitStatus({
+            const response = await github.repos.createCommitStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
               sha: context.sha,
@@ -25,6 +25,7 @@ jobs:
               target_url: 'https://github.com/fuxingloh/multi-labeler/blob/main/.github/workflows/ci-use.yml',
               context: 'Semantic Pull Request'
             })
+            console.log(response)
 
       - uses: actions/checkout@v2
 
@@ -38,7 +39,7 @@ jobs:
             const success = context.payload.pull_request.labels
               .some(label => ['feat', 'fix', 'chore', 'docs'].includes(label.name))
 
-            await github.request('POST /repos/{owner}/{repo}/statuses/{sha}', {
+            await github.repos.createCommitStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
               sha: context.sha,
