@@ -132,14 +132,16 @@ const commits_1 = __importDefault(__nccwpck_require__(747));
 const files_1 = __importDefault(__nccwpck_require__(1180));
 function labels(client, config) {
     return __awaiter(this, void 0, void 0, function* () {
-        return lodash_1.uniq([
-            ...title_1.default(client, config),
-            ...body_1.default(client, config),
-            ...comment_1.default(client, config),
-            ...branch_1.default(client, config),
-            ...(yield commits_1.default(client, config)),
-            ...(yield files_1.default(client, config))
-        ]);
+        return Promise.all([
+            title_1.default(client, config),
+            body_1.default(client, config),
+            comment_1.default(client, config),
+            branch_1.default(client, config),
+            commits_1.default(client, config),
+            files_1.default(client, config)
+        ]).then(value => {
+            return lodash_1.uniq(lodash_1.concat(...value));
+        });
     });
 }
 exports.labels = labels;
