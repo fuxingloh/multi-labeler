@@ -2,6 +2,8 @@ import * as yaml from 'js-yaml'
 import * as t from 'io-ts'
 import reporter from 'io-ts-reporters'
 import {isRight} from 'fp-ts/Either'
+import {GitHub} from '@actions/github/lib/utils'
+import * as github from '@actions/github'
 
 const Matcher = t.partial({
   title: t.string,
@@ -52,4 +54,22 @@ export function parse(content: string): Config {
       `labeler.yml parse error:\\n${reporter.report(decoded).join('\\n')}`
     )
   }
+}
+
+export async function getConfig(
+  client: InstanceType<typeof GitHub>,
+  configPath: string
+): Promise<Config> {
+  const response: any = await client.repos.getContent({
+    owner: github.context.repo.owner,
+    repo: github.context.repo.repo,
+    ref: github.context.sha,
+    path: configPath
+  })
+
+  const content: string = await Buffer.from(
+    response.data.content,
+    response.data.encoding
+  ).toString()
+  return parse(content)
 }
