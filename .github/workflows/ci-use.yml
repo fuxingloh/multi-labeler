@@ -15,7 +15,7 @@ jobs:
         uses: actions/github-script@v3
         with:
           script: |
-            await github.repos.createCommitStatus({
+            await github.request('POST /repos/{owner}/{repo}/statuses/{sha}', {
               owner: context.repo.owner,
               repo: context.repo.repo,
               sha: context.sha,
@@ -36,7 +36,7 @@ jobs:
             const success = context.payload.pull_request.labels
               .some(label => ['feat', 'fix', 'chore', 'docs'].includes(label.name))
 
-            await github.repos.createCommitStatus({
+            await github.request('POST /repos/{owner}/{repo}/statuses/{sha}', {
               owner: context.repo.owner,
               repo: context.repo.repo,
               sha: context.sha,
