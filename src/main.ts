@@ -11,7 +11,7 @@ const client = github.getOctokit(githubToken)
 const payload =
   github.context.payload.pull_request || github.context.payload.issue
 
-if (payload?.number) {
+if (!payload?.number) {
   throw new Error(
     'Could not get issue_number from pull_request or issue from context'
   )
