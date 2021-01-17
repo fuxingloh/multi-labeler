@@ -75,7 +75,7 @@ checks:
     description:
       success: Ready for review & merge.
       failure: Missing semantic label for merge.
-    condition:
+    labels:
       any:
         - feat
         - fix

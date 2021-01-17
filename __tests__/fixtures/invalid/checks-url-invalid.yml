@@ -1,0 +1,16 @@
+version: v1
+
+labels:
+  - label: "feat"
+    matcher:
+      title: "^feat:.*"
+
+checks:
+  - context: Seamtnic Pull Request
+    url: []
+    description:
+      success: Ready for review & merge.
+      failure: Missing semantic label for merge.
+    labels:
+      any:
+        - feat

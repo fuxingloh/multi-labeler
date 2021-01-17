@@ -1,0 +1,5 @@
+version: v1
+
+checks:
+  - context: "Always"
+    description: "Always description"

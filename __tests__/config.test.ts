@@ -11,20 +11,68 @@ describe('valid config', () => {
     expect(() => parseConfig('basic.yml')).not.toThrowError()
   })
 
+  it('checks.yml', function () {
+    expect(() => parseConfig('checks.yml')).not.toThrowError()
+  })
+
+  it('checks-basic.yml', function () {
+    expect(() => parseConfig('checks-basic.yml')).not.toThrowError()
+  })
+
   it('empty.yml', function () {
     expect(() => parseConfig('empty.yml')).not.toThrowError()
   })
+
+  it('labels.yml', function () {
+    expect(() => parseConfig('labels.yml')).not.toThrowError()
+  })
+
+  it('semantic-release.yml', function () {
+    expect(() => parseConfig('semantic-release.yml')).not.toThrowError()
+  })
 })
 
-describe('invalid config', () => {
-  it('labels-empty.yml', function () {
-    expect(() => parseConfig('invalid/labels-empty.yml')).toThrow(
+describe('invalid checks', () => {
+  it('checks-all-invalid.yml', function () {
+    expect(() => parseConfig('invalid/checks-all-invalid.yml')).toThrow(
       /labeler\.yml parse error:/
     )
   })
 
-  it('labels-missing.yml', function () {
-    expect(() => parseConfig('invalid/labels-missing.yml')).toThrow(
+  it('checks-any-invalid.yml', function () {
+    expect(() => parseConfig('invalid/checks-any-invalid.yml')).toThrow(
+      /labeler\.yml parse error:/
+    )
+  })
+
+  it('checks-context-invalid.yml', function () {
+    expect(() => parseConfig('invalid/checks-context-invalid.yml')).toThrow(
+      /labeler\.yml parse error:/
+    )
+  })
+
+  it('checks-context-missing.yml', function () {
+    expect(() => parseConfig('invalid/checks-context-missing.yml')).toThrow(
+      /labeler\.yml parse error:/
+    )
+  })
+
+  it('checks-empty.yml', function () {
+    expect(() => parseConfig('invalid/checks-empty.yml')).toThrow(
+      /labeler\.yml parse error:/
+    )
+  })
+
+  it('checks-url-invalid.yml', function () {
+    expect(() => parseConfig('invalid/checks-url-invalid.yml')).toThrow(
+      /labeler\.yml parse error:/
+    )
+  })
+})
+
+describe('invalid labels', () => {
+  it('labels-empty.yml', function () {
+    expect(() => parseConfig('invalid/labels-empty.yml')).toThrow(
       /labeler\.yml parse error:/
     )
   })
@@ -43,12 +91,12 @@ describe('invalid config', () => {
 
   it('version-invalid.yml', function () {
     expect(() => parseConfig('invalid/version-invalid.yml')).toThrow(
-      'labeler.yml parse error:\\nExpecting "v1" at version but instead got: "v100"'
+      'labeler.yml parse error:\\nExpecting "v1" at 0.version but instead got: "v100"'
     )
   })
 })
 
-describe('invalid matcher', () => {
+describe('invalid labels matcher', () => {
   it('matcher-body-invalid.yml', function () {
     expect(() => parseConfig('invalid/matcher-body-invalid.yml')).toThrow(
       /labeler\.yml parse error:/

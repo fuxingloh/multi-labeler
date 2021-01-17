@@ -5,7 +5,8 @@
 [![Release](https://img.shields.io/github/v/release/fuxingloh/multi-labeler)](https://github.com/fuxingloh/multi-labeler/releases)
 [![License MIT](https://img.shields.io/github/license/fuxingloh/multi-labeler)](https://github.com/fuxingloh/multi-labeler/blob/main/LICENSE)
 
-Multi labeler for title, body, comments, commit messages, branch or files.
+Multi labeler for title, body, comments, commit messages, branch or files. Optionally, generate a status check based on
+the labels.
 
 ## Features
 
@@ -21,6 +22,9 @@ Multi labeler for title, body, comments, commit messages, branch or files.
   - Files count
   - Files any glob match
   - Files all glob match
+- Generate status checks:
+  - Any label match
+  - All label match
 
 ## Usage
 
@@ -49,7 +53,7 @@ version: v1
 
 labels:
   - label: "feat"
-    matcher: 
+    matcher:
       # Matcher will match on any 6 matcher
       title: "^feat:.*"
       body: "/feat"
@@ -57,14 +61,87 @@ labels:
       branch: "^feat/.*"
       commits: "^feat:.*"
       files:
-        any: ["app/*"]
-        all: ["!app/config/**"]
+        any: [ "app/*" ]
+        all: [ "!app/config/**" ]
         count:
           gte: 1
           lte: 1000
+
+checks:
+  - context: "Status Check"
+    description: "Description"
+    labels:
+      any:
+        - any
+        - have
+      all:
+        - must
+        - all
+        - have
 ```
 
 ### Examples
+
+<details>
+  <summary>Semantic Pull Request</summary>
+
+#### `.github/workflow/pr-triage.yml`
+
+```yml
+on:
+  pull_request:
+    types: [ opened, edited, synchronize, ready_for_review ]
+    branches: [ master, main ]
+
+jobs:
+  labeler:
+    name: Labeler
+    runs-on: ubuntu-latest
+    steps:
+      - uses: fuxingloh/multi-labeler@v1
+```
+
+#### `.github/labeler.yml`
+
+```yml
+version: v1
+
+labels:
+  - label: "feat"
+    matcher:
+      title: "^feat: .*"
+      commits: "^feat: .*"
+
+  - label: "fix"
+    matcher:
+      title: "^fix: .*"
+      commits: "^fix: .*"
+
+  - label: "chore"
+    matcher:
+      title: "^chore: .*"
+      commits: "^chore: .*"
+
+  - label: "docs"
+    matcher:
+      title: "^docs: .*"
+      commits: "^docs: .*"
+
+checks:
+  - context: "Semantic Pull Request"
+    url: "https://github.com/fuxingloh/multi-labeler/blob/main/.github/labeler.yml"
+    description:
+      success: Ready for review & merge.
+      failure: Missing semantic label for merge.
+    labels:
+      any:
+        - feat
+        - fix
+        - chore
+        - docs
+```
+
+</details>
 
 <details>
   <summary>PR Triage</summary>
@@ -304,6 +381,40 @@ labels:
         any: [ "app/**" ]
         count:
           neq: 1
+```
+
+### PR Status Checks
+
+#### PR Check any
+
+```yml
+version: v1
+
+checks:
+  - context: "Release Drafter"
+    url: "https://go.to/detail"
+    description:
+      success: "Ready for review & merge."
+      failure: "Missing labels for release."
+    labels:
+      any:
+        - feat
+        - fix
+        - chore
+        - docs 
+```
+
+#### PR Check any + all
+
+```yml
+version: v1
+
+checks:
+  - context: "Merge check"
+    description: "Labels for merge."
+    labels:
+      any: [ "reviewed", "size:s" ]
+      all: [ "app" ]
 ```
 
 ## Why?

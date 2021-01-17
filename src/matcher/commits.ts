@@ -13,7 +13,7 @@ export default async function match(
     return []
   }
 
-  const matchers = config.labels.filter(value => {
+  const matchers = config.labels!.filter(value => {
     return value.matcher?.commits
   })
 

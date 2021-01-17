@@ -1,0 +1,8 @@
+version: v1
+
+checks:
+  - context: "Always"
+    description: "Always failure"
+    labels:
+      all:
+        - always-failure
