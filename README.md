@@ -22,6 +22,9 @@ the labels.
   - Files count
   - Files any glob match
   - Files all glob match
+- Generate status checks:
+  - Any label match
+  - All label match
 
 ## Usage
 
