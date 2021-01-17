@@ -316,7 +316,7 @@ const githubToken = core.getInput('github-token');
 const configPath = core.getInput('config-path', { required: true });
 const client = github.getOctokit(githubToken);
 const payload = github.context.payload.pull_request || github.context.payload.issue;
-if (payload === null || payload === void 0 ? void 0 : payload.number) {
+if (!(payload === null || payload === void 0 ? void 0 : payload.number)) {
     throw new Error('Could not get issue_number from pull_request or issue from context');
 }
 function addLabels(labels) {
