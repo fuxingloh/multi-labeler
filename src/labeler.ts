@@ -13,6 +13,10 @@ export async function labels(
   client: InstanceType<typeof GitHub>,
   config: Config
 ): Promise<string[]> {
+  if (!config.labels?.length) {
+    return []
+  }
+
   return Promise.all([
     title(client, config),
     body(client, config),

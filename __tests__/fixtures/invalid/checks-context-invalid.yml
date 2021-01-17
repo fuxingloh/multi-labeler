@@ -1,14 +1,15 @@
 version: v1
 
+labels:
+  - label: "feat"
+    matcher:
+      title: "^feat:.*"
+
 checks:
-  - context: "Semantic Pull Request"
-    url: "https://github.com/fuxingloh/multi-labeler/blob/main/.github/labeler.yml"
+  - context: []
     description:
       success: Ready for review & merge.
       failure: Missing semantic label for merge.
     labels:
       any:
         - feat
-        - fix
-        - chore
-        - docs

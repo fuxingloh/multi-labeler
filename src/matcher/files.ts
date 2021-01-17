@@ -24,8 +24,8 @@ interface FileCountMatcher {
  * Get a type-safe FileMatcher
  */
 function getMatchers(config: Config): FileMatcher[] {
-  return config.labels
-    .filter(value => {
+  return config
+    .labels!.filter(value => {
       if (Array.isArray(value.matcher?.files)) {
         return value.matcher?.files.length
       }

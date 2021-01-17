@@ -34,33 +34,37 @@ const Label = t.type({
 
 const Check = t.intersection([
   t.type({
-    context: t.string,
+    context: t.string
   }),
   t.partial({
     url: t.string,
     description: t.union([
-      t.string, t.partial({
+      t.string,
+      t.partial({
         success: t.string,
-        failure: t.string,
+        failure: t.string
       })
     ]),
-    condition: t.partial({
+    labels: t.partial({
       any: t.array(t.string),
-      all: t.array(t.string),
+      all: t.array(t.string)
     })
   })
 ])
 
-const Config = t.type({
-  version: t.keyof({
-    v1: null
+const Config = t.intersection([
+  t.type({
+    version: t.literal('v1')
   }),
-  labels: t.union([t.array(Label), t.undefined]),
-  checks: t.union([t.array(Check), t.undefined]),
-})
+  t.partial({
+    labels: t.array(Label),
+    checks: t.array(Check)
+  })
+])
 
 export type Matcher = t.TypeOf<typeof Matcher>
 export type Label = t.TypeOf<typeof Label>
+export type Check = t.TypeOf<typeof Check>
 export type Config = t.TypeOf<typeof Config>
 
 export function parse(content: string): Config {

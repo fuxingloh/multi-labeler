@@ -14,8 +14,8 @@ export default function match(
     return []
   }
 
-  return config.labels
-    .filter(value => {
+  return config
+    .labels!.filter(value => {
       return matcherRegex({regex: value.matcher?.branch, text: ref})
     })
     .map(value => value.label)

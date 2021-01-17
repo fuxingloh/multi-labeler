@@ -5,27 +5,11 @@ labels:
     matcher:
       title: "^feat:.*"
 
-  - label: "fix"
-    matcher:
-      title: "^fix:.*"
-
-  - label: "chore"
-    matcher:
-      title: "^chore:.*"
-
-  - label: "docs"
-    matcher:
-      title: "^docs:.*"
-
 checks:
-  - context: "Semantic Pull Request"
+  - context: Semantic Pull Request
     url: "https://github.com/fuxingloh/multi-labeler/blob/main/.github/labeler.yml"
     description:
       success: Ready for review & merge.
       failure: Missing semantic label for merge.
     labels:
-      any:
-        - feat
-        - fix
-        - chore
-        - docs
+      any: feat

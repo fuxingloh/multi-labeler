@@ -2,6 +2,102 @@ require('./sourcemap-register.js');module.exports =
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 2321:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.checks = void 0;
+const github = __importStar(__nccwpck_require__(5438));
+const lodash_1 = __nccwpck_require__(250);
+function joined(labels) {
+    var _a;
+    const currently = (_a = github.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.labels.map((label) => label.name);
+    return lodash_1.uniq(lodash_1.concat(labels, currently));
+}
+function is(check, labels) {
+    var _a, _b, _c, _d;
+    if ((_b = (_a = check.labels) === null || _a === void 0 ? void 0 : _a.any) === null || _b === void 0 ? void 0 : _b.length) {
+        if (!labels.some(label => { var _a, _b; return (_b = (_a = check.labels) === null || _a === void 0 ? void 0 : _a.any) === null || _b === void 0 ? void 0 : _b.includes(label); })) {
+            return false;
+        }
+    }
+    if ((_d = (_c = check.labels) === null || _c === void 0 ? void 0 : _c.all) === null || _d === void 0 ? void 0 : _d.length) {
+        if (!labels.every(label => { var _a, _b; return (_b = (_a = check.labels) === null || _a === void 0 ? void 0 : _a.all) === null || _b === void 0 ? void 0 : _b.includes(label); })) {
+            return false;
+        }
+    }
+    return true;
+}
+function checks(client, config, labels) {
+    var _a;
+    return __awaiter(this, void 0, void 0, function* () {
+        if (!github.context.payload.pull_request) {
+            return [];
+        }
+        if (!((_a = config.checks) === null || _a === void 0 ? void 0 : _a.length)) {
+            return [];
+        }
+        labels = joined(labels);
+        return config.checks.map(check => {
+            var _a, _b;
+            if (is(check, labels)) {
+                return {
+                    context: check.context,
+                    url: check.url,
+                    state: 'success',
+                    description: typeof check.description === 'string'
+                        ? check.description
+                        : (_a = check.description) === null || _a === void 0 ? void 0 : _a.success
+                };
+            }
+            else {
+                return {
+                    context: check.context,
+                    url: check.url,
+                    state: 'failure',
+                    description: typeof check.description === 'string'
+                        ? check.description
+                        : (_b = check.description) === null || _b === void 0 ? void 0 : _b.failure
+                };
+            }
+        });
+    });
+}
+exports.checks = checks;
+
+
+/***/ }),
+
 /***/ 88:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -70,12 +166,34 @@ const Label = t.type({
     label: t.string,
     matcher: t.union([Matcher, t.undefined])
 });
-const Config = t.type({
-    version: t.keyof({
-        v1: null
+const Check = t.intersection([
+    t.type({
+        context: t.string
     }),
-    labels: t.array(Label)
-});
+    t.partial({
+        url: t.string,
+        description: t.union([
+            t.string,
+            t.partial({
+                success: t.string,
+                failure: t.string
+            })
+        ]),
+        labels: t.partial({
+            any: t.array(t.string),
+            all: t.array(t.string)
+        })
+    })
+]);
+const Config = t.intersection([
+    t.type({
+        version: t.literal('v1')
+    }),
+    t.partial({
+        labels: t.array(Label),
+        checks: t.array(Check)
+    })
+]);
 function parse(content) {
     const config = yaml.load(content);
     const decoded = Config.decode(config);
@@ -131,7 +249,11 @@ const branch_1 = __importDefault(__nccwpck_require__(5832));
 const commits_1 = __importDefault(__nccwpck_require__(747));
 const files_1 = __importDefault(__nccwpck_require__(1180));
 function labels(client, config) {
+    var _a;
     return __awaiter(this, void 0, void 0, function* () {
+        if (!((_a = config.labels) === null || _a === void 0 ? void 0 : _a.length)) {
+            return [];
+        }
         return Promise.all([
             title_1.default(client, config),
             body_1.default(client, config),
@@ -187,27 +309,61 @@ const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
 const labeler_1 = __nccwpck_require__(5272);
 const config_1 = __nccwpck_require__(88);
+const checks_1 = __nccwpck_require__(2321);
 const githubToken = core.getInput('github-token');
 const configPath = core.getInput('config-path', { required: true });
 const client = github.getOctokit(githubToken);
 const payload = github.context.payload.pull_request || github.context.payload.issue;
-config_1.getConfig(client, configPath)
-    .then(config => labeler_1.labels(client, config))
-    .then((labels) => __awaiter(void 0, void 0, void 0, function* () {
-    core.setOutput('labels', labels);
-    if (labels.length) {
+if (payload === null || payload === void 0 ? void 0 : payload.number) {
+    throw new Error('Could not get issue_number from pull_request or issue from context');
+}
+function addLabels(labels) {
+    return __awaiter(this, void 0, void 0, function* () {
+        core.setOutput('labels', labels);
+        if (!labels.length) {
+            return;
+        }
         yield client.issues.addLabels({
             owner: github.context.repo.owner,
             repo: github.context.repo.repo,
             issue_number: payload.number,
             labels: labels
         });
-    }
-    return labels;
+    });
+}
+function addChecks(checks) {
+    var _a;
+    return __awaiter(this, void 0, void 0, function* () {
+        if (!checks.length) {
+            return;
+        }
+        if (!github.context.payload.pull_request) {
+            return;
+        }
+        const sha = (_a = github.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.head.sha;
+        yield Promise.all([
+            checks.map(check => {
+                client.repos.createCommitStatus({
+                    owner: github.context.repo.owner,
+                    repo: github.context.repo.repo,
+                    sha: sha,
+                    context: check.context,
+                    state: check.state,
+                    description: check.description,
+                    target_url: check.url
+                });
+            })
+        ]);
+    });
+}
+config_1.getConfig(client, configPath)
+    .then((config) => __awaiter(void 0, void 0, void 0, function* () {
+    const labeled = yield labeler_1.labels(client, config);
+    return Promise.all([
+        addLabels(labeled),
+        checks_1.checks(client, config, labeled).then(checks => addChecks(checks))
+    ]);
 }))
-    .then(labels => {
-    // TODO(fuxing): checks
-})
     .catch(error => {
     core.error(error);
     core.setFailed(error.message);
@@ -249,8 +405,8 @@ function match(client, config) {
     if (!body) {
         return [];
     }
-    return config.labels
-        .filter(value => {
+    return config
+        .labels.filter(value => {
         var _a;
         return utils_1.matcherRegex({ regex: (_a = value.matcher) === null || _a === void 0 ? void 0 : _a.body, text: body });
     })
@@ -295,8 +451,8 @@ function match(client, config) {
     if (!ref) {
         return [];
     }
-    return config.labels
-        .filter(value => {
+    return config
+        .labels.filter(value => {
         var _a;
         return utils_1.matcherRegex({ regex: (_a = value.matcher) === null || _a === void 0 ? void 0 : _a.branch, text: ref });
     })
@@ -340,8 +496,8 @@ function match(client, config) {
     if (!body) {
         return [];
     }
-    return config.labels
-        .filter(value => {
+    return config
+        .labels.filter(value => {
         var _a;
         return utils_1.matcherRegex({ regex: (_a = value.matcher) === null || _a === void 0 ? void 0 : _a.comment, text: body });
     })
@@ -461,8 +617,8 @@ const minimatch_1 = __nccwpck_require__(3973);
  * Get a type-safe FileMatcher
  */
 function getMatchers(config) {
-    return config.labels
-        .filter(value => {
+    return config
+        .labels.filter(value => {
         var _a, _b, _c;
         if (Array.isArray((_a = value.matcher) === null || _a === void 0 ? void 0 : _a.files)) {
             return (_b = value.matcher) === null || _b === void 0 ? void 0 : _b.files.length;
@@ -620,8 +776,8 @@ function match(client, config) {
     if (!title) {
         return [];
     }
-    return config.labels
-        .filter(value => {
+    return config
+        .labels.filter(value => {
         var _a;
         return utils_1.matcherRegex({ regex: (_a = value.matcher) === null || _a === void 0 ? void 0 : _a.title, text: title });
     })
