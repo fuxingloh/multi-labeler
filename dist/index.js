@@ -36,7 +36,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.checks = void 0;
+exports.checks = exports.is = exports.joined = void 0;
 const github = __importStar(__nccwpck_require__(5438));
 const lodash_1 = __nccwpck_require__(250);
 function joined(labels) {
@@ -44,20 +44,22 @@ function joined(labels) {
     const currently = (_a = github.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.labels.map((label) => label.name);
     return lodash_1.uniq(lodash_1.concat(labels, currently));
 }
+exports.joined = joined;
 function is(check, labels) {
-    var _a, _b, _c, _d;
+    var _a, _b, _c, _d, _e, _f;
     if ((_b = (_a = check.labels) === null || _a === void 0 ? void 0 : _a.any) === null || _b === void 0 ? void 0 : _b.length) {
         if (!labels.some(label => { var _a, _b; return (_b = (_a = check.labels) === null || _a === void 0 ? void 0 : _a.any) === null || _b === void 0 ? void 0 : _b.includes(label); })) {
             return false;
         }
     }
     if ((_d = (_c = check.labels) === null || _c === void 0 ? void 0 : _c.all) === null || _d === void 0 ? void 0 : _d.length) {
-        if (!labels.every(label => { var _a, _b; return (_b = (_a = check.labels) === null || _a === void 0 ? void 0 : _a.all) === null || _b === void 0 ? void 0 : _b.includes(label); })) {
+        if (!((_f = (_e = check.labels) === null || _e === void 0 ? void 0 : _e.all) === null || _f === void 0 ? void 0 : _f.every(label => labels.includes(label)))) {
             return false;
         }
     }
     return true;
 }
+exports.is = is;
 function checks(client, config, labels) {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
