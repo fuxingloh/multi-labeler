@@ -1,0 +1,14 @@
+version: v1
+
+checks:
+  - context: "Semantic Pull Request"
+    url: "https://github.com/fuxingloh/multi-labeler/blob/main/.github/labeler.yml"
+    description:
+      success: Ready for review & merge.
+      failure: Missing semantic label for merge.
+    condition:
+      any:
+        - feat
+        - fix
+        - chore
+        - docs

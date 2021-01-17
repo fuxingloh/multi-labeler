@@ -11,8 +11,20 @@ describe('valid config', () => {
     expect(() => parseConfig('basic.yml')).not.toThrowError()
   })
 
+  it('checks.yml', function () {
+    expect(() => parseConfig('checks.yml')).not.toThrowError()
+  })
+
   it('empty.yml', function () {
     expect(() => parseConfig('empty.yml')).not.toThrowError()
+  })
+
+  it('labels.yml', function () {
+    expect(() => parseConfig('labels.yml')).not.toThrowError()
+  })
+
+  it('semantic-release.yml', function () {
+    expect(() => parseConfig('semantic-release.yml')).not.toThrowError()
   })
 })
 

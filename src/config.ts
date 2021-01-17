@@ -32,11 +32,31 @@ const Label = t.type({
   matcher: t.union([Matcher, t.undefined])
 })
 
+const Check = t.intersection([
+  t.type({
+    context: t.string,
+  }),
+  t.partial({
+    url: t.string,
+    description: t.union([
+      t.string, t.partial({
+        success: t.string,
+        failure: t.string,
+      })
+    ]),
+    condition: t.partial({
+      any: t.array(t.string),
+      all: t.array(t.string),
+    })
+  })
+])
+
 const Config = t.type({
   version: t.keyof({
     v1: null
   }),
-  labels: t.array(Label)
+  labels: t.union([t.array(Label), t.undefined]),
+  checks: t.union([t.array(Check), t.undefined]),
 })
 
 export type Matcher = t.TypeOf<typeof Matcher>
