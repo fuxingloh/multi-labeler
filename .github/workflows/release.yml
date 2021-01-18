@@ -8,5 +8,5 @@ jobs:
   release-tags:
     runs-on: ubuntu-latest
     steps:
-      - name: Additional Tags
-        uses: vweevers/additional-tags-action@v1
+      - uses: actions/checkout@v2
+      - uses: vweevers/additional-tags-action@v1
