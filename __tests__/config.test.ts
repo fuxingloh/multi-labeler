@@ -79,13 +79,13 @@ describe('invalid labels', () => {
 
   it('malformed-escaping.yml', function () {
     expect(() => parseConfig('invalid/malformed-escaping.yml')).toThrow(
-      /unknown escape sequence at .+/
+      /unknown escape sequence .+/
     )
   })
 
   it('malformed-indent.yml', function () {
     expect(() => parseConfig('invalid/malformed-indent.yml')).toThrow(
-      /bad indentation of a mapping entry at .+/
+      /bad indentation of a mapping entry .+/
     )
   })
 
