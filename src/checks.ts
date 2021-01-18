@@ -1,20 +1,12 @@
 import {GitHub} from '@actions/github/lib/utils'
 import {Check, Config} from './config'
 import * as github from '@actions/github'
-import {concat, uniq} from 'lodash'
 
 export interface StatusCheck {
   context: string
   state: 'success' | 'failure'
   description?: string
   url?: string
-}
-
-export function joined(labels: string[]): string[] {
-  const currently = github.context.payload.pull_request?.labels.map(
-    (label: any) => label.name as string
-  )
-  return uniq(concat(labels, currently))
 }
 
 export function is(check: Check, labels: string[]): boolean {
@@ -45,8 +37,6 @@ export async function checks(
   if (!config.checks?.length) {
     return []
   }
-
-  labels = joined(labels)
 
   return config.checks.map(check => {
     if (is(check, labels)) {

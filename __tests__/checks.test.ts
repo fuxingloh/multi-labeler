@@ -3,7 +3,7 @@ import * as github from '@actions/github'
 import {GitHub} from '@actions/github/lib/utils'
 import {getConfig} from '../src/config'
 import * as fs from 'fs'
-import {checks, is, joined, StatusCheck} from '../src/checks'
+import {checks, is, StatusCheck} from '../src/checks'
 
 const client: InstanceType<typeof GitHub> = {
   repos: {
@@ -28,64 +28,6 @@ async function runChecks(
   const config = await getConfig(client, configPath)
   return checks(client, config, labels)
 }
-
-describe('joined', () => {
-  it('lhs empty should join', function () {
-    github.context.payload = {
-      pull_request: {
-        number: 1,
-        labels: []
-      }
-    }
-
-    const labels = ['a', 'b', 'c']
-    expect(joined(labels)).toEqual(labels)
-  })
-
-  it('rhs empty should join', function () {
-    const labels = ['a', 'b', 'c']
-    github.context.payload = {
-      pull_request: {
-        number: 1,
-        labels: labels.map(value => {
-          return {name: value}
-        })
-      }
-    }
-
-    expect(joined([])).toEqual(labels)
-  })
-
-  it('non empty should join', function () {
-    const lhs = ['a', 'b', 'c']
-    const rhs = ['d', 'e', 'f']
-    github.context.payload = {
-      pull_request: {
-        number: 1,
-        labels: lhs.map(value => {
-          return {name: value}
-        })
-      }
-    }
-
-    expect(joined(rhs).sort()).toEqual([...lhs, ...rhs].sort())
-  })
-
-  it('should dedupe', function () {
-    const lhs = ['a', 'b', 'c']
-    const rhs = ['c', 'b', 'f']
-    github.context.payload = {
-      pull_request: {
-        number: 1,
-        labels: lhs.map(value => {
-          return {name: value}
-        })
-      }
-    }
-
-    expect(joined(rhs).sort()).toEqual(['a', 'b', 'c', 'f'].sort())
-  })
-})
 
 describe('is', () => {
   it('should empty true', function () {
@@ -443,17 +385,9 @@ describe('checks', () => {
   })
 
   it('feat: success state', async function () {
-    github.context.payload = {
-      pull_request: {
-        number: 1,
-        labels: [{name: 'feat'}]
-      }
-    }
-
-    const checks = await runChecks(
-      '__tests__/fixtures/semantic-release.yml',
-      []
-    )
+    const checks = await runChecks('__tests__/fixtures/semantic-release.yml', [
+      'feat'
+    ])
 
     expect(checks.length).toBe(1)
     expect(checks[0].context).toBe('Semantic Pull Request')
@@ -465,13 +399,6 @@ describe('checks', () => {
   })
 
   it('chore: success state', async function () {
-    github.context.payload = {
-      pull_request: {
-        number: 1,
-        labels: [{name: 'help'}]
-      }
-    }
-
     const checks = await runChecks('__tests__/fixtures/semantic-release.yml', [
       'chore'
     ])
@@ -500,15 +427,10 @@ describe('checks', () => {
   })
 
   it('fix: success state', async function () {
-    github.context.payload = {
-      pull_request: {
-        number: 1,
-        labels: [{name: 'bug'}, {name: 'fix'}]
-      }
-    }
-
     const checks = await runChecks('__tests__/fixtures/semantic-release.yml', [
-      'none'
+      'none',
+      'bug',
+      'fix'
     ])
 
     expect(checks.length).toBe(1)

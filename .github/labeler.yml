@@ -26,14 +26,17 @@ labels:
       commits: "^docs:.*"
 
   - label: "test:labeler"
+    sync: true
     matcher:
       files: ".github/labeler.yml"
 
   - label: "test:dist"
+    sync: true
     matcher:
       files: ["dist/*"]
 
   - label: "test:tests"
+    sync: true
     matcher:
       files: [ "__tests__/matcher/**", "__tests__/*.ts" ]
 
@@ -50,6 +53,7 @@ labels:
       comment: "/stale"
 
   - label: "test: s"
+    sync: true
     matcher:
       files:
         count:
@@ -57,6 +61,7 @@ labels:
           lte: 4
 
   - label: "test: m"
+    sync: true
     matcher:
       files:
         count:
@@ -64,6 +69,7 @@ labels:
           lte: 10
 
   - label: "test: l"
+    sync: true
     matcher:
       files:
         count:

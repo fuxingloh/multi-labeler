@@ -1,7 +1,7 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
-import {labels} from './labeler'
-import {getConfig} from './config'
+import {labels, mergeLabels} from './labeler'
+import {Config, getConfig} from './config'
 import {checks, StatusCheck} from './checks'
 
 const githubToken = core.getInput('github-token')
@@ -32,6 +32,27 @@ async function addLabels(labels: string[]): Promise<void> {
   })
 }
 
+async function removeLabels(
+  labels: string[],
+  config: Config
+): Promise<unknown[]> {
+  return Promise.all(
+    (config.labels || [])
+      .filter(label => {
+        // Is sync, not matched in final set of labels
+        return label.sync && !labels.includes(label.label)
+      })
+      .map(label => {
+        return client.issues.removeLabel({
+          owner: github.context.repo.owner,
+          repo: github.context.repo.repo,
+          issue_number: payload!.number,
+          name: label.label
+        })
+      })
+  )
+}
+
 async function addChecks(checks: StatusCheck[]): Promise<void> {
   if (!checks.length) {
     return
@@ -60,9 +81,12 @@ async function addChecks(checks: StatusCheck[]): Promise<void> {
 getConfig(client, configPath)
   .then(async config => {
     const labeled = await labels(client, config)
+    const finalLabels = mergeLabels(labeled, config)
+
     return Promise.all([
-      addLabels(labeled),
-      checks(client, config, labeled).then(checks => addChecks(checks))
+      addLabels(finalLabels),
+      removeLabels(finalLabels, config),
+      checks(client, config, finalLabels).then(checks => addChecks(checks))
     ])
   })
   .catch(error => {

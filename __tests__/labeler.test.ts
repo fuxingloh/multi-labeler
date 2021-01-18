@@ -1,8 +1,8 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
-import {labels} from '../src/labeler'
+import {labels, mergeLabels} from '../src/labeler'
 import {GitHub} from '@actions/github/lib/utils'
-import {getConfig} from '../src/config'
+import {Config, getConfig} from '../src/config'
 import * as fs from 'fs'
 
 const client: InstanceType<typeof GitHub> = {
@@ -151,5 +151,158 @@ describe('labeler', () => {
       const labels = await runLabels('__tests__/fixtures/basic.yml')
       expect(labels).toEqual(['docs'])
     })
+  })
+})
+
+describe('mergeLabels, empty config', () => {
+  const config: Config = {
+    version: 'v1'
+  }
+
+  it('lhs empty should join', function () {
+    github.context.payload = {
+      pull_request: {
+        number: 1,
+        labels: []
+      }
+    }
+
+    const labels = ['a', 'b', 'c']
+    expect(mergeLabels(labels, config)).toEqual(labels)
+  })
+
+  it('rhs empty should join', function () {
+    const labels = ['a', 'b', 'c']
+    github.context.payload = {
+      pull_request: {
+        number: 1,
+        labels: labels.map(value => {
+          return {name: value}
+        })
+      }
+    }
+
+    expect(mergeLabels([], config)).toEqual(labels)
+  })
+
+  it('non empty should join', function () {
+    const lhs = ['a', 'b', 'c']
+    const rhs = ['d', 'e', 'f']
+    github.context.payload = {
+      pull_request: {
+        number: 1,
+        labels: lhs.map(value => {
+          return {name: value}
+        })
+      }
+    }
+
+    expect(mergeLabels(rhs, config).sort()).toEqual([...lhs, ...rhs].sort())
+  })
+
+  it('should dedupe', function () {
+    const lhs = ['a', 'b', 'c']
+    const rhs = ['c', 'b', 'f']
+    github.context.payload = {
+      pull_request: {
+        number: 1,
+        labels: lhs.map(value => {
+          return {name: value}
+        })
+      }
+    }
+
+    expect(mergeLabels(rhs, config).sort()).toEqual(['a', 'b', 'c', 'f'].sort())
+  })
+})
+
+describe('mergeLabels, sync config', () => {
+  const config: Config = {
+    version: 'v1',
+    labels: [
+      {
+        label: 'sync1',
+        sync: true,
+        matcher: {}
+      },
+      {
+        label: 'sync2',
+        sync: true,
+        matcher: {}
+      },
+      {
+        label: 'no-sync1',
+        sync: false,
+        matcher: {}
+      },
+      {
+        label: 'no-sync2',
+        matcher: {}
+      }
+    ]
+  }
+
+  it('lhs empty should join', function () {
+    github.context.payload = {
+      pull_request: {
+        number: 1,
+        labels: [
+          {
+            name: 'no-sync1'
+          },
+          {
+            name: 'sync1'
+          }
+        ]
+      }
+    }
+
+    const labels = ['a', 'b', 'c', 'no-sync1']
+    expect(mergeLabels(labels, config).sort()).toEqual(labels.sort())
+  })
+
+  it('rhs empty should join', function () {
+    github.context.payload = {
+      pull_request: {
+        number: 1,
+        labels: ['a', 'b', 'c', 'no-sync2', 'sync2'].map(value => {
+          return {name: value}
+        })
+      }
+    }
+
+    expect(mergeLabels([], config).sort()).toEqual(
+      ['a', 'b', 'c', 'no-sync2'].sort()
+    )
+  })
+
+  it('non empty should join', function () {
+    github.context.payload = {
+      pull_request: {
+        number: 1,
+        labels: ['a', 'b', 'c', 'no-sync1', 'sync1'].map(value => {
+          return {name: value}
+        })
+      }
+    }
+
+    expect(mergeLabels(['d', 'e', 'f'], config).sort()).toEqual(
+      ['a', 'b', 'c', 'd', 'e', 'f', 'no-sync1'].sort()
+    )
+  })
+
+  it('should dedupe', function () {
+    github.context.payload = {
+      pull_request: {
+        number: 1,
+        labels: ['a', 'b', 'c', 'no-sync2', 'sync2'].map(value => {
+          return {name: value}
+        })
+      }
+    }
+
+    expect(mergeLabels(['c', 'b', 'f'], config).sort()).toEqual(
+      ['a', 'b', 'c', 'f', 'no-sync2'].sort()
+    )
   })
 })

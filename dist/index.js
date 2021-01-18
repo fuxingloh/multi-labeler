@@ -36,15 +36,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.checks = exports.is = exports.joined = void 0;
+exports.checks = exports.is = void 0;
 const github = __importStar(__nccwpck_require__(5438));
-const lodash_1 = __nccwpck_require__(250);
-function joined(labels) {
-    var _a;
-    const currently = (_a = github.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.labels.map((label) => label.name);
-    return lodash_1.uniq(lodash_1.concat(labels, currently));
-}
-exports.joined = joined;
 function is(check, labels) {
     var _a, _b, _c, _d, _e, _f;
     if ((_b = (_a = check.labels) === null || _a === void 0 ? void 0 : _a.any) === null || _b === void 0 ? void 0 : _b.length) {
@@ -69,7 +62,6 @@ function checks(client, config, labels) {
         if (!((_a = config.checks) === null || _a === void 0 ? void 0 : _a.length)) {
             return [];
         }
-        labels = joined(labels);
         return config.checks.map(check => {
             var _a, _b;
             if (is(check, labels)) {
@@ -164,10 +156,15 @@ const Matcher = t.partial({
         })
     ])
 });
-const Label = t.type({
-    label: t.string,
-    matcher: t.union([Matcher, t.undefined])
-});
+const Label = t.intersection([
+    t.type({
+        label: t.string
+    }),
+    t.partial({
+        sync: t.boolean,
+        matcher: Matcher
+    })
+]);
 const Check = t.intersection([
     t.type({
         context: t.string
@@ -229,6 +226,25 @@ exports.getConfig = getConfig;
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -242,7 +258,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.labels = void 0;
+exports.labels = exports.mergeLabels = void 0;
 const lodash_1 = __nccwpck_require__(250);
 const title_1 = __importDefault(__nccwpck_require__(9961));
 const body_1 = __importDefault(__nccwpck_require__(5404));
@@ -250,13 +266,30 @@ const comment_1 = __importDefault(__nccwpck_require__(5921));
 const branch_1 = __importDefault(__nccwpck_require__(5832));
 const commits_1 = __importDefault(__nccwpck_require__(747));
 const files_1 = __importDefault(__nccwpck_require__(1180));
+const github = __importStar(__nccwpck_require__(5438));
+function mergeLabels(labels, config) {
+    var _a;
+    const payload = github.context.payload.pull_request || github.context.payload.issue;
+    const currents = ((_a = payload === null || payload === void 0 ? void 0 : payload.labels) === null || _a === void 0 ? void 0 : _a.map((label) => label.name)) ||
+        [];
+    const removals = (config.labels || [])
+        .filter(label => {
+        // Is sync, not matched and currently added as a label in payload
+        return (label.sync &&
+            !labels.includes(label.label) &&
+            currents.includes(label.label));
+    })
+        .map(value => value.label);
+    return lodash_1.difference(lodash_1.uniq(lodash_1.concat(labels, currents)), removals);
+}
+exports.mergeLabels = mergeLabels;
 function labels(client, config) {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
         if (!((_a = config.labels) === null || _a === void 0 ? void 0 : _a.length)) {
             return [];
         }
-        return Promise.all([
+        const labels = yield Promise.all([
             title_1.default(client, config),
             body_1.default(client, config),
             comment_1.default(client, config),
@@ -266,6 +299,7 @@ function labels(client, config) {
         ]).then(value => {
             return lodash_1.uniq(lodash_1.concat(...value));
         });
+        return mergeLabels(labels, config);
     });
 }
 exports.labels = labels;
@@ -333,6 +367,23 @@ function addLabels(labels) {
         });
     });
 }
+function removeLabels(labels, config) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return Promise.all((config.labels || [])
+            .filter(label => {
+            // Is sync, not matched in final set of labels
+            return label.sync && !labels.includes(label.label);
+        })
+            .map(label => {
+            return client.issues.removeLabel({
+                owner: github.context.repo.owner,
+                repo: github.context.repo.repo,
+                issue_number: payload.number,
+                name: label.label
+            });
+        }));
+    });
+}
 function addChecks(checks) {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
@@ -361,9 +412,11 @@ function addChecks(checks) {
 config_1.getConfig(client, configPath)
     .then((config) => __awaiter(void 0, void 0, void 0, function* () {
     const labeled = yield labeler_1.labels(client, config);
+    const finalLabels = labeler_1.mergeLabels(labeled, config);
     return Promise.all([
-        addLabels(labeled),
-        checks_1.checks(client, config, labeled).then(checks => addChecks(checks))
+        addLabels(finalLabels),
+        removeLabels(finalLabels, config),
+        checks_1.checks(client, config, finalLabels).then(checks => addChecks(checks))
     ]);
 }))
     .catch(error => {
