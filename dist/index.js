@@ -380,6 +380,8 @@ function removeLabels(labels, config) {
                 repo: github.context.repo.repo,
                 issue_number: payload.number,
                 name: label.label
+            }).catch(ignored => {
+                return undefined;
             });
         }));
     });
