@@ -344,6 +344,14 @@ describe('checks', () => {
     jest.restoreAllMocks()
   })
 
+  it('should be empty without payload', async function () {
+    github.context.payload = {}
+
+    const checks = await runChecks('__tests__/fixtures/basic.yml', ['feat'])
+
+    expect(checks.length).toBe(0)
+  })
+
   it('no checks', async function () {
     const checks = await runChecks('__tests__/fixtures/basic.yml', ['feat'])
 

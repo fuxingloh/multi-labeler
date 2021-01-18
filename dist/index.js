@@ -375,12 +375,14 @@ function removeLabels(labels, config) {
             return label.sync && !labels.includes(label.label);
         })
             .map(label => {
-            return client.issues.removeLabel({
+            return client.issues
+                .removeLabel({
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
                 issue_number: payload.number,
                 name: label.label
-            }).catch(ignored => {
+            })
+                .catch(ignored => {
                 return undefined;
             });
         }));
