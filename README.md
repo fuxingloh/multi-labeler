@@ -53,6 +53,7 @@ version: v1
 
 labels:
   - label: "feat"
+    sync: true # remove label if match failed, default: false
     matcher:
       # Matcher will match on any 6 matcher
       title: "^feat:.*"
@@ -326,11 +327,13 @@ version: v1
 
 labels:
   - label: "github"
+    sync: true
     matcher:
       # This is shorthand for any: [".github/**"]
       files: ".github/**"
 
   - label: "security"
+    sync: true
     matcher:
       # This is shorthand for any: ["web/security/**", "security/**"]
       files: [ "web/security/**", "security/**" ]
@@ -343,6 +346,7 @@ version: v1
 
 labels:
   - label: "size: s"
+    sync: true
     matcher:
       files:
         count:
@@ -350,6 +354,7 @@ labels:
           lte: 4
 
   - label: "size: m"
+    sync: true
     matcher:
       files:
         count:
@@ -357,6 +362,7 @@ labels:
           lte: 10
 
   - label: "size: l"
+    sync: true
     matcher:
       files:
         count:
@@ -370,12 +376,14 @@ version: v1
 
 labels:
   - label: "ci"
+    sync: true
     matcher:
       files:
         any: [ ".github/workflow/**", ".circleci/**" ]
         all: [ "!app/**" ]
 
   - label: "attention"
+    sync: true
     matcher:
       files:
         any: [ "app/**" ]

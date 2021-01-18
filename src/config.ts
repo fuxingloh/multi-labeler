@@ -27,10 +27,15 @@ const Matcher = t.partial({
   ])
 })
 
-const Label = t.type({
-  label: t.string,
-  matcher: t.union([Matcher, t.undefined])
-})
+const Label = t.intersection([
+  t.type({
+    label: t.string
+  }),
+  t.partial({
+    sync: t.boolean,
+    matcher: Matcher
+  })
+])
 
 const Check = t.intersection([
   t.type({
