@@ -8,25 +8,6 @@
 Multi labeler for title, body, comments, commit messages, branch or files. Optionally, generate a status check based on
 the labels.
 
-## Features
-
-- Append based multi-labeler, using `.github/labeler.yml` as config.
-- Automatically fail if `labeler.yml` is malformed, type-checked.
-- Set label to sync for conditional labeling, removed if condition failed.
-- Regex Matcher:
-  - PR/Issue title
-  - PR/Issue body
-  - PR/Issue comments
-  - PR commit messages
-  - PR branch name
-- File Matcher:
-  - Files count
-  - Files any glob match
-  - Files all glob match
-- Generate status checks:
-  - Any label match
-  - All label match
-
 ## Usage
 
 #### `.github/workflow/labeler.yml`
