@@ -11,8 +11,8 @@ import files from './matcher/files'
 import * as github from '@actions/github'
 
 export function mergeLabels(labels: string[], config: Config): string[] {
-  const payload =
-    github.context.payload.pull_request || github.context.payload.issue
+  const context = github.context
+  const payload = context.payload.pull_request || context.payload.issue
 
   const currents =
     (payload?.labels?.map((label: any) => label.name as string) as string[]) ||

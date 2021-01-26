@@ -269,7 +269,8 @@ const files_1 = __importDefault(__nccwpck_require__(1180));
 const github = __importStar(__nccwpck_require__(5438));
 function mergeLabels(labels, config) {
     var _a;
-    const payload = github.context.payload.pull_request || github.context.payload.issue;
+    const context = github.context;
+    const payload = context.payload.pull_request || context.payload.issue;
     const currents = ((_a = payload === null || payload === void 0 ? void 0 : payload.labels) === null || _a === void 0 ? void 0 : _a.map((label) => label.name)) ||
         [];
     const removals = (config.labels || [])
@@ -369,6 +370,9 @@ function addLabels(labels) {
 }
 function removeLabels(labels, config) {
     return __awaiter(this, void 0, void 0, function* () {
+        if (!(github.context.payload.pull_request || github.context.payload.issue)) {
+            return [];
+        }
         return Promise.all((config.labels || [])
             .filter(label => {
             // Is sync, not matched in final set of labels

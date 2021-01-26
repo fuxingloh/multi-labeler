@@ -53,7 +53,7 @@ version: v1
 
 labels:
   - label: "feat"
-    sync: true # remove label if match failed, default: false
+    sync: true # remove label if match failed, default: false (pull_request/issue only)
     matcher:
       # Matcher will match on any 6 matcher
       title: "^feat:.*"

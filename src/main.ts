@@ -3,6 +3,7 @@ import * as github from '@actions/github'
 import {labels, mergeLabels} from './labeler'
 import {Config, getConfig} from './config'
 import {checks, StatusCheck} from './checks'
+import {concat, uniq} from 'lodash'
 
 const githubToken = core.getInput('github-token')
 const configPath = core.getInput('config-path', {required: true})
@@ -36,6 +37,10 @@ async function removeLabels(
   labels: string[],
   config: Config
 ): Promise<unknown[]> {
+  if (!(github.context.payload.pull_request || github.context.payload.issue)) {
+    return []
+  }
+
   return Promise.all(
     (config.labels || [])
       .filter(label => {
