@@ -160,6 +160,7 @@ describe('mergeLabels, empty config', () => {
   }
 
   it('lhs empty should join', function () {
+    github.context.eventName = 'pull_request'
     github.context.payload = {
       pull_request: {
         number: 1,
@@ -173,6 +174,7 @@ describe('mergeLabels, empty config', () => {
 
   it('rhs empty should join', function () {
     const labels = ['a', 'b', 'c']
+    github.context.eventName = 'pull_request'
     github.context.payload = {
       pull_request: {
         number: 1,
@@ -188,6 +190,7 @@ describe('mergeLabels, empty config', () => {
   it('non empty should join', function () {
     const lhs = ['a', 'b', 'c']
     const rhs = ['d', 'e', 'f']
+    github.context.eventName = 'pull_request'
     github.context.payload = {
       pull_request: {
         number: 1,
@@ -203,6 +206,7 @@ describe('mergeLabels, empty config', () => {
   it('should dedupe', function () {
     const lhs = ['a', 'b', 'c']
     const rhs = ['c', 'b', 'f']
+    github.context.eventName = 'pull_request'
     github.context.payload = {
       pull_request: {
         number: 1,
@@ -243,6 +247,7 @@ describe('mergeLabels, sync config', () => {
   }
 
   it('lhs empty should join', function () {
+    github.context.eventName = 'pull_request'
     github.context.payload = {
       pull_request: {
         number: 1,
@@ -262,6 +267,7 @@ describe('mergeLabels, sync config', () => {
   })
 
   it('rhs empty should join', function () {
+    github.context.eventName = 'pull_request'
     github.context.payload = {
       pull_request: {
         number: 1,
@@ -277,6 +283,7 @@ describe('mergeLabels, sync config', () => {
   })
 
   it('non empty should join', function () {
+    github.context.eventName = 'pull_request'
     github.context.payload = {
       pull_request: {
         number: 1,
@@ -292,6 +299,7 @@ describe('mergeLabels, sync config', () => {
   })
 
   it('should dedupe', function () {
+    github.context.eventName = 'pull_request'
     github.context.payload = {
       pull_request: {
         number: 1,
