@@ -12,6 +12,7 @@ the labels.
 
 - Append based multi-labeler, using `.github/labeler.yml` as config.
 - Automatically fail if `labeler.yml` is malformed, type-checked.
+- Set label to sync for conditional labeling, removed if condition failed.
 - Regex Matcher:
   - PR/Issue title
   - PR/Issue body

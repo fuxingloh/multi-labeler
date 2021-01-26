@@ -370,7 +370,8 @@ function addLabels(labels) {
 }
 function removeLabels(labels, config) {
     return __awaiter(this, void 0, void 0, function* () {
-        if (!(github.context.payload.pull_request || github.context.payload.issue)) {
+        const eventName = github.context.eventName;
+        if (!['pull_request', 'issue'].includes(eventName)) {
             return [];
         }
         return Promise.all((config.labels || [])
