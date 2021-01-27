@@ -8,6 +8,7 @@ import comment from './matcher/comment'
 import branch from './matcher/branch'
 import commits from './matcher/commits'
 import files from './matcher/files'
+import author from './matcher/author'
 import * as github from '@actions/github'
 
 export function mergeLabels(labels: string[], config: Config): string[] {
@@ -46,7 +47,8 @@ export async function labels(
     comment(client, config),
     branch(client, config),
     commits(client, config),
-    files(client, config)
+    files(client, config),
+    author(client, config)
   ]).then(value => {
     return uniq(concat(...value))
   })

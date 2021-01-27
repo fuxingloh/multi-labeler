@@ -5,11 +5,12 @@
 [![Release](https://img.shields.io/github/v/release/fuxingloh/multi-labeler)](https://github.com/fuxingloh/multi-labeler/releases)
 [![License MIT](https://img.shields.io/github/license/fuxingloh/multi-labeler)](https://github.com/fuxingloh/multi-labeler/blob/main/LICENSE)
 
-Multi labeler for title, body, comments, commit messages, branch or files. Optionally, generate a status check based on
-the labels.
+Multi labeler for title, body, comments, commit messages, branch, author or files. Optionally, generate a status check
+based on the labels.
 
 ## Features
 
+- Single compiled javascript file, extremely fast. Use fewer credits!
 - Append based multi-labeler, using `.github/labeler.yml` as config.
 - Automatically fail if `labeler.yml` is malformed, type-checked.
 - Set label to sync for conditional labeling, removed if condition failed.
@@ -23,6 +24,7 @@ the labels.
   - Files count
   - Files any glob match
   - Files all glob match
+- Author Matcher
 - Generate status checks:
   - Any label match
   - All label match
@@ -56,12 +58,15 @@ labels:
   - label: "feat"
     sync: true # remove label if match failed, default: false (pull_request/issue only)
     matcher:
-      # Matcher will match on any 6 matcher
+      # Matcher will match on any 7 matcher
       title: "^feat:.*"
       body: "/feat"
       comment: "/feat"
       branch: "^feat/.*"
       commits: "^feat:.*"
+      author:
+        - github-actions
+        - fuxingloh
       files:
         any: [ "app/*" ]
         all: [ "!app/config/**" ]
@@ -314,6 +319,24 @@ labels:
   - label: "feat"
     matcher:
       commits: "^feat: .*"
+```
+
+### PR/Issue Author
+
+Check for pr or issue author match.
+
+```yml
+version: v1
+
+labels:
+  - label: "single"
+    matcher:
+      author: "fuxingloh"
+  - label: "any"
+    matcher:
+      author:
+        - adam
+        - claire
 ```
 
 ### PR Files: [Glob Matcher](https://github.com/isaacs/minimatch)
