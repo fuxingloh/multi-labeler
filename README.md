@@ -35,16 +35,30 @@ based on the labels.
 
 ```yml
 on:
-  pull_request:
-  issues:
+  pull_request:   
+  # Useful for triaging code review, and generate compliance status check.
+  # Semantic release? Done.
+  # Make a file change in a mono repo. Tag the mono repo getting changed to generate better release!
+  
+  issues:         
+  # Useful for triaging error!
+  # '- [x] Is this a bug?' = 'bug' label!
+  
   issue_comment:
+  # To pickup comment body in pr or issue and generate a label. 
+  # Imagine someone comment 'Me too, I get TimeoutException from ...' in comment body. 
+  # Generate a 'bug/timeout' label for better triaging!
 
 jobs:
   labeler:
     name: Labeler
     runs-on: ubuntu-latest
     steps:
-      - uses: fuxingloh/multi-labeler@v1
+      # follows semantic versioning. Lock to different version: v1, v1.5, v1.5.0 or use a commit hash.
+      - uses: fuxingloh/multi-labeler@v1 
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}} # optional, default to '${{ github.token }}'  
+          config-path: .github/labeler.yml # optional, default to '.github/labeler.yml'
 ```
 
 #### `.github/labeler.yml`
@@ -74,16 +88,20 @@ labels:
           gte: 1
           lte: 1000
 
+# Optional, if you want labels to generate a success/failure status check
 checks:
   - context: "Status Check"
-    description: "Description"
+    url: "https://go.to/detail"
+    description:
+      success: "Ready for review & merge."
+      failure: "Missing labels for release."
     labels:
       any:
         - any
         - have
       all:
-        - must
         - all
+        - must
         - have
 ```
 
