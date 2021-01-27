@@ -1,5 +1,5 @@
 name: 'Multi Labeler'
-description: 'Multi labeler for title, body, comments, commit messages, branch or files with automated status checks.'
+description: 'Multi labeler for title, body, comments, commit messages, branch, author or files with automated status checks.'
 author: 'Fuxing Loh'
 branding:
   icon: tag

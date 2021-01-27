@@ -141,6 +141,7 @@ const Matcher = t.partial({
     comment: t.string,
     commits: t.string,
     branch: t.string,
+    author: t.union([t.string, t.array(t.string)]),
     files: t.union([
         t.string,
         t.array(t.string),
@@ -266,6 +267,7 @@ const comment_1 = __importDefault(__nccwpck_require__(5921));
 const branch_1 = __importDefault(__nccwpck_require__(5832));
 const commits_1 = __importDefault(__nccwpck_require__(747));
 const files_1 = __importDefault(__nccwpck_require__(1180));
+const author_1 = __importDefault(__nccwpck_require__(8432));
 const github = __importStar(__nccwpck_require__(5438));
 function mergeLabels(labels, config) {
     var _a;
@@ -296,7 +298,8 @@ function labels(client, config) {
             comment_1.default(client, config),
             branch_1.default(client, config),
             commits_1.default(client, config),
-            files_1.default(client, config)
+            files_1.default(client, config),
+            author_1.default(client, config)
         ]).then(value => {
             return lodash_1.uniq(lodash_1.concat(...value));
         });
@@ -432,6 +435,65 @@ config_1.getConfig(client, configPath)
     core.error(error);
     core.setFailed(error.message);
 });
+
+
+/***/ }),
+
+/***/ 8432:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const github = __importStar(__nccwpck_require__(5438));
+function getAuthors(label) {
+    var _a;
+    const author = (_a = label.matcher) === null || _a === void 0 ? void 0 : _a.author;
+    if (typeof author === 'string') {
+        return [author];
+    }
+    if (Array.isArray(author)) {
+        return [...author];
+    }
+    return [];
+}
+function match(client, config) {
+    var _a;
+    const payload = github.context.payload.pull_request || github.context.payload.issue;
+    const author = (_a = payload === null || payload === void 0 ? void 0 : payload.user) === null || _a === void 0 ? void 0 : _a.login;
+    if (!author) {
+        return [];
+    }
+    return config
+        .labels.filter(label => {
+        const authors = getAuthors(label);
+        if (authors.length > 0) {
+            return authors.includes(author);
+        }
+        return false;
+    })
+        .map(value => value.label);
+}
+exports.default = match;
 
 
 /***/ }),

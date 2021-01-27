@@ -97,6 +97,12 @@ describe('invalid labels', () => {
 })
 
 describe('invalid labels matcher', () => {
+  it('matcher-author-invalid.yml', function () {
+    expect(() => parseConfig('invalid/matcher-author-invalid.yml')).toThrow(
+      /labeler\.yml parse error:/
+    )
+  })
+
   it('matcher-body-invalid.yml', function () {
     expect(() => parseConfig('invalid/matcher-body-invalid.yml')).toThrow(
       /labeler\.yml parse error:/

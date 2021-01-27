@@ -33,7 +33,7 @@ labels:
   - label: "test:dist"
     sync: true
     matcher:
-      files: ["dist/*"]
+      files: [ "dist/*" ]
 
   - label: "test:tests"
     sync: true
@@ -74,6 +74,15 @@ labels:
       files:
         count:
           gte: 11
+
+  - label: "Maintainer"
+    matcher:
+      author:
+        - fuxingloh
+
+  - label: "Owner"
+    matcher:
+      author: fuxingloh
 
 checks:
   - context: "Semantic Pull Request"

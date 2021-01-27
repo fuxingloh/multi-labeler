@@ -11,6 +11,7 @@ const Matcher = t.partial({
   comment: t.string,
   commits: t.string,
   branch: t.string,
+  author: t.union([t.string, t.array(t.string)]),
   files: t.union([
     t.string,
     t.array(t.string),

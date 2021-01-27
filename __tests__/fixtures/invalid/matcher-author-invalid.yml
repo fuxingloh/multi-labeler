@@ -1,0 +1,6 @@
+version: v1
+
+labels:
+  - label: "author"
+    matcher:
+      files: false
