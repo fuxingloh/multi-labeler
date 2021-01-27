@@ -11,6 +11,9 @@ const config: Config = {
   version: 'v1',
   labels: [
     {
+      label: 'empty',
+    },
+    {
       label: 'string',
       matcher: {
         author: 'fuxingloh'
