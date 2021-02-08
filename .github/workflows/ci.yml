@@ -5,7 +5,6 @@ on:
   push:
     branches:
       - main
-      - 'releases/*'
 
 jobs:
   build:
@@ -13,10 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: |
-          npm install
-      - run: |
-          npm run ci
+
+      - run: npm install
+      - run: npm run ci
 
       - uses: EndBug/add-and-commit@v6
         with:
