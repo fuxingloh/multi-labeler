@@ -7630,7 +7630,7 @@ var traverseArrayWithIndex = function (f) { return function (arr) {
 exports.traverseArrayWithIndex = traverseArrayWithIndex;
 /**
  * map an array using provided function to Either then transform to Either of the array
- * this function have the same behavior of `A.traverse(E.either)` but it's optimized and perform better
+ * this function has the same behavior of `A.traverse(E.either)` but it's optimized and performs better
  *
  * @example
  *
@@ -7665,7 +7665,7 @@ var traverseArray = function (f) { return exports.traverseArrayWithIndex(functio
 exports.traverseArray = traverseArray;
 /**
  * convert an array of either to an either of array
- * this function have the same behavior of `A.sequence(E.either)` but it's optimized and perform better
+ * this function has the same behavior of `A.sequence(E.either)` but it's optimized and performs better
  *
  * @example
  *
@@ -9605,7 +9605,7 @@ exports.traverseArrayWithIndex = traverseArrayWithIndex;
 /**
  * Runs an action for every element in array and accumulates the results in option
  *
- * this function have the same behavior of `A.sequence(O.option)` but it's optimized and perform better
+ * this function has the same behavior of `A.sequence(O.option)` but it's optimized and performs better
  *
  * @example
  *
@@ -9624,7 +9624,7 @@ exports.traverseArray = traverseArray;
 /**
  * get an array of option and convert it to option of array
  *
- * this function have the same behavior of `A.sequence(O.option)` but it's optimized and perform better
+ * this function has the same behavior of `A.sequence(O.option)` but it's optimized and performs better
  *
  * @example
  *
@@ -10304,7 +10304,6 @@ exports.foldRight = foldRight;
 function scanLeft(b, f) {
     return function (as) {
         var l = as.length;
-        // tslint:disable-next-line: readonly-array
         var r = new Array(l + 1);
         r[0] = b;
         for (var i = 0; i < l; i++) {
@@ -10328,7 +10327,6 @@ exports.scanLeft = scanLeft;
 function scanRight(b, f) {
     return function (as) {
         var l = as.length;
-        // tslint:disable-next-line: readonly-array
         var r = new Array(l + 1);
         r[l] = b;
         for (var i = l - 1; i >= 0; i--) {
