@@ -29,8 +29,9 @@
     "@actions/core": "^1.2.6",
     "@actions/github": "^4.0.0",
     "fp-ts": "^2.9.5",
-    "io-ts": "^2.2.13",
+    "io-ts": "^2.2.14",
     "io-ts-reporters": "^1.2.2",
+    "js-yaml": "^4.0.0",
     "lodash": "^4.17.20",
     "minimatch": "^3.0.4"
   },
@@ -48,7 +49,6 @@
     "eslint-plugin-jest": "^24.1.3",
     "jest": "^26.4.4",
     "jest-circus": "^26.4.4",
-    "js-yaml": "^4.0.0",
     "prettier": "2.2.1",
     "ts-jest": "^26.5.0",
     "typescript": "^4.1.3"

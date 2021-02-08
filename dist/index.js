@@ -15027,13 +15027,32 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
     return r;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getIndex = exports.getTags = exports.emptyTags = exports.alias = exports.clean = exports.StrictType = exports.dictionary = exports.Integer = exports.refinement = exports.object = exports.ObjectType = exports.Dictionary = exports.any = exports.AnyType = exports.never = exports.NeverType = exports.getDefaultContext = exports.getValidationError = exports.void = exports.interface = exports.Array = exports.undefined = exports.null = exports.exact = exports.ExactType = exports.taggedUnion = exports.TaggedUnionType = exports.strict = exports.readonlyArray = exports.ReadonlyArrayType = exports.readonly = exports.ReadonlyType = exports.tuple = exports.TupleType = exports.intersection = exports.mergeAll = exports.IntersectionType = exports.union = exports.UnionType = exports.record = exports.getDomainKeys = exports.DictionaryType = exports.partial = exports.PartialType = exports.type = exports.InterfaceType = exports.array = exports.ArrayType = exports.recursion = exports.RecursiveType = exports.keyof = exports.KeyofType = exports.literal = exports.LiteralType = exports.Int = exports.brand = exports.RefinementType = exports.Function = exports.FunctionType = exports.UnknownRecord = exports.AnyDictionaryType = exports.UnknownArray = exports.AnyArrayType = exports.boolean = exports.BooleanType = exports.bigint = exports.BigIntType = exports.number = exports.NumberType = exports.string = exports.StringType = exports.unknown = exports.UnknownType = exports.voidType = exports.VoidType = exports.UndefinedType = exports.nullType = exports.NullType = exports.success = exports.failure = exports.failures = exports.appendContext = exports.getContextEntry = exports.getFunctionName = exports.identity = exports.Type = void 0;
+exports.partial = exports.PartialType = exports.type = exports.InterfaceType = exports.array = exports.ArrayType = exports.recursion = exports.RecursiveType = exports.Int = exports.brand = exports.RefinementType = exports.keyof = exports.KeyofType = exports.literal = exports.LiteralType = exports.void = exports.undefined = exports.null = exports.UnknownRecord = exports.AnyDictionaryType = exports.UnknownArray = exports.AnyArrayType = exports.boolean = exports.BooleanType = exports.bigint = exports.BigIntType = exports.number = exports.NumberType = exports.string = exports.StringType = exports.unknown = exports.UnknownType = exports.voidType = exports.VoidType = exports.UndefinedType = exports.nullType = exports.NullType = exports.getIndex = exports.getTags = exports.emptyTags = exports.mergeAll = exports.getDomainKeys = exports.appendContext = exports.getContextEntry = exports.getFunctionName = exports.identity = exports.Type = exports.success = exports.failure = exports.failures = void 0;
+exports.alias = exports.clean = exports.StrictType = exports.dictionary = exports.Integer = exports.refinement = exports.object = exports.ObjectType = exports.Dictionary = exports.any = exports.AnyType = exports.never = exports.NeverType = exports.getDefaultContext = exports.getValidationError = exports.interface = exports.Array = exports.taggedUnion = exports.TaggedUnionType = exports.Function = exports.FunctionType = exports.exact = exports.ExactType = exports.strict = exports.readonlyArray = exports.ReadonlyArrayType = exports.readonly = exports.ReadonlyType = exports.tuple = exports.TupleType = exports.intersection = exports.IntersectionType = exports.union = exports.UnionType = exports.record = exports.DictionaryType = void 0;
 /**
  * @since 1.0.0
  */
 var Either_1 = __nccwpck_require__(7534);
 /**
- * @category Model
+ * @category Decode error
+ * @since 1.0.0
+ */
+exports.failures = Either_1.left;
+/**
+ * @category Decode error
+ * @since 1.0.0
+ */
+var failure = function (value, context, message) {
+    return exports.failures([{ value: value, context: context, message: message }]);
+};
+exports.failure = failure;
+/**
+ * @category Decode error
+ * @since 1.0.0
+ */
+exports.success = Either_1.right;
+/**
+ * @category Codec
  * @since 1.0.0
  */
 var Type = /** @class */ (function () {
@@ -15088,24 +15107,32 @@ var Type = /** @class */ (function () {
     return Type;
 }());
 exports.Type = Type;
+// -------------------------------------------------------------------------------------
+// utils
+// -------------------------------------------------------------------------------------
 /**
  * @since 1.0.0
  */
-exports.identity = function (a) { return a; };
+var identity = function (a) { return a; };
+exports.identity = identity;
 /**
  * @since 1.0.0
  */
-exports.getFunctionName = function (f) {
+function getFunctionName(f) {
     return f.displayName || f.name || "<function" + f.length + ">";
-};
+}
+exports.getFunctionName = getFunctionName;
 /**
  * @since 1.0.0
  */
-exports.getContextEntry = function (key, decoder) { return ({ key: key, type: decoder }); };
+function getContextEntry(key, decoder) {
+    return { key: key, type: decoder };
+}
+exports.getContextEntry = getContextEntry;
 /**
  * @since 1.0.0
  */
-exports.appendContext = function (c, key, decoder, actual) {
+function appendContext(c, key, decoder, actual) {
     var len = c.length;
     var r = Array(len + 1);
     for (var i = 0; i < len; i++) {
@@ -15113,654 +15140,34 @@ exports.appendContext = function (c, key, decoder, actual) {
     }
     r[len] = { key: key, type: decoder, actual: actual };
     return r;
-};
-/**
- * @since 1.0.0
- */
-exports.failures = Either_1.left;
-/**
- * @since 1.0.0
- */
-exports.failure = function (value, context, message) {
-    return exports.failures([{ value: value, context: context, message: message }]);
-};
-/**
- * @since 1.0.0
- */
-exports.success = Either_1.right;
-var pushAll = function (xs, ys) {
+}
+exports.appendContext = appendContext;
+function pushAll(xs, ys) {
     var l = ys.length;
     for (var i = 0; i < l; i++) {
         xs.push(ys[i]);
     }
-};
-// -------------------------------------------------------------------------------------
-// primitives
-// -------------------------------------------------------------------------------------
-/**
- * @since 1.0.0
- */
-var NullType = /** @class */ (function (_super) {
-    __extends(NullType, _super);
-    function NullType() {
-        var _this = _super.call(this, 'null', function (u) { return u === null; }, function (u, c) { return (_this.is(u) ? exports.success(u) : exports.failure(u, c)); }, exports.identity) || this;
-        /**
-         * @since 1.0.0
-         */
-        _this._tag = 'NullType';
-        return _this;
-    }
-    return NullType;
-}(Type));
-exports.NullType = NullType;
-/**
- * @category Primitives
- * @since 1.0.0
- */
-exports.nullType = new NullType();
-exports.null = exports.nullType;
-/**
- * @since 1.0.0
- */
-var UndefinedType = /** @class */ (function (_super) {
-    __extends(UndefinedType, _super);
-    function UndefinedType() {
-        var _this = _super.call(this, 'undefined', function (u) { return u === void 0; }, function (u, c) { return (_this.is(u) ? exports.success(u) : exports.failure(u, c)); }, exports.identity) || this;
-        /**
-         * @since 1.0.0
-         */
-        _this._tag = 'UndefinedType';
-        return _this;
-    }
-    return UndefinedType;
-}(Type));
-exports.UndefinedType = UndefinedType;
-var undefinedType = new UndefinedType();
-exports.undefined = undefinedType;
-/**
- * @since 1.2.0
- */
-var VoidType = /** @class */ (function (_super) {
-    __extends(VoidType, _super);
-    function VoidType() {
-        var _this = _super.call(this, 'void', undefinedType.is, undefinedType.validate, exports.identity) || this;
-        /**
-         * @since 1.0.0
-         */
-        _this._tag = 'VoidType';
-        return _this;
-    }
-    return VoidType;
-}(Type));
-exports.VoidType = VoidType;
-/**
- * @category Primitives
- * @since 1.2.0
- */
-exports.voidType = new VoidType();
-exports.void = exports.voidType;
-/**
- * @since 1.5.0
- */
-var UnknownType = /** @class */ (function (_super) {
-    __extends(UnknownType, _super);
-    function UnknownType() {
-        var _this = _super.call(this, 'unknown', function (_) { return true; }, exports.success, exports.identity) || this;
-        /**
-         * @since 1.0.0
-         */
-        _this._tag = 'UnknownType';
-        return _this;
-    }
-    return UnknownType;
-}(Type));
-exports.UnknownType = UnknownType;
-/**
- * @category Primitives
- * @since 1.5.0
- */
-exports.unknown = new UnknownType();
-/**
- * @since 1.0.0
- */
-var StringType = /** @class */ (function (_super) {
-    __extends(StringType, _super);
-    function StringType() {
-        var _this = _super.call(this, 'string', function (u) { return typeof u === 'string'; }, function (u, c) { return (_this.is(u) ? exports.success(u) : exports.failure(u, c)); }, exports.identity) || this;
-        /**
-         * @since 1.0.0
-         */
-        _this._tag = 'StringType';
-        return _this;
-    }
-    return StringType;
-}(Type));
-exports.StringType = StringType;
-/**
- * @category Primitives
- * @since 1.0.0
- */
-exports.string = new StringType();
-/**
- * @since 1.0.0
- */
-var NumberType = /** @class */ (function (_super) {
-    __extends(NumberType, _super);
-    function NumberType() {
-        var _this = _super.call(this, 'number', function (u) { return typeof u === 'number'; }, function (u, c) { return (_this.is(u) ? exports.success(u) : exports.failure(u, c)); }, exports.identity) || this;
-        /**
-         * @since 1.0.0
-         */
-        _this._tag = 'NumberType';
-        return _this;
-    }
-    return NumberType;
-}(Type));
-exports.NumberType = NumberType;
-/**
- * @category Primitives
- * @since 1.0.0
- */
-exports.number = new NumberType();
-/**
- * @since 2.1.0
- */
-var BigIntType = /** @class */ (function (_super) {
-    __extends(BigIntType, _super);
-    function BigIntType() {
-        var _this = _super.call(this, 'bigint', 
-        // tslint:disable-next-line: valid-typeof
-        function (u) { return typeof u === 'bigint'; }, function (u, c) { return (_this.is(u) ? exports.success(u) : exports.failure(u, c)); }, exports.identity) || this;
-        /**
-         * @since 1.0.0
-         */
-        _this._tag = 'BigIntType';
-        return _this;
-    }
-    return BigIntType;
-}(Type));
-exports.BigIntType = BigIntType;
-/**
- * @category Primitives
- * @since 2.1.0
- */
-exports.bigint = new BigIntType();
-/**
- * @since 1.0.0
- */
-var BooleanType = /** @class */ (function (_super) {
-    __extends(BooleanType, _super);
-    function BooleanType() {
-        var _this = _super.call(this, 'boolean', function (u) { return typeof u === 'boolean'; }, function (u, c) { return (_this.is(u) ? exports.success(u) : exports.failure(u, c)); }, exports.identity) || this;
-        /**
-         * @since 1.0.0
-         */
-        _this._tag = 'BooleanType';
-        return _this;
-    }
-    return BooleanType;
-}(Type));
-exports.BooleanType = BooleanType;
-/**
- * @category Primitives
- * @since 1.0.0
- */
-exports.boolean = new BooleanType();
-/**
- * @since 1.0.0
- */
-var AnyArrayType = /** @class */ (function (_super) {
-    __extends(AnyArrayType, _super);
-    function AnyArrayType() {
-        var _this = _super.call(this, 'UnknownArray', Array.isArray, function (u, c) { return (_this.is(u) ? exports.success(u) : exports.failure(u, c)); }, exports.identity) || this;
-        /**
-         * @since 1.0.0
-         */
-        _this._tag = 'AnyArrayType';
-        return _this;
-    }
-    return AnyArrayType;
-}(Type));
-exports.AnyArrayType = AnyArrayType;
-/**
- * @category Primitives
- * @since 1.7.1
- */
-exports.UnknownArray = new AnyArrayType();
-exports.Array = exports.UnknownArray;
-/**
- * @since 1.0.0
- */
-var AnyDictionaryType = /** @class */ (function (_super) {
-    __extends(AnyDictionaryType, _super);
-    function AnyDictionaryType() {
-        var _this = _super.call(this, 'UnknownRecord', function (u) {
-            var s = Object.prototype.toString.call(u);
-            return s === '[object Object]' || s === '[object Window]';
-        }, function (u, c) { return (_this.is(u) ? exports.success(u) : exports.failure(u, c)); }, exports.identity) || this;
-        /**
-         * @since 1.0.0
-         */
-        _this._tag = 'AnyDictionaryType';
-        return _this;
-    }
-    return AnyDictionaryType;
-}(Type));
-exports.AnyDictionaryType = AnyDictionaryType;
-/**
- * @category Primitives
- * @since 1.7.1
- */
-exports.UnknownRecord = new AnyDictionaryType();
-/**
- * @category deprecated
- * @since 1.0.0
- * @deprecated
- */
-var FunctionType = /** @class */ (function (_super) {
-    __extends(FunctionType, _super);
-    function FunctionType() {
-        var _this = _super.call(this, 'Function', 
-        // tslint:disable-next-line:strict-type-predicates
-        function (u) { return typeof u === 'function'; }, function (u, c) { return (_this.is(u) ? exports.success(u) : exports.failure(u, c)); }, exports.identity) || this;
-        /**
-         * @since 1.0.0
-         */
-        _this._tag = 'FunctionType';
-        return _this;
-    }
-    return FunctionType;
-}(Type));
-exports.FunctionType = FunctionType;
-/**
- * @category deprecated
- * @since 1.0.0
- * @deprecated
- */
-// tslint:disable-next-line: deprecation
-exports.Function = new FunctionType();
-/**
- * @since 1.0.0
- */
-var RefinementType = /** @class */ (function (_super) {
-    __extends(RefinementType, _super);
-    function RefinementType(name, is, validate, encode, type, predicate) {
-        var _this = _super.call(this, name, is, validate, encode) || this;
-        _this.type = type;
-        _this.predicate = predicate;
-        /**
-         * @since 1.0.0
-         */
-        _this._tag = 'RefinementType';
-        return _this;
-    }
-    return RefinementType;
-}(Type));
-exports.RefinementType = RefinementType;
-// -------------------------------------------------------------------------------------
-// combinators
-// -------------------------------------------------------------------------------------
-/**
- * @category Combinators
- * @since 1.8.1
- */
-exports.brand = function (codec, predicate, name) {
-    // tslint:disable-next-line: deprecation
-    return refinement(codec, predicate, name);
-};
-/**
- * A branded codec representing an integer
- *
- * @category Primitives
- * @since 1.8.1
- */
-exports.Int = exports.brand(exports.number, function (n) { return Number.isInteger(n); }, 'Int');
-/**
- * @since 1.0.0
- */
-var LiteralType = /** @class */ (function (_super) {
-    __extends(LiteralType, _super);
-    function LiteralType(name, is, validate, encode, value) {
-        var _this = _super.call(this, name, is, validate, encode) || this;
-        _this.value = value;
-        /**
-         * @since 1.0.0
-         */
-        _this._tag = 'LiteralType';
-        return _this;
-    }
-    return LiteralType;
-}(Type));
-exports.LiteralType = LiteralType;
-/**
- * @category Combinators
- * @since 1.0.0
- */
-exports.literal = function (value, name) {
-    if (name === void 0) { name = JSON.stringify(value); }
-    var is = function (u) { return u === value; };
-    return new LiteralType(name, is, function (u, c) { return (is(u) ? exports.success(value) : exports.failure(u, c)); }, exports.identity, value);
-};
-/**
- * @since 1.0.0
- */
-var KeyofType = /** @class */ (function (_super) {
-    __extends(KeyofType, _super);
-    function KeyofType(name, is, validate, encode, keys) {
-        var _this = _super.call(this, name, is, validate, encode) || this;
-        _this.keys = keys;
-        /**
-         * @since 1.0.0
-         */
-        _this._tag = 'KeyofType';
-        return _this;
-    }
-    return KeyofType;
-}(Type));
-exports.KeyofType = KeyofType;
+}
 var hasOwnProperty = Object.prototype.hasOwnProperty;
-/**
- * @category Combinators
- * @since 1.0.0
- */
-exports.keyof = function (keys, name) {
-    if (name === void 0) { name = Object.keys(keys)
-        .map(function (k) { return JSON.stringify(k); })
-        .join(' | '); }
-    var is = function (u) { return exports.string.is(u) && hasOwnProperty.call(keys, u); };
-    return new KeyofType(name, is, function (u, c) { return (is(u) ? exports.success(u) : exports.failure(u, c)); }, exports.identity, keys);
-};
-/**
- * @since 1.0.0
- */
-var RecursiveType = /** @class */ (function (_super) {
-    __extends(RecursiveType, _super);
-    function RecursiveType(name, is, validate, encode, runDefinition) {
-        var _this = _super.call(this, name, is, validate, encode) || this;
-        _this.runDefinition = runDefinition;
-        /**
-         * @since 1.0.0
-         */
-        _this._tag = 'RecursiveType';
-        return _this;
-    }
-    return RecursiveType;
-}(Type));
-exports.RecursiveType = RecursiveType;
-Object.defineProperty(RecursiveType.prototype, 'type', {
-    get: function () {
-        return this.runDefinition();
-    },
-    enumerable: true,
-    configurable: true
-});
-/**
- * @category Combinators
- * @since 1.0.0
- */
-exports.recursion = function (name, definition) {
-    var cache;
-    var runDefinition = function () {
-        if (!cache) {
-            cache = definition(Self);
-            cache.name = name;
-        }
-        return cache;
-    };
-    var Self = new RecursiveType(name, function (u) { return runDefinition().is(u); }, function (u, c) { return runDefinition().validate(u, c); }, function (a) { return runDefinition().encode(a); }, runDefinition);
-    return Self;
-};
-/**
- * @since 1.0.0
- */
-var ArrayType = /** @class */ (function (_super) {
-    __extends(ArrayType, _super);
-    function ArrayType(name, is, validate, encode, type) {
-        var _this = _super.call(this, name, is, validate, encode) || this;
-        _this.type = type;
-        /**
-         * @since 1.0.0
-         */
-        _this._tag = 'ArrayType';
-        return _this;
-    }
-    return ArrayType;
-}(Type));
-exports.ArrayType = ArrayType;
-/**
- * @category Combinators
- * @since 1.0.0
- */
-exports.array = function (item, name) {
-    if (name === void 0) { name = "Array<" + item.name + ">"; }
-    return new ArrayType(name, function (u) { return exports.UnknownArray.is(u) && u.every(item.is); }, function (u, c) {
-        var e = exports.UnknownArray.validate(u, c);
-        if (Either_1.isLeft(e)) {
-            return e;
-        }
-        var us = e.right;
-        var len = us.length;
-        var as = us;
-        var errors = [];
-        for (var i = 0; i < len; i++) {
-            var ui = us[i];
-            var result = item.validate(ui, exports.appendContext(c, String(i), item, ui));
-            if (Either_1.isLeft(result)) {
-                pushAll(errors, result.left);
-            }
-            else {
-                var ai = result.right;
-                if (ai !== ui) {
-                    if (as === us) {
-                        as = us.slice();
-                    }
-                    as[i] = ai;
-                }
-            }
-        }
-        return errors.length > 0 ? exports.failures(errors) : exports.success(as);
-    }, item.encode === exports.identity ? exports.identity : function (a) { return a.map(item.encode); }, item);
-};
-/**
- * @since 1.0.0
- */
-var InterfaceType = /** @class */ (function (_super) {
-    __extends(InterfaceType, _super);
-    function InterfaceType(name, is, validate, encode, props) {
-        var _this = _super.call(this, name, is, validate, encode) || this;
-        _this.props = props;
-        /**
-         * @since 1.0.0
-         */
-        _this._tag = 'InterfaceType';
-        return _this;
-    }
-    return InterfaceType;
-}(Type));
-exports.InterfaceType = InterfaceType;
-var getNameFromProps = function (props) {
+function getNameFromProps(props) {
     return Object.keys(props)
         .map(function (k) { return k + ": " + props[k].name; })
         .join(', ');
-};
-var useIdentity = function (codecs) {
+}
+function useIdentity(codecs) {
     for (var i = 0; i < codecs.length; i++) {
         if (codecs[i].encode !== exports.identity) {
             return false;
         }
     }
     return true;
-};
-var getInterfaceTypeName = function (props) {
+}
+function getInterfaceTypeName(props) {
     return "{ " + getNameFromProps(props) + " }";
-};
-/**
- * @category Combinators
- * @since 1.0.0
- */
-exports.type = function (props, name) {
-    if (name === void 0) { name = getInterfaceTypeName(props); }
-    var keys = Object.keys(props);
-    var types = keys.map(function (key) { return props[key]; });
-    var len = keys.length;
-    return new InterfaceType(name, function (u) {
-        if (exports.UnknownRecord.is(u)) {
-            for (var i = 0; i < len; i++) {
-                var k = keys[i];
-                var uk = u[k];
-                if ((uk === undefined && !hasOwnProperty.call(u, k)) || !types[i].is(uk)) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        return false;
-    }, function (u, c) {
-        var e = exports.UnknownRecord.validate(u, c);
-        if (Either_1.isLeft(e)) {
-            return e;
-        }
-        var o = e.right;
-        var a = o;
-        var errors = [];
-        for (var i = 0; i < len; i++) {
-            var k = keys[i];
-            var ak = a[k];
-            var type_1 = types[i];
-            var result = type_1.validate(ak, exports.appendContext(c, k, type_1, ak));
-            if (Either_1.isLeft(result)) {
-                pushAll(errors, result.left);
-            }
-            else {
-                var vak = result.right;
-                if (vak !== ak || (vak === undefined && !hasOwnProperty.call(a, k))) {
-                    /* istanbul ignore next */
-                    if (a === o) {
-                        a = __assign({}, o);
-                    }
-                    a[k] = vak;
-                }
-            }
-        }
-        return errors.length > 0 ? exports.failures(errors) : exports.success(a);
-    }, useIdentity(types)
-        ? exports.identity
-        : function (a) {
-            var s = __assign({}, a);
-            for (var i = 0; i < len; i++) {
-                var k = keys[i];
-                var encode = types[i].encode;
-                if (encode !== exports.identity) {
-                    s[k] = encode(a[k]);
-                }
-            }
-            return s;
-        }, props);
-};
-exports.interface = exports.type;
-/**
- * @since 1.0.0
- */
-var PartialType = /** @class */ (function (_super) {
-    __extends(PartialType, _super);
-    function PartialType(name, is, validate, encode, props) {
-        var _this = _super.call(this, name, is, validate, encode) || this;
-        _this.props = props;
-        /**
-         * @since 1.0.0
-         */
-        _this._tag = 'PartialType';
-        return _this;
-    }
-    return PartialType;
-}(Type));
-exports.PartialType = PartialType;
-var getPartialTypeName = function (inner) {
+}
+function getPartialTypeName(inner) {
     return "Partial<" + inner + ">";
-};
-/**
- * @category Combinators
- * @since 1.0.0
- */
-exports.partial = function (props, name) {
-    if (name === void 0) { name = getPartialTypeName(getInterfaceTypeName(props)); }
-    var keys = Object.keys(props);
-    var types = keys.map(function (key) { return props[key]; });
-    var len = keys.length;
-    return new PartialType(name, function (u) {
-        if (exports.UnknownRecord.is(u)) {
-            for (var i = 0; i < len; i++) {
-                var k = keys[i];
-                var uk = u[k];
-                if (uk !== undefined && !props[k].is(uk)) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        return false;
-    }, function (u, c) {
-        var e = exports.UnknownRecord.validate(u, c);
-        if (Either_1.isLeft(e)) {
-            return e;
-        }
-        var o = e.right;
-        var a = o;
-        var errors = [];
-        for (var i = 0; i < len; i++) {
-            var k = keys[i];
-            var ak = a[k];
-            var type_2 = props[k];
-            var result = type_2.validate(ak, exports.appendContext(c, k, type_2, ak));
-            if (Either_1.isLeft(result)) {
-                if (ak !== undefined) {
-                    pushAll(errors, result.left);
-                }
-            }
-            else {
-                var vak = result.right;
-                if (vak !== ak) {
-                    /* istanbul ignore next */
-                    if (a === o) {
-                        a = __assign({}, o);
-                    }
-                    a[k] = vak;
-                }
-            }
-        }
-        return errors.length > 0 ? exports.failures(errors) : exports.success(a);
-    }, useIdentity(types)
-        ? exports.identity
-        : function (a) {
-            var s = __assign({}, a);
-            for (var i = 0; i < len; i++) {
-                var k = keys[i];
-                var ak = a[k];
-                if (ak !== undefined) {
-                    s[k] = types[i].encode(ak);
-                }
-            }
-            return s;
-        }, props);
-};
-/**
- * @since 1.0.0
- */
-var DictionaryType = /** @class */ (function (_super) {
-    __extends(DictionaryType, _super);
-    function DictionaryType(name, is, validate, encode, domain, codomain) {
-        var _this = _super.call(this, name, is, validate, encode) || this;
-        _this.domain = domain;
-        _this.codomain = codomain;
-        /**
-         * @since 1.0.0
-         */
-        _this._tag = 'DictionaryType';
-        return _this;
-    }
-    return DictionaryType;
-}(Type));
-exports.DictionaryType = DictionaryType;
+}
 function enumerableRecord(keys, domain, codomain, name) {
     if (name === void 0) { name = "{ [K in " + domain.name + "]: " + codomain.name + " }"; }
     var len = keys.length;
@@ -15776,7 +15183,7 @@ function enumerableRecord(keys, domain, codomain, name) {
         for (var i = 0; i < len; i++) {
             var k = keys[i];
             var ok = o[k];
-            var codomainResult = codomain.validate(ok, exports.appendContext(c, k, codomain, ok));
+            var codomainResult = codomain.validate(ok, appendContext(c, k, codomain, ok));
             if (Either_1.isLeft(codomainResult)) {
                 pushAll(errors, codomainResult.left);
             }
@@ -15836,7 +15243,7 @@ function nonEnumerableRecord(domain, codomain, name) {
             for (var i = 0; i < len; i++) {
                 var k = keys[i];
                 var ok = u[k];
-                var domainResult = domain.validate(k, exports.appendContext(c, k, domain, k));
+                var domainResult = domain.validate(k, appendContext(c, k, domain, k));
                 if (Either_1.isLeft(domainResult)) {
                     pushAll(errors, domainResult.left);
                 }
@@ -15844,7 +15251,7 @@ function nonEnumerableRecord(domain, codomain, name) {
                     var vk = domainResult.right;
                     changed = changed || vk !== k;
                     k = vk;
-                    var codomainResult = codomain.validate(ok, exports.appendContext(c, k, codomain, ok));
+                    var codomainResult = codomain.validate(ok, appendContext(c, k, codomain, ok));
                     if (Either_1.isLeft(codomainResult)) {
                         pushAll(errors, codomainResult.left);
                     }
@@ -15874,136 +15281,13 @@ function nonEnumerableRecord(domain, codomain, name) {
             return s;
         }, domain, codomain);
 }
-/**
- * @category Combinators
- * @since 1.7.1
- */
-function record(domain, codomain, name) {
-    var keys = getDomainKeys(domain);
-    return keys
-        ? enumerableRecord(Object.keys(keys), domain, codomain, name)
-        : nonEnumerableRecord(domain, codomain, name);
-}
-exports.record = record;
-/**
- * @since 1.0.0
- */
-var UnionType = /** @class */ (function (_super) {
-    __extends(UnionType, _super);
-    function UnionType(name, is, validate, encode, types) {
-        var _this = _super.call(this, name, is, validate, encode) || this;
-        _this.types = types;
-        /**
-         * @since 1.0.0
-         */
-        _this._tag = 'UnionType';
-        return _this;
-    }
-    return UnionType;
-}(Type));
-exports.UnionType = UnionType;
-var getUnionName = function (codecs) {
+function getUnionName(codecs) {
     return '(' + codecs.map(function (type) { return type.name; }).join(' | ') + ')';
-};
-/**
- * @category Combinators
- * @since 1.0.0
- */
-exports.union = function (codecs, name) {
-    if (name === void 0) { name = getUnionName(codecs); }
-    var index = getIndex(codecs);
-    if (index !== undefined && codecs.length > 0) {
-        var tag_1 = index[0], groups_1 = index[1];
-        var len_1 = groups_1.length;
-        var find_1 = function (value) {
-            for (var i = 0; i < len_1; i++) {
-                if (groups_1[i].indexOf(value) !== -1) {
-                    return i;
-                }
-            }
-            return undefined;
-        };
-        // tslint:disable-next-line: deprecation
-        return new TaggedUnionType(name, function (u) {
-            if (exports.UnknownRecord.is(u)) {
-                var i = find_1(u[tag_1]);
-                return i !== undefined ? codecs[i].is(u) : false;
-            }
-            return false;
-        }, function (u, c) {
-            var e = exports.UnknownRecord.validate(u, c);
-            if (Either_1.isLeft(e)) {
-                return e;
-            }
-            var r = e.right;
-            var i = find_1(r[tag_1]);
-            if (i === undefined) {
-                return exports.failure(u, c);
-            }
-            var codec = codecs[i];
-            return codec.validate(r, exports.appendContext(c, String(i), codec, r));
-        }, useIdentity(codecs)
-            ? exports.identity
-            : function (a) {
-                var i = find_1(a[tag_1]);
-                if (i === undefined) {
-                    // https://github.com/gcanti/io-ts/pull/305
-                    throw new Error("no codec found to encode value in union codec " + name);
-                }
-                else {
-                    return codecs[i].encode(a);
-                }
-            }, codecs, tag_1);
-    }
-    else {
-        return new UnionType(name, function (u) { return codecs.some(function (type) { return type.is(u); }); }, function (u, c) {
-            var errors = [];
-            for (var i = 0; i < codecs.length; i++) {
-                var codec = codecs[i];
-                var result = codec.validate(u, exports.appendContext(c, String(i), codec, u));
-                if (Either_1.isLeft(result)) {
-                    pushAll(errors, result.left);
-                }
-                else {
-                    return exports.success(result.right);
-                }
-            }
-            return exports.failures(errors);
-        }, useIdentity(codecs)
-            ? exports.identity
-            : function (a) {
-                for (var _i = 0, codecs_1 = codecs; _i < codecs_1.length; _i++) {
-                    var codec = codecs_1[_i];
-                    if (codec.is(a)) {
-                        return codec.encode(a);
-                    }
-                }
-                // https://github.com/gcanti/io-ts/pull/305
-                throw new Error("no codec found to encode value in union type " + name);
-            }, codecs);
-    }
-};
-/**
- * @since 1.0.0
- */
-var IntersectionType = /** @class */ (function (_super) {
-    __extends(IntersectionType, _super);
-    function IntersectionType(name, is, validate, encode, types) {
-        var _this = _super.call(this, name, is, validate, encode) || this;
-        _this.types = types;
-        /**
-         * @since 1.0.0
-         */
-        _this._tag = 'IntersectionType';
-        return _this;
-    }
-    return IntersectionType;
-}(Type));
-exports.IntersectionType = IntersectionType;
+}
 /**
  * @internal
  */
-exports.mergeAll = function (base, us) {
+function mergeAll(base, us) {
     var equal = true;
     var primitive = true;
     var baseIsNotADictionary = !exports.UnknownRecord.is(base);
@@ -16032,205 +15316,9 @@ exports.mergeAll = function (base, us) {
         }
     }
     return r;
-};
-function intersection(codecs, name) {
-    if (name === void 0) { name = "(" + codecs.map(function (type) { return type.name; }).join(' & ') + ")"; }
-    var len = codecs.length;
-    return new IntersectionType(name, function (u) { return codecs.every(function (type) { return type.is(u); }); }, codecs.length === 0
-        ? exports.success
-        : function (u, c) {
-            var us = [];
-            var errors = [];
-            for (var i = 0; i < len; i++) {
-                var codec = codecs[i];
-                var result = codec.validate(u, exports.appendContext(c, String(i), codec, u));
-                if (Either_1.isLeft(result)) {
-                    pushAll(errors, result.left);
-                }
-                else {
-                    us.push(result.right);
-                }
-            }
-            return errors.length > 0 ? exports.failures(errors) : exports.success(exports.mergeAll(u, us));
-        }, codecs.length === 0
-        ? exports.identity
-        : function (a) {
-            return exports.mergeAll(a, codecs.map(function (codec) { return codec.encode(a); }));
-        }, codecs);
 }
-exports.intersection = intersection;
-/**
- * @since 1.0.0
- */
-var TupleType = /** @class */ (function (_super) {
-    __extends(TupleType, _super);
-    function TupleType(name, is, validate, encode, types) {
-        var _this = _super.call(this, name, is, validate, encode) || this;
-        _this.types = types;
-        /**
-         * @since 1.0.0
-         */
-        _this._tag = 'TupleType';
-        return _this;
-    }
-    return TupleType;
-}(Type));
-exports.TupleType = TupleType;
-function tuple(codecs, name) {
-    if (name === void 0) { name = "[" + codecs.map(function (type) { return type.name; }).join(', ') + "]"; }
-    var len = codecs.length;
-    return new TupleType(name, function (u) { return exports.UnknownArray.is(u) && u.length === len && codecs.every(function (type, i) { return type.is(u[i]); }); }, function (u, c) {
-        var e = exports.UnknownArray.validate(u, c);
-        if (Either_1.isLeft(e)) {
-            return e;
-        }
-        var us = e.right;
-        var as = us.length > len ? us.slice(0, len) : us; // strip additional components
-        var errors = [];
-        for (var i = 0; i < len; i++) {
-            var a = us[i];
-            var type_3 = codecs[i];
-            var result = type_3.validate(a, exports.appendContext(c, String(i), type_3, a));
-            if (Either_1.isLeft(result)) {
-                pushAll(errors, result.left);
-            }
-            else {
-                var va = result.right;
-                if (va !== a) {
-                    /* istanbul ignore next */
-                    if (as === us) {
-                        as = us.slice();
-                    }
-                    as[i] = va;
-                }
-            }
-        }
-        return errors.length > 0 ? exports.failures(errors) : exports.success(as);
-    }, useIdentity(codecs) ? exports.identity : function (a) { return codecs.map(function (type, i) { return type.encode(a[i]); }); }, codecs);
-}
-exports.tuple = tuple;
-/**
- * @since 1.0.0
- */
-var ReadonlyType = /** @class */ (function (_super) {
-    __extends(ReadonlyType, _super);
-    function ReadonlyType(name, is, validate, encode, type) {
-        var _this = _super.call(this, name, is, validate, encode) || this;
-        _this.type = type;
-        /**
-         * @since 1.0.0
-         */
-        _this._tag = 'ReadonlyType';
-        return _this;
-    }
-    return ReadonlyType;
-}(Type));
-exports.ReadonlyType = ReadonlyType;
-/**
- * @category Combinators
- * @since 1.0.0
- */
-exports.readonly = function (codec, name) {
-    if (name === void 0) { name = "Readonly<" + codec.name + ">"; }
-    return new ReadonlyType(name, codec.is, codec.validate, codec.encode, codec);
-};
-/**
- * @since 1.0.0
- */
-var ReadonlyArrayType = /** @class */ (function (_super) {
-    __extends(ReadonlyArrayType, _super);
-    function ReadonlyArrayType(name, is, validate, encode, type) {
-        var _this = _super.call(this, name, is, validate, encode) || this;
-        _this.type = type;
-        /**
-         * @since 1.0.0
-         */
-        _this._tag = 'ReadonlyArrayType';
-        return _this;
-    }
-    return ReadonlyArrayType;
-}(Type));
-exports.ReadonlyArrayType = ReadonlyArrayType;
-/**
- * @category Combinators
- * @since 1.0.0
- */
-exports.readonlyArray = function (item, name) {
-    if (name === void 0) { name = "ReadonlyArray<" + item.name + ">"; }
-    var codec = exports.array(item);
-    return new ReadonlyArrayType(name, codec.is, codec.validate, codec.encode, item);
-};
-/**
- * Strips additional properties
- *
- * @category Combinators
- * @since 1.0.0
- */
-exports.strict = function (props, name) {
-    return exports.exact(exports.type(props), name);
-};
-/**
- * @category deprecated
- * @since 1.3.0
- * @deprecated
- */
-var TaggedUnionType = /** @class */ (function (_super) {
-    __extends(TaggedUnionType, _super);
-    function TaggedUnionType(name, 
-    // tslint:disable-next-line: deprecation
-    is, 
-    // tslint:disable-next-line: deprecation
-    validate, 
-    // tslint:disable-next-line: deprecation
-    encode, codecs, tag) {
-        var _this = _super.call(this, name, is, validate, encode, codecs) /* istanbul ignore next */ // <= workaround for https://github.com/Microsoft/TypeScript/issues/13455
-         || this;
-        _this.tag = tag;
-        return _this;
-    }
-    return TaggedUnionType;
-}(UnionType));
-exports.TaggedUnionType = TaggedUnionType;
-/**
- * Use `union` instead
- *
- * @category deprecated
- * @since 1.3.0
- * @deprecated
- */
-exports.taggedUnion = function (tag, codecs, name
-// tslint:disable-next-line: deprecation
-) {
-    if (name === void 0) { name = getUnionName(codecs); }
-    var U = exports.union(codecs, name);
-    // tslint:disable-next-line: deprecation
-    if (U instanceof TaggedUnionType) {
-        return U;
-    }
-    else {
-        console.warn("[io-ts] Cannot build a tagged union for " + name + ", returning a de-optimized union");
-        // tslint:disable-next-line: deprecation
-        return new TaggedUnionType(name, U.is, U.validate, U.encode, codecs, tag);
-    }
-};
-/**
- * @since 1.1.0
- */
-var ExactType = /** @class */ (function (_super) {
-    __extends(ExactType, _super);
-    function ExactType(name, is, validate, encode, type) {
-        var _this = _super.call(this, name, is, validate, encode) || this;
-        _this.type = type;
-        /**
-         * @since 1.0.0
-         */
-        _this._tag = 'ExactType';
-        return _this;
-    }
-    return ExactType;
-}(Type));
-exports.ExactType = ExactType;
-var getProps = function (codec) {
+exports.mergeAll = mergeAll;
+function getProps(codec) {
     switch (codec._tag) {
         case 'RefinementType':
         case 'ReadonlyType':
@@ -16242,8 +15330,8 @@ var getProps = function (codec) {
         case 'IntersectionType':
             return codec.types.reduce(function (props, type) { return Object.assign(props, getProps(type)); }, {});
     }
-};
-var stripKeys = function (o, props) {
+}
+function stripKeys(o, props) {
     var keys = Object.getOwnPropertyNames(o);
     var shouldStrip = false;
     var r = {};
@@ -16257,8 +15345,8 @@ var stripKeys = function (o, props) {
         }
     }
     return shouldStrip ? r : o;
-};
-var getExactTypeName = function (codec) {
+}
+function getExactTypeName(codec) {
     if (isTypeC(codec)) {
         return "{| " + getNameFromProps(codec.props) + " |}";
     }
@@ -16266,211 +15354,10 @@ var getExactTypeName = function (codec) {
         return getPartialTypeName("{| " + getNameFromProps(codec.props) + " |}");
     }
     return "Exact<" + codec.name + ">";
-};
-/**
- * Strips additional properties
- * @since 1.1.0
- */
-exports.exact = function (codec, name) {
-    if (name === void 0) { name = getExactTypeName(codec); }
-    var props = getProps(codec);
-    return new ExactType(name, codec.is, function (u, c) {
-        var e = exports.UnknownRecord.validate(u, c);
-        if (Either_1.isLeft(e)) {
-            return e;
-        }
-        var ce = codec.validate(u, c);
-        if (Either_1.isLeft(ce)) {
-            return ce;
-        }
-        return Either_1.right(stripKeys(ce.right, props));
-    }, function (a) { return codec.encode(stripKeys(a, props)); }, codec);
-};
-/**
- * @category deprecated
- * @since 1.0.0
- * @deprecated
- */
-exports.getValidationError /* istanbul ignore next */ = function (value, context) { return ({
-    value: value,
-    context: context
-}); };
-/**
- * @category deprecated
- * @since 1.0.0
- * @deprecated
- */
-exports.getDefaultContext /* istanbul ignore next */ = function (decoder) { return [
-    { key: '', type: decoder }
-]; };
-/**
- * @category deprecated
- * @since 1.0.0
- * @deprecated
- */
-var NeverType = /** @class */ (function (_super) {
-    __extends(NeverType, _super);
-    function NeverType() {
-        var _this = _super.call(this, 'never', function (_) { return false; }, function (u, c) { return exports.failure(u, c); }, 
-        /* istanbul ignore next */
-        function () {
-            throw new Error('cannot encode never');
-        }) || this;
-        /**
-         * @since 1.0.0
-         */
-        _this._tag = 'NeverType';
-        return _this;
-    }
-    return NeverType;
-}(Type));
-exports.NeverType = NeverType;
-/**
- * @category deprecated
- * @since 1.0.0
- * @deprecated
- */
-// tslint:disable-next-line: deprecation
-exports.never = new NeverType();
-/**
- * @category deprecated
- * @since 1.0.0
- * @deprecated
- */
-var AnyType = /** @class */ (function (_super) {
-    __extends(AnyType, _super);
-    function AnyType() {
-        var _this = _super.call(this, 'any', function (_) { return true; }, exports.success, exports.identity) || this;
-        /**
-         * @since 1.0.0
-         */
-        _this._tag = 'AnyType';
-        return _this;
-    }
-    return AnyType;
-}(Type));
-exports.AnyType = AnyType;
-/**
- * Use `unknown` instead
- *
- * @category deprecated
- * @since 1.0.0
- * @deprecated
- */
-// tslint:disable-next-line: deprecation
-exports.any = new AnyType();
-/**
- * Use `UnknownRecord` instead
- *
- * @category deprecated
- * @since 1.0.0
- * @deprecated
- */
-exports.Dictionary = exports.UnknownRecord;
-/**
- * @category deprecated
- * @since 1.0.0
- * @deprecated
- */
-var ObjectType = /** @class */ (function (_super) {
-    __extends(ObjectType, _super);
-    function ObjectType() {
-        var _this = _super.call(this, 'object', function (u) { return u !== null && typeof u === 'object'; }, function (u, c) { return (_this.is(u) ? exports.success(u) : exports.failure(u, c)); }, exports.identity) || this;
-        /**
-         * @since 1.0.0
-         */
-        _this._tag = 'ObjectType';
-        return _this;
-    }
-    return ObjectType;
-}(Type));
-exports.ObjectType = ObjectType;
-/**
- * Use `UnknownRecord` instead
- *
- * @category deprecated
- * @since 1.0.0
- * @deprecated
- */
-// tslint:disable-next-line: deprecation
-exports.object = new ObjectType();
-/**
- * Use `brand` instead
- *
- * @category deprecated
- * @since 1.0.0
- * @deprecated
- */
-function refinement(codec, predicate, name) {
-    if (name === void 0) { name = "(" + codec.name + " | " + exports.getFunctionName(predicate) + ")"; }
-    return new RefinementType(name, function (u) { return codec.is(u) && predicate(u); }, function (i, c) {
-        var e = codec.validate(i, c);
-        if (Either_1.isLeft(e)) {
-            return e;
-        }
-        var a = e.right;
-        return predicate(a) ? exports.success(a) : exports.failure(a, c);
-    }, codec.encode, codec, predicate);
 }
-exports.refinement = refinement;
-/**
- * Use `Int` instead
- *
- * @category deprecated
- * @since 1.0.0
- * @deprecated
- */
-// tslint:disable-next-line: deprecation
-exports.Integer = refinement(exports.number, Number.isInteger, 'Integer');
-/**
- * Use `record` instead
- *
- * @category deprecated
- * @since 1.0.0
- * @deprecated
- */
-exports.dictionary = record;
-/**
- * @category deprecated
- * @since 1.0.0
- * @deprecated
- */
-var StrictType = /** @class */ (function (_super) {
-    __extends(StrictType, _super);
-    function StrictType(name, 
-    // tslint:disable-next-line: deprecation
-    is, 
-    // tslint:disable-next-line: deprecation
-    validate, 
-    // tslint:disable-next-line: deprecation
-    encode, props) {
-        var _this = _super.call(this, name, is, validate, encode) || this;
-        _this.props = props;
-        /**
-         * @since 1.0.0
-         */
-        _this._tag = 'StrictType';
-        return _this;
-    }
-    return StrictType;
-}(Type));
-exports.StrictType = StrictType;
-/**
- * Drops the codec "kind"
- *
- * @category deprecated
- * @since 1.1.0
- * @deprecated
- */
-function clean(codec) {
-    return codec;
+function isNonEmpty(as) {
+    return as.length > 0;
 }
-exports.clean = clean;
-function alias(codec) {
-    return function () { return codec; };
-}
-exports.alias = alias;
-var isNonEmpty = function (as) { return as.length > 0; };
 /**
  * @internal
  */
@@ -16646,6 +15533,1146 @@ function getIndex(codecs) {
     return undefined;
 }
 exports.getIndex = getIndex;
+// -------------------------------------------------------------------------------------
+// primitives
+// -------------------------------------------------------------------------------------
+/**
+ * @since 1.0.0
+ */
+var NullType = /** @class */ (function (_super) {
+    __extends(NullType, _super);
+    function NullType() {
+        var _this = _super.call(this, 'null', function (u) { return u === null; }, function (u, c) { return (_this.is(u) ? exports.success(u) : exports.failure(u, c)); }, exports.identity) || this;
+        /**
+         * @since 1.0.0
+         */
+        _this._tag = 'NullType';
+        return _this;
+    }
+    return NullType;
+}(Type));
+exports.NullType = NullType;
+/**
+ * @category primitives
+ * @since 1.0.0
+ */
+exports.nullType = new NullType();
+exports.null = exports.nullType;
+/**
+ * @since 1.0.0
+ */
+var UndefinedType = /** @class */ (function (_super) {
+    __extends(UndefinedType, _super);
+    function UndefinedType() {
+        var _this = _super.call(this, 'undefined', function (u) { return u === void 0; }, function (u, c) { return (_this.is(u) ? exports.success(u) : exports.failure(u, c)); }, exports.identity) || this;
+        /**
+         * @since 1.0.0
+         */
+        _this._tag = 'UndefinedType';
+        return _this;
+    }
+    return UndefinedType;
+}(Type));
+exports.UndefinedType = UndefinedType;
+var undefinedType = new UndefinedType();
+exports.undefined = undefinedType;
+/**
+ * @since 1.2.0
+ */
+var VoidType = /** @class */ (function (_super) {
+    __extends(VoidType, _super);
+    function VoidType() {
+        var _this = _super.call(this, 'void', undefinedType.is, undefinedType.validate, exports.identity) || this;
+        /**
+         * @since 1.0.0
+         */
+        _this._tag = 'VoidType';
+        return _this;
+    }
+    return VoidType;
+}(Type));
+exports.VoidType = VoidType;
+/**
+ * @category primitives
+ * @since 1.2.0
+ */
+exports.voidType = new VoidType();
+exports.void = exports.voidType;
+/**
+ * @since 1.5.0
+ */
+var UnknownType = /** @class */ (function (_super) {
+    __extends(UnknownType, _super);
+    function UnknownType() {
+        var _this = _super.call(this, 'unknown', function (_) { return true; }, exports.success, exports.identity) || this;
+        /**
+         * @since 1.0.0
+         */
+        _this._tag = 'UnknownType';
+        return _this;
+    }
+    return UnknownType;
+}(Type));
+exports.UnknownType = UnknownType;
+/**
+ * @category primitives
+ * @since 1.5.0
+ */
+exports.unknown = new UnknownType();
+/**
+ * @since 1.0.0
+ */
+var StringType = /** @class */ (function (_super) {
+    __extends(StringType, _super);
+    function StringType() {
+        var _this = _super.call(this, 'string', function (u) { return typeof u === 'string'; }, function (u, c) { return (_this.is(u) ? exports.success(u) : exports.failure(u, c)); }, exports.identity) || this;
+        /**
+         * @since 1.0.0
+         */
+        _this._tag = 'StringType';
+        return _this;
+    }
+    return StringType;
+}(Type));
+exports.StringType = StringType;
+/**
+ * @category primitives
+ * @since 1.0.0
+ */
+exports.string = new StringType();
+/**
+ * @since 1.0.0
+ */
+var NumberType = /** @class */ (function (_super) {
+    __extends(NumberType, _super);
+    function NumberType() {
+        var _this = _super.call(this, 'number', function (u) { return typeof u === 'number'; }, function (u, c) { return (_this.is(u) ? exports.success(u) : exports.failure(u, c)); }, exports.identity) || this;
+        /**
+         * @since 1.0.0
+         */
+        _this._tag = 'NumberType';
+        return _this;
+    }
+    return NumberType;
+}(Type));
+exports.NumberType = NumberType;
+/**
+ * @category primitives
+ * @since 1.0.0
+ */
+exports.number = new NumberType();
+/**
+ * @since 2.1.0
+ */
+var BigIntType = /** @class */ (function (_super) {
+    __extends(BigIntType, _super);
+    function BigIntType() {
+        var _this = _super.call(this, 'bigint', 
+        // tslint:disable-next-line: valid-typeof
+        function (u) { return typeof u === 'bigint'; }, function (u, c) { return (_this.is(u) ? exports.success(u) : exports.failure(u, c)); }, exports.identity) || this;
+        /**
+         * @since 1.0.0
+         */
+        _this._tag = 'BigIntType';
+        return _this;
+    }
+    return BigIntType;
+}(Type));
+exports.BigIntType = BigIntType;
+/**
+ * @category primitives
+ * @since 2.1.0
+ */
+exports.bigint = new BigIntType();
+/**
+ * @since 1.0.0
+ */
+var BooleanType = /** @class */ (function (_super) {
+    __extends(BooleanType, _super);
+    function BooleanType() {
+        var _this = _super.call(this, 'boolean', function (u) { return typeof u === 'boolean'; }, function (u, c) { return (_this.is(u) ? exports.success(u) : exports.failure(u, c)); }, exports.identity) || this;
+        /**
+         * @since 1.0.0
+         */
+        _this._tag = 'BooleanType';
+        return _this;
+    }
+    return BooleanType;
+}(Type));
+exports.BooleanType = BooleanType;
+/**
+ * @category primitives
+ * @since 1.0.0
+ */
+exports.boolean = new BooleanType();
+/**
+ * @since 1.0.0
+ */
+var AnyArrayType = /** @class */ (function (_super) {
+    __extends(AnyArrayType, _super);
+    function AnyArrayType() {
+        var _this = _super.call(this, 'UnknownArray', Array.isArray, function (u, c) { return (_this.is(u) ? exports.success(u) : exports.failure(u, c)); }, exports.identity) || this;
+        /**
+         * @since 1.0.0
+         */
+        _this._tag = 'AnyArrayType';
+        return _this;
+    }
+    return AnyArrayType;
+}(Type));
+exports.AnyArrayType = AnyArrayType;
+/**
+ * @category primitives
+ * @since 1.7.1
+ */
+exports.UnknownArray = new AnyArrayType();
+exports.Array = exports.UnknownArray;
+/**
+ * @since 1.0.0
+ */
+var AnyDictionaryType = /** @class */ (function (_super) {
+    __extends(AnyDictionaryType, _super);
+    function AnyDictionaryType() {
+        var _this = _super.call(this, 'UnknownRecord', function (u) {
+            var s = Object.prototype.toString.call(u);
+            return s === '[object Object]' || s === '[object Window]';
+        }, function (u, c) { return (_this.is(u) ? exports.success(u) : exports.failure(u, c)); }, exports.identity) || this;
+        /**
+         * @since 1.0.0
+         */
+        _this._tag = 'AnyDictionaryType';
+        return _this;
+    }
+    return AnyDictionaryType;
+}(Type));
+exports.AnyDictionaryType = AnyDictionaryType;
+/**
+ * @category primitives
+ * @since 1.7.1
+ */
+exports.UnknownRecord = new AnyDictionaryType();
+/**
+ * @since 1.0.0
+ */
+var LiteralType = /** @class */ (function (_super) {
+    __extends(LiteralType, _super);
+    function LiteralType(name, is, validate, encode, value) {
+        var _this = _super.call(this, name, is, validate, encode) || this;
+        _this.value = value;
+        /**
+         * @since 1.0.0
+         */
+        _this._tag = 'LiteralType';
+        return _this;
+    }
+    return LiteralType;
+}(Type));
+exports.LiteralType = LiteralType;
+/**
+ * @category constructors
+ * @since 1.0.0
+ */
+function literal(value, name) {
+    if (name === void 0) { name = JSON.stringify(value); }
+    var is = function (u) { return u === value; };
+    return new LiteralType(name, is, function (u, c) { return (is(u) ? exports.success(value) : exports.failure(u, c)); }, exports.identity, value);
+}
+exports.literal = literal;
+/**
+ * @since 1.0.0
+ */
+var KeyofType = /** @class */ (function (_super) {
+    __extends(KeyofType, _super);
+    function KeyofType(name, is, validate, encode, keys) {
+        var _this = _super.call(this, name, is, validate, encode) || this;
+        _this.keys = keys;
+        /**
+         * @since 1.0.0
+         */
+        _this._tag = 'KeyofType';
+        return _this;
+    }
+    return KeyofType;
+}(Type));
+exports.KeyofType = KeyofType;
+/**
+ * @category constructors
+ * @since 1.0.0
+ */
+function keyof(keys, name) {
+    if (name === void 0) { name = Object.keys(keys)
+        .map(function (k) { return JSON.stringify(k); })
+        .join(' | '); }
+    var is = function (u) { return exports.string.is(u) && hasOwnProperty.call(keys, u); };
+    return new KeyofType(name, is, function (u, c) { return (is(u) ? exports.success(u) : exports.failure(u, c)); }, exports.identity, keys);
+}
+exports.keyof = keyof;
+// -------------------------------------------------------------------------------------
+// combinators
+// -------------------------------------------------------------------------------------
+/**
+ * @since 1.0.0
+ */
+var RefinementType = /** @class */ (function (_super) {
+    __extends(RefinementType, _super);
+    function RefinementType(name, is, validate, encode, type, predicate) {
+        var _this = _super.call(this, name, is, validate, encode) || this;
+        _this.type = type;
+        _this.predicate = predicate;
+        /**
+         * @since 1.0.0
+         */
+        _this._tag = 'RefinementType';
+        return _this;
+    }
+    return RefinementType;
+}(Type));
+exports.RefinementType = RefinementType;
+/**
+ * @category combinators
+ * @since 1.8.1
+ */
+function brand(codec, predicate, name) {
+    // tslint:disable-next-line: deprecation
+    return refinement(codec, predicate, name);
+}
+exports.brand = brand;
+/**
+ * A branded codec representing an integer
+ *
+ * @category primitives
+ * @since 1.8.1
+ */
+exports.Int = brand(exports.number, function (n) { return Number.isInteger(n); }, 'Int');
+/**
+ * @since 1.0.0
+ */
+var RecursiveType = /** @class */ (function (_super) {
+    __extends(RecursiveType, _super);
+    function RecursiveType(name, is, validate, encode, runDefinition) {
+        var _this = _super.call(this, name, is, validate, encode) || this;
+        _this.runDefinition = runDefinition;
+        /**
+         * @since 1.0.0
+         */
+        _this._tag = 'RecursiveType';
+        return _this;
+    }
+    return RecursiveType;
+}(Type));
+exports.RecursiveType = RecursiveType;
+Object.defineProperty(RecursiveType.prototype, 'type', {
+    get: function () {
+        return this.runDefinition();
+    },
+    enumerable: true,
+    configurable: true
+});
+/**
+ * @category combinators
+ * @since 1.0.0
+ */
+function recursion(name, definition) {
+    var cache;
+    var runDefinition = function () {
+        if (!cache) {
+            cache = definition(Self);
+            cache.name = name;
+        }
+        return cache;
+    };
+    var Self = new RecursiveType(name, function (u) { return runDefinition().is(u); }, function (u, c) { return runDefinition().validate(u, c); }, function (a) { return runDefinition().encode(a); }, runDefinition);
+    return Self;
+}
+exports.recursion = recursion;
+/**
+ * @since 1.0.0
+ */
+var ArrayType = /** @class */ (function (_super) {
+    __extends(ArrayType, _super);
+    function ArrayType(name, is, validate, encode, type) {
+        var _this = _super.call(this, name, is, validate, encode) || this;
+        _this.type = type;
+        /**
+         * @since 1.0.0
+         */
+        _this._tag = 'ArrayType';
+        return _this;
+    }
+    return ArrayType;
+}(Type));
+exports.ArrayType = ArrayType;
+/**
+ * @category combinators
+ * @since 1.0.0
+ */
+function array(item, name) {
+    if (name === void 0) { name = "Array<" + item.name + ">"; }
+    return new ArrayType(name, function (u) { return exports.UnknownArray.is(u) && u.every(item.is); }, function (u, c) {
+        var e = exports.UnknownArray.validate(u, c);
+        if (Either_1.isLeft(e)) {
+            return e;
+        }
+        var us = e.right;
+        var len = us.length;
+        var as = us;
+        var errors = [];
+        for (var i = 0; i < len; i++) {
+            var ui = us[i];
+            var result = item.validate(ui, appendContext(c, String(i), item, ui));
+            if (Either_1.isLeft(result)) {
+                pushAll(errors, result.left);
+            }
+            else {
+                var ai = result.right;
+                if (ai !== ui) {
+                    if (as === us) {
+                        as = us.slice();
+                    }
+                    as[i] = ai;
+                }
+            }
+        }
+        return errors.length > 0 ? exports.failures(errors) : exports.success(as);
+    }, item.encode === exports.identity ? exports.identity : function (a) { return a.map(item.encode); }, item);
+}
+exports.array = array;
+/**
+ * @since 1.0.0
+ */
+var InterfaceType = /** @class */ (function (_super) {
+    __extends(InterfaceType, _super);
+    function InterfaceType(name, is, validate, encode, props) {
+        var _this = _super.call(this, name, is, validate, encode) || this;
+        _this.props = props;
+        /**
+         * @since 1.0.0
+         */
+        _this._tag = 'InterfaceType';
+        return _this;
+    }
+    return InterfaceType;
+}(Type));
+exports.InterfaceType = InterfaceType;
+/**
+ * @category combinators
+ * @since 1.0.0
+ */
+function type(props, name) {
+    if (name === void 0) { name = getInterfaceTypeName(props); }
+    var keys = Object.keys(props);
+    var types = keys.map(function (key) { return props[key]; });
+    var len = keys.length;
+    return new InterfaceType(name, function (u) {
+        if (exports.UnknownRecord.is(u)) {
+            for (var i = 0; i < len; i++) {
+                var k = keys[i];
+                var uk = u[k];
+                if ((uk === undefined && !hasOwnProperty.call(u, k)) || !types[i].is(uk)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }, function (u, c) {
+        var e = exports.UnknownRecord.validate(u, c);
+        if (Either_1.isLeft(e)) {
+            return e;
+        }
+        var o = e.right;
+        var a = o;
+        var errors = [];
+        for (var i = 0; i < len; i++) {
+            var k = keys[i];
+            var ak = a[k];
+            var type_1 = types[i];
+            var result = type_1.validate(ak, appendContext(c, k, type_1, ak));
+            if (Either_1.isLeft(result)) {
+                pushAll(errors, result.left);
+            }
+            else {
+                var vak = result.right;
+                if (vak !== ak || (vak === undefined && !hasOwnProperty.call(a, k))) {
+                    /* istanbul ignore next */
+                    if (a === o) {
+                        a = __assign({}, o);
+                    }
+                    a[k] = vak;
+                }
+            }
+        }
+        return errors.length > 0 ? exports.failures(errors) : exports.success(a);
+    }, useIdentity(types)
+        ? exports.identity
+        : function (a) {
+            var s = __assign({}, a);
+            for (var i = 0; i < len; i++) {
+                var k = keys[i];
+                var encode = types[i].encode;
+                if (encode !== exports.identity) {
+                    s[k] = encode(a[k]);
+                }
+            }
+            return s;
+        }, props);
+}
+exports.type = type;
+exports.interface = type;
+/**
+ * @since 1.0.0
+ */
+var PartialType = /** @class */ (function (_super) {
+    __extends(PartialType, _super);
+    function PartialType(name, is, validate, encode, props) {
+        var _this = _super.call(this, name, is, validate, encode) || this;
+        _this.props = props;
+        /**
+         * @since 1.0.0
+         */
+        _this._tag = 'PartialType';
+        return _this;
+    }
+    return PartialType;
+}(Type));
+exports.PartialType = PartialType;
+/**
+ * @category combinators
+ * @since 1.0.0
+ */
+function partial(props, name) {
+    if (name === void 0) { name = getPartialTypeName(getInterfaceTypeName(props)); }
+    var keys = Object.keys(props);
+    var types = keys.map(function (key) { return props[key]; });
+    var len = keys.length;
+    return new PartialType(name, function (u) {
+        if (exports.UnknownRecord.is(u)) {
+            for (var i = 0; i < len; i++) {
+                var k = keys[i];
+                var uk = u[k];
+                if (uk !== undefined && !props[k].is(uk)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }, function (u, c) {
+        var e = exports.UnknownRecord.validate(u, c);
+        if (Either_1.isLeft(e)) {
+            return e;
+        }
+        var o = e.right;
+        var a = o;
+        var errors = [];
+        for (var i = 0; i < len; i++) {
+            var k = keys[i];
+            var ak = a[k];
+            var type_2 = props[k];
+            var result = type_2.validate(ak, appendContext(c, k, type_2, ak));
+            if (Either_1.isLeft(result)) {
+                if (ak !== undefined) {
+                    pushAll(errors, result.left);
+                }
+            }
+            else {
+                var vak = result.right;
+                if (vak !== ak) {
+                    /* istanbul ignore next */
+                    if (a === o) {
+                        a = __assign({}, o);
+                    }
+                    a[k] = vak;
+                }
+            }
+        }
+        return errors.length > 0 ? exports.failures(errors) : exports.success(a);
+    }, useIdentity(types)
+        ? exports.identity
+        : function (a) {
+            var s = __assign({}, a);
+            for (var i = 0; i < len; i++) {
+                var k = keys[i];
+                var ak = a[k];
+                if (ak !== undefined) {
+                    s[k] = types[i].encode(ak);
+                }
+            }
+            return s;
+        }, props);
+}
+exports.partial = partial;
+/**
+ * @since 1.0.0
+ */
+var DictionaryType = /** @class */ (function (_super) {
+    __extends(DictionaryType, _super);
+    function DictionaryType(name, is, validate, encode, domain, codomain) {
+        var _this = _super.call(this, name, is, validate, encode) || this;
+        _this.domain = domain;
+        _this.codomain = codomain;
+        /**
+         * @since 1.0.0
+         */
+        _this._tag = 'DictionaryType';
+        return _this;
+    }
+    return DictionaryType;
+}(Type));
+exports.DictionaryType = DictionaryType;
+/**
+ * @category combinators
+ * @since 1.7.1
+ */
+function record(domain, codomain, name) {
+    var keys = getDomainKeys(domain);
+    return keys
+        ? enumerableRecord(Object.keys(keys), domain, codomain, name)
+        : nonEnumerableRecord(domain, codomain, name);
+}
+exports.record = record;
+/**
+ * @since 1.0.0
+ */
+var UnionType = /** @class */ (function (_super) {
+    __extends(UnionType, _super);
+    function UnionType(name, is, validate, encode, types) {
+        var _this = _super.call(this, name, is, validate, encode) || this;
+        _this.types = types;
+        /**
+         * @since 1.0.0
+         */
+        _this._tag = 'UnionType';
+        return _this;
+    }
+    return UnionType;
+}(Type));
+exports.UnionType = UnionType;
+/**
+ * @category combinators
+ * @since 1.0.0
+ */
+function union(codecs, name) {
+    if (name === void 0) { name = getUnionName(codecs); }
+    var index = getIndex(codecs);
+    if (index !== undefined && codecs.length > 0) {
+        var tag_1 = index[0], groups_1 = index[1];
+        var len_1 = groups_1.length;
+        var find_1 = function (value) {
+            for (var i = 0; i < len_1; i++) {
+                if (groups_1[i].indexOf(value) !== -1) {
+                    return i;
+                }
+            }
+            return undefined;
+        };
+        // tslint:disable-next-line: deprecation
+        return new TaggedUnionType(name, function (u) {
+            if (exports.UnknownRecord.is(u)) {
+                var i = find_1(u[tag_1]);
+                return i !== undefined ? codecs[i].is(u) : false;
+            }
+            return false;
+        }, function (u, c) {
+            var e = exports.UnknownRecord.validate(u, c);
+            if (Either_1.isLeft(e)) {
+                return e;
+            }
+            var r = e.right;
+            var i = find_1(r[tag_1]);
+            if (i === undefined) {
+                return exports.failure(u, c);
+            }
+            var codec = codecs[i];
+            return codec.validate(r, appendContext(c, String(i), codec, r));
+        }, useIdentity(codecs)
+            ? exports.identity
+            : function (a) {
+                var i = find_1(a[tag_1]);
+                if (i === undefined) {
+                    // https://github.com/gcanti/io-ts/pull/305
+                    throw new Error("no codec found to encode value in union codec " + name);
+                }
+                else {
+                    return codecs[i].encode(a);
+                }
+            }, codecs, tag_1);
+    }
+    else {
+        return new UnionType(name, function (u) { return codecs.some(function (type) { return type.is(u); }); }, function (u, c) {
+            var errors = [];
+            for (var i = 0; i < codecs.length; i++) {
+                var codec = codecs[i];
+                var result = codec.validate(u, appendContext(c, String(i), codec, u));
+                if (Either_1.isLeft(result)) {
+                    pushAll(errors, result.left);
+                }
+                else {
+                    return exports.success(result.right);
+                }
+            }
+            return exports.failures(errors);
+        }, useIdentity(codecs)
+            ? exports.identity
+            : function (a) {
+                for (var _i = 0, codecs_1 = codecs; _i < codecs_1.length; _i++) {
+                    var codec = codecs_1[_i];
+                    if (codec.is(a)) {
+                        return codec.encode(a);
+                    }
+                }
+                // https://github.com/gcanti/io-ts/pull/305
+                throw new Error("no codec found to encode value in union type " + name);
+            }, codecs);
+    }
+}
+exports.union = union;
+/**
+ * @since 1.0.0
+ */
+var IntersectionType = /** @class */ (function (_super) {
+    __extends(IntersectionType, _super);
+    function IntersectionType(name, is, validate, encode, types) {
+        var _this = _super.call(this, name, is, validate, encode) || this;
+        _this.types = types;
+        /**
+         * @since 1.0.0
+         */
+        _this._tag = 'IntersectionType';
+        return _this;
+    }
+    return IntersectionType;
+}(Type));
+exports.IntersectionType = IntersectionType;
+function intersection(codecs, name) {
+    if (name === void 0) { name = "(" + codecs.map(function (type) { return type.name; }).join(' & ') + ")"; }
+    var len = codecs.length;
+    return new IntersectionType(name, function (u) { return codecs.every(function (type) { return type.is(u); }); }, codecs.length === 0
+        ? exports.success
+        : function (u, c) {
+            var us = [];
+            var errors = [];
+            for (var i = 0; i < len; i++) {
+                var codec = codecs[i];
+                var result = codec.validate(u, appendContext(c, String(i), codec, u));
+                if (Either_1.isLeft(result)) {
+                    pushAll(errors, result.left);
+                }
+                else {
+                    us.push(result.right);
+                }
+            }
+            return errors.length > 0 ? exports.failures(errors) : exports.success(mergeAll(u, us));
+        }, codecs.length === 0
+        ? exports.identity
+        : function (a) {
+            return mergeAll(a, codecs.map(function (codec) { return codec.encode(a); }));
+        }, codecs);
+}
+exports.intersection = intersection;
+/**
+ * @since 1.0.0
+ */
+var TupleType = /** @class */ (function (_super) {
+    __extends(TupleType, _super);
+    function TupleType(name, is, validate, encode, types) {
+        var _this = _super.call(this, name, is, validate, encode) || this;
+        _this.types = types;
+        /**
+         * @since 1.0.0
+         */
+        _this._tag = 'TupleType';
+        return _this;
+    }
+    return TupleType;
+}(Type));
+exports.TupleType = TupleType;
+function tuple(codecs, name) {
+    if (name === void 0) { name = "[" + codecs.map(function (type) { return type.name; }).join(', ') + "]"; }
+    var len = codecs.length;
+    return new TupleType(name, function (u) { return exports.UnknownArray.is(u) && u.length === len && codecs.every(function (type, i) { return type.is(u[i]); }); }, function (u, c) {
+        var e = exports.UnknownArray.validate(u, c);
+        if (Either_1.isLeft(e)) {
+            return e;
+        }
+        var us = e.right;
+        var as = us.length > len ? us.slice(0, len) : us; // strip additional components
+        var errors = [];
+        for (var i = 0; i < len; i++) {
+            var a = us[i];
+            var type_3 = codecs[i];
+            var result = type_3.validate(a, appendContext(c, String(i), type_3, a));
+            if (Either_1.isLeft(result)) {
+                pushAll(errors, result.left);
+            }
+            else {
+                var va = result.right;
+                if (va !== a) {
+                    /* istanbul ignore next */
+                    if (as === us) {
+                        as = us.slice();
+                    }
+                    as[i] = va;
+                }
+            }
+        }
+        return errors.length > 0 ? exports.failures(errors) : exports.success(as);
+    }, useIdentity(codecs) ? exports.identity : function (a) { return codecs.map(function (type, i) { return type.encode(a[i]); }); }, codecs);
+}
+exports.tuple = tuple;
+/**
+ * @since 1.0.0
+ */
+var ReadonlyType = /** @class */ (function (_super) {
+    __extends(ReadonlyType, _super);
+    function ReadonlyType(name, is, validate, encode, type) {
+        var _this = _super.call(this, name, is, validate, encode) || this;
+        _this.type = type;
+        /**
+         * @since 1.0.0
+         */
+        _this._tag = 'ReadonlyType';
+        return _this;
+    }
+    return ReadonlyType;
+}(Type));
+exports.ReadonlyType = ReadonlyType;
+/**
+ * @category combinators
+ * @since 1.0.0
+ */
+function readonly(codec, name) {
+    if (name === void 0) { name = "Readonly<" + codec.name + ">"; }
+    return new ReadonlyType(name, codec.is, codec.validate, codec.encode, codec);
+}
+exports.readonly = readonly;
+/**
+ * @since 1.0.0
+ */
+var ReadonlyArrayType = /** @class */ (function (_super) {
+    __extends(ReadonlyArrayType, _super);
+    function ReadonlyArrayType(name, is, validate, encode, type) {
+        var _this = _super.call(this, name, is, validate, encode) || this;
+        _this.type = type;
+        /**
+         * @since 1.0.0
+         */
+        _this._tag = 'ReadonlyArrayType';
+        return _this;
+    }
+    return ReadonlyArrayType;
+}(Type));
+exports.ReadonlyArrayType = ReadonlyArrayType;
+/**
+ * @category combinators
+ * @since 1.0.0
+ */
+function readonlyArray(item, name) {
+    if (name === void 0) { name = "ReadonlyArray<" + item.name + ">"; }
+    var codec = array(item);
+    return new ReadonlyArrayType(name, codec.is, codec.validate, codec.encode, item);
+}
+exports.readonlyArray = readonlyArray;
+/**
+ * Strips additional properties, equivalent to `exact(type(props))`.
+ *
+ * @category combinators
+ * @since 1.0.0
+ */
+var strict = function (props, name) { return exact(type(props), name); };
+exports.strict = strict;
+/**
+ * @since 1.1.0
+ */
+var ExactType = /** @class */ (function (_super) {
+    __extends(ExactType, _super);
+    function ExactType(name, is, validate, encode, type) {
+        var _this = _super.call(this, name, is, validate, encode) || this;
+        _this.type = type;
+        /**
+         * @since 1.0.0
+         */
+        _this._tag = 'ExactType';
+        return _this;
+    }
+    return ExactType;
+}(Type));
+exports.ExactType = ExactType;
+/**
+ * Strips additional properties.
+ *
+ * @category combinators
+ * @since 1.1.0
+ */
+function exact(codec, name) {
+    if (name === void 0) { name = getExactTypeName(codec); }
+    var props = getProps(codec);
+    return new ExactType(name, codec.is, function (u, c) {
+        var e = exports.UnknownRecord.validate(u, c);
+        if (Either_1.isLeft(e)) {
+            return e;
+        }
+        var ce = codec.validate(u, c);
+        if (Either_1.isLeft(ce)) {
+            return ce;
+        }
+        return Either_1.right(stripKeys(ce.right, props));
+    }, function (a) { return codec.encode(stripKeys(a, props)); }, codec);
+}
+exports.exact = exact;
+// -------------------------------------------------------------------------------------
+// deprecated
+// -------------------------------------------------------------------------------------
+/**
+ * @since 1.0.0
+ * @deprecated
+ */
+var FunctionType = /** @class */ (function (_super) {
+    __extends(FunctionType, _super);
+    function FunctionType() {
+        var _this = _super.call(this, 'Function', 
+        // tslint:disable-next-line:strict-type-predicates
+        function (u) { return typeof u === 'function'; }, function (u, c) { return (_this.is(u) ? exports.success(u) : exports.failure(u, c)); }, exports.identity) || this;
+        /**
+         * @since 1.0.0
+         */
+        _this._tag = 'FunctionType';
+        return _this;
+    }
+    return FunctionType;
+}(Type));
+exports.FunctionType = FunctionType;
+/**
+ * @category primitives
+ * @since 1.0.0
+ * @deprecated
+ */
+// tslint:disable-next-line: deprecation
+exports.Function = new FunctionType();
+/**
+ * @since 1.3.0
+ * @deprecated
+ */
+var TaggedUnionType = /** @class */ (function (_super) {
+    __extends(TaggedUnionType, _super);
+    function TaggedUnionType(name, 
+    // tslint:disable-next-line: deprecation
+    is, 
+    // tslint:disable-next-line: deprecation
+    validate, 
+    // tslint:disable-next-line: deprecation
+    encode, codecs, tag) {
+        var _this = _super.call(this, name, is, validate, encode, codecs) /* istanbul ignore next */ // <= workaround for https://github.com/Microsoft/TypeScript/issues/13455
+         || this;
+        _this.tag = tag;
+        return _this;
+    }
+    return TaggedUnionType;
+}(UnionType));
+exports.TaggedUnionType = TaggedUnionType;
+/**
+ * Use `union` instead.
+ *
+ * @category combinators
+ * @since 1.3.0
+ * @deprecated
+ */
+var taggedUnion = function (tag, codecs, name
+// tslint:disable-next-line: deprecation
+) {
+    if (name === void 0) { name = getUnionName(codecs); }
+    var U = union(codecs, name);
+    // tslint:disable-next-line: deprecation
+    if (U instanceof TaggedUnionType) {
+        return U;
+    }
+    else {
+        console.warn("[io-ts] Cannot build a tagged union for " + name + ", returning a de-optimized union");
+        // tslint:disable-next-line: deprecation
+        return new TaggedUnionType(name, U.is, U.validate, U.encode, codecs, tag);
+    }
+};
+exports.taggedUnion = taggedUnion;
+/**
+ * @since 1.0.0
+ * @deprecated
+ */
+var getValidationError /* istanbul ignore next */ = function (value, context) { return ({
+    value: value,
+    context: context
+}); };
+exports.getValidationError /* istanbul ignore next */ = getValidationError;
+/**
+ * @since 1.0.0
+ * @deprecated
+ */
+var getDefaultContext /* istanbul ignore next */ = function (decoder) { return [
+    { key: '', type: decoder }
+]; };
+exports.getDefaultContext /* istanbul ignore next */ = getDefaultContext;
+/**
+ * @since 1.0.0
+ * @deprecated
+ */
+var NeverType = /** @class */ (function (_super) {
+    __extends(NeverType, _super);
+    function NeverType() {
+        var _this = _super.call(this, 'never', function (_) { return false; }, function (u, c) { return exports.failure(u, c); }, 
+        /* istanbul ignore next */
+        function () {
+            throw new Error('cannot encode never');
+        }) || this;
+        /**
+         * @since 1.0.0
+         */
+        _this._tag = 'NeverType';
+        return _this;
+    }
+    return NeverType;
+}(Type));
+exports.NeverType = NeverType;
+/**
+ * @category primitives
+ * @since 1.0.0
+ * @deprecated
+ */
+// tslint:disable-next-line: deprecation
+exports.never = new NeverType();
+/**
+ * @since 1.0.0
+ * @deprecated
+ */
+var AnyType = /** @class */ (function (_super) {
+    __extends(AnyType, _super);
+    function AnyType() {
+        var _this = _super.call(this, 'any', function (_) { return true; }, exports.success, exports.identity) || this;
+        /**
+         * @since 1.0.0
+         */
+        _this._tag = 'AnyType';
+        return _this;
+    }
+    return AnyType;
+}(Type));
+exports.AnyType = AnyType;
+/**
+ * Use `unknown` instead.
+ *
+ * @category primitives
+ * @since 1.0.0
+ * @deprecated
+ */
+// tslint:disable-next-line: deprecation
+exports.any = new AnyType();
+/**
+ * Use `UnknownRecord` instead.
+ *
+ * @category primitives
+ * @since 1.0.0
+ * @deprecated
+ */
+exports.Dictionary = exports.UnknownRecord;
+/**
+ * @since 1.0.0
+ * @deprecated
+ */
+var ObjectType = /** @class */ (function (_super) {
+    __extends(ObjectType, _super);
+    function ObjectType() {
+        var _this = _super.call(this, 'object', function (u) { return u !== null && typeof u === 'object'; }, function (u, c) { return (_this.is(u) ? exports.success(u) : exports.failure(u, c)); }, exports.identity) || this;
+        /**
+         * @since 1.0.0
+         */
+        _this._tag = 'ObjectType';
+        return _this;
+    }
+    return ObjectType;
+}(Type));
+exports.ObjectType = ObjectType;
+/**
+ * Use `UnknownRecord` instead.
+ *
+ * @category primitives
+ * @since 1.0.0
+ * @deprecated
+ */
+// tslint:disable-next-line: deprecation
+exports.object = new ObjectType();
+/**
+ * Use `brand` instead.
+ *
+ * @category combinators
+ * @since 1.0.0
+ * @deprecated
+ */
+function refinement(codec, predicate, name) {
+    if (name === void 0) { name = "(" + codec.name + " | " + getFunctionName(predicate) + ")"; }
+    return new RefinementType(name, function (u) { return codec.is(u) && predicate(u); }, function (i, c) {
+        var e = codec.validate(i, c);
+        if (Either_1.isLeft(e)) {
+            return e;
+        }
+        var a = e.right;
+        return predicate(a) ? exports.success(a) : exports.failure(a, c);
+    }, codec.encode, codec, predicate);
+}
+exports.refinement = refinement;
+/**
+ * Use `Int` instead.
+ *
+ * @category primitives
+ * @since 1.0.0
+ * @deprecated
+ */
+// tslint:disable-next-line: deprecation
+exports.Integer = refinement(exports.number, Number.isInteger, 'Integer');
+/**
+ * Use `record` instead.
+ *
+ * @category combinators
+ * @since 1.0.0
+ * @deprecated
+ */
+exports.dictionary = record;
+/**
+ * @since 1.0.0
+ * @deprecated
+ */
+var StrictType = /** @class */ (function (_super) {
+    __extends(StrictType, _super);
+    function StrictType(name, 
+    // tslint:disable-next-line: deprecation
+    is, 
+    // tslint:disable-next-line: deprecation
+    validate, 
+    // tslint:disable-next-line: deprecation
+    encode, props) {
+        var _this = _super.call(this, name, is, validate, encode) || this;
+        _this.props = props;
+        /**
+         * @since 1.0.0
+         */
+        _this._tag = 'StrictType';
+        return _this;
+    }
+    return StrictType;
+}(Type));
+exports.StrictType = StrictType;
+/**
+ * Drops the codec "kind".
+ *
+ * @category combinators
+ * @since 1.1.0
+ * @deprecated
+ */
+function clean(codec) {
+    return codec;
+}
+exports.clean = clean;
+function alias(codec) {
+    return function () { return codec; };
+}
+exports.alias = alias;
 
 
 /***/ }),
