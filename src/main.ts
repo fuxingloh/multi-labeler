@@ -3,7 +3,6 @@ import * as github from '@actions/github'
 import {labels, mergeLabels} from './labeler'
 import {Config, getConfig} from './config'
 import {checks, StatusCheck} from './checks'
-import {concat, uniq} from 'lodash'
 
 const githubToken = core.getInput('github-token')
 const configPath = core.getInput('config-path', {required: true})
