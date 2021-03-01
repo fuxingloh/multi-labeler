@@ -782,7 +782,11 @@ function getMatchers(config) {
     })
         .filter(({ any, all, count }) => {
         return (any.length ||
-            all.length || (count === null || count === void 0 ? void 0 : count.lte) || (count === null || count === void 0 ? void 0 : count.gte) || (count === null || count === void 0 ? void 0 : count.eq) || (count === null || count === void 0 ? void 0 : count.neq));
+            all.length ||
+            (count === null || count === void 0 ? void 0 : count.lte) ||
+            (count === null || count === void 0 ? void 0 : count.gte) ||
+            (count === null || count === void 0 ? void 0 : count.eq) ||
+            (count === null || count === void 0 ? void 0 : count.neq));
     });
 }
 function getFiles(client, pr_number) {
