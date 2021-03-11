@@ -10,6 +10,8 @@ based on the labels.
 
 ## Features
 
+> **Psst!** For a more wholesome OSS governance solution check out [DeFiCh/oss-governance-bot](https://github.com/DeFiCh/oss-governance-bot). I am also the main contributor for the GitHub Action.
+
 - Single compiled javascript file, extremely fast. Use fewer credits!
 - Append based multi-labeler, using `.github/labeler.yml` as config.
 - Automatically fail if `labeler.yml` is malformed, type-checked.
@@ -35,6 +37,7 @@ based on the labels.
 
 ```yml
 on:
+  pull_request_target: # for OSS with public contributions   
   pull_request:   
   # Useful for triaging code review, and generate compliance status check.
   # Semantic release? Done.
