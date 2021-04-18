@@ -11,6 +11,10 @@ import files from './matcher/files'
 import author from './matcher/author'
 import * as github from '@actions/github'
 
+/**
+ * @param {string[]} labels that are newly derived
+ * @param {Config} config of the labels
+ */
 export function mergeLabels(labels: string[], config: Config): string[] {
   const context = github.context
   const payload = context.payload.pull_request || context.payload.issue

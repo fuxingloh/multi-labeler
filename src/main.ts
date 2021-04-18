@@ -37,7 +37,7 @@ async function removeLabels(
   config: Config
 ): Promise<unknown[]> {
   const eventName = github.context.eventName
-  if (!['pull_request', 'issue'].includes(eventName)) {
+  if (!['pull_request', 'pull_request_target', 'issue'].includes(eventName)) {
     return []
   }
 
