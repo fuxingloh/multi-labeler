@@ -269,6 +269,10 @@ const commits_1 = __importDefault(__nccwpck_require__(747));
 const files_1 = __importDefault(__nccwpck_require__(1180));
 const author_1 = __importDefault(__nccwpck_require__(8432));
 const github = __importStar(__nccwpck_require__(5438));
+/**
+ * @param {string[]} labels that are newly derived
+ * @param {Config} config of the labels
+ */
 function mergeLabels(labels, config) {
     var _a;
     const context = github.context;
@@ -374,7 +378,7 @@ function addLabels(labels) {
 function removeLabels(labels, config) {
     return __awaiter(this, void 0, void 0, function* () {
         const eventName = github.context.eventName;
-        if (!['pull_request', 'issue'].includes(eventName)) {
+        if (!['pull_request', 'pull_request_target', 'issue'].includes(eventName)) {
             return [];
         }
         return Promise.all((config.labels || [])
