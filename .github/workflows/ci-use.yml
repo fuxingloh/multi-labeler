@@ -6,6 +6,12 @@ on:
   issues:
   issue_comment:
 
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+  statuses: write
+
 jobs:
   uses:
     name: Uses

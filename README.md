@@ -8,9 +8,9 @@
 Multi labeler for title, body, comments, commit messages, branch, author or files. Optionally, generate a status check
 based on the labels.
 
-## Features
+[Who is using `fuxingloh/multi-labeler`?](https://github.com/search?o=desc&q=fuxingloh+%2F+multi-labeler&s=indexed&type=Code)
 
-> **Psst!** For a more wholesome OSS governance solution check out [DeFiCh/oss-governance-bot](https://github.com/DeFiCh/oss-governance-bot). I am also the main contributor for the GitHub Action.
+## Features
 
 - Single compiled javascript file, extremely fast. Use fewer credits!
 - Append based multi-labeler, using `.github/labeler.yml` as config.
@@ -37,20 +37,28 @@ based on the labels.
 
 ```yml
 on:
-  pull_request_target: # for OSS with public contributions   
-  pull_request:   
+  pull_request_target: # for OSS with public contributions (forked PR)   
+  pull_request:
   # Useful for triaging code review, and generate compliance status check.
   # Semantic release? Done.
   # Make a file change in a mono repo. Tag the mono repo getting changed to generate better release!
-  
-  issues:         
+
+  issues:
   # Useful for triaging error!
   # '- [x] Is this a bug?' = 'bug' label!
-  
+
   issue_comment:
   # To pickup comment body in pr or issue and generate a label. 
   # Imagine someone comment 'Me too, I get TimeoutException from ...' in comment body. 
   # Generate a 'bug/timeout' label for better triaging!
+
+permissions:
+  # Setting up permissions in the workflow to limit the scope of what it can do. Optional!
+  contents: read
+  issues: write
+  pull-requests: write
+  statuses: write
+  checks: write
 
 jobs:
   labeler:
@@ -58,7 +66,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # follows semantic versioning. Lock to different version: v1, v1.5, v1.5.0 or use a commit hash.
-      - uses: fuxingloh/multi-labeler@v1 
+      - uses: fuxingloh/multi-labeler@v1
         with:
           github-token: ${{secrets.GITHUB_TOKEN}} # optional, default to '${{ github.token }}'  
           config-path: .github/labeler.yml # optional, default to '.github/labeler.yml'
@@ -284,6 +292,8 @@ file to the repository.
 
 ## Matchers
 
+> RegEx matcher requires backslash '\' to be double slashed '\\'. Hence, to match brackets '()' you need a regex of '\\(\\)'. See https://github.com/fuxingloh/multi-labeler/issues/103
+
 ### PR/Issue Title: RegEx
 
 ```yml
@@ -307,7 +317,7 @@ labels:
       body: "(\\n|.)*- \\[x\\] bug(\\n|.)*"
 ```
 
-### PR/Issue Comment: Regex
+### PR/Issue Comment: RegEx
 
 ```yml
 version: v1
@@ -474,11 +484,10 @@ checks:
 
 > There are so many labeler why create another? 😧
 
-1. I want a lightweight labeler that is written in TypeScript so that it don't have to build a docker image everytime it
-   runs.
+1. I want a lightweight labeler that is written in TypeScript so that it don't have to build a docker image everytime it  runs.
 2. I want a simple match first append based multi-labeler without it being a turing complete solution.
 3. I want to write my rules with `.github/labeler.yml` for a single source of label truth.
 4. I don't want it to do anything else, labels only.
-    1. Assume you are using GitHub branch protection (labels only).
-    2. I want to run this in PR triage before everything else (labels only).
-    3. Chain this action with another action; this should just be for (labels only). 
+   1. Assume you are using GitHub branch protection (labels only).
+   2. I want to run this in PR triage before everything else (labels only).
+   3. Chain this action with another action; this should just be for (labels only). 
