@@ -27,7 +27,7 @@
   "license": "MIT",
   "dependencies": {
     "@actions/core": "^1.2.6",
-    "@actions/github": "^4.0.0",
+    "@actions/github": "^5.0.0",
     "fp-ts": "^2.9.5",
     "io-ts": "^2.2.15",
     "io-ts-reporters": "^1.2.2",
