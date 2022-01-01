@@ -8,6 +8,8 @@
 Multi labeler for title, body, comments, commit messages, branch, author or files. Optionally, generate a status check
 based on the labels.
 
+[Who is using `fuxingloh/multi-labeler`?](https://github.com/search?o=desc&q=fuxingloh+%2F+multi-labeler&s=indexed&type=Code)
+
 ## Features
 
 - Single compiled javascript file, extremely fast. Use fewer credits!
