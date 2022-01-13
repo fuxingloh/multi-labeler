@@ -39,7 +39,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.checks = exports.is = void 0;
 const github = __importStar(__nccwpck_require__(5438));
 function is(check, labels) {
-    var _a, _b, _c, _d, _e, _f;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
     if ((_b = (_a = check.labels) === null || _a === void 0 ? void 0 : _a.any) === null || _b === void 0 ? void 0 : _b.length) {
         if (!labels.some(label => { var _a, _b; return (_b = (_a = check.labels) === null || _a === void 0 ? void 0 : _a.any) === null || _b === void 0 ? void 0 : _b.includes(label); })) {
             return false;
@@ -47,6 +47,11 @@ function is(check, labels) {
     }
     if ((_d = (_c = check.labels) === null || _c === void 0 ? void 0 : _c.all) === null || _d === void 0 ? void 0 : _d.length) {
         if (!((_f = (_e = check.labels) === null || _e === void 0 ? void 0 : _e.all) === null || _f === void 0 ? void 0 : _f.every(label => labels.includes(label)))) {
+            return false;
+        }
+    }
+    if ((_h = (_g = check.labels) === null || _g === void 0 ? void 0 : _g.none) === null || _h === void 0 ? void 0 : _h.length) {
+        if ((_k = (_j = check.labels) === null || _j === void 0 ? void 0 : _j.none) === null || _k === void 0 ? void 0 : _k.some(label => labels.includes(label))) {
             return false;
         }
     }
@@ -181,7 +186,8 @@ const Check = t.intersection([
         ]),
         labels: t.partial({
             any: t.array(t.string),
-            all: t.array(t.string)
+            all: t.array(t.string),
+            none: t.array(t.string)
         })
     })
 ]);

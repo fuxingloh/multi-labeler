@@ -318,13 +318,13 @@ describe('is', () => {
   })
 
   describe('none', function () {
-    it('should none false', function () {
+    it('should be false when none is present', function () {
       expect(
         is(
           {
             context: 'abc',
             labels: {
-              none: ['b'],
+              none: ['b']
             }
           },
           ['a', 'b']
@@ -332,18 +332,33 @@ describe('is', () => {
       ).toBeFalsy()
     })
 
-    it('should none true', function () {
+    it('should be true when none is not present', function () {
+      expect(
+        is(
+          {
+            context: 'abc',
+            labels: {
+              none: ['c']
+            }
+          },
+          ['a', 'b']
+        )
+      ).toBeTruthy()
+    })
+
+    it('should be true when none is not present but all not valid', function () {
       expect(
         is(
           {
             context: 'abc',
             labels: {
               none: ['c'],
+              all: ['b']
             }
           },
-          ['a', 'b']
+          ['a', 'd']
         )
-      ).toBeTruthy()
+      ).toBeFalsy()
     })
   })
 })
