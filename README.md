@@ -5,6 +5,8 @@
 [![Release](https://img.shields.io/github/v/release/fuxingloh/multi-labeler)](https://github.com/fuxingloh/multi-labeler/releases)
 [![License MIT](https://img.shields.io/github/license/fuxingloh/multi-labeler)](https://github.com/fuxingloh/multi-labeler/blob/main/LICENSE)
 
+**DIFFERENCE: allows a remote config-path i.e. a file in a .github repo**
+
 Multi labeler for title, body, comments, commit messages, branch, author or files. Optionally, generate a status check
 based on the labels.
 
