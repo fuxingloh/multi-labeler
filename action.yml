@@ -10,6 +10,10 @@ inputs:
     description: 'The path for the label configurations'
     default: '.github/labeler.yml'
     required: false
+  remote-config-path:
+    description: 'A remote path for the label configurations'
+    default: ''
+    required: false
   github-token:
     description: 'GITHUB_TOKEN or a `repo` scoped Personal Access Token (PAT)'
     required: false
