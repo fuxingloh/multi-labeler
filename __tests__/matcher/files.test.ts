@@ -3,23 +3,26 @@ import * as github from '@actions/github'
 import {Config} from '../../src/config'
 
 async function getMatchedLabels(config: Config): Promise<string[]> {
-  return match({
-    pulls: {
-      listFiles: {
-        endpoint: {
-          // @ts-ignore
-          merge(params) {
-            return {pull_number: params.pull_number}
+  return match(
+    {
+      pulls: {
+        listFiles: {
+          endpoint: {
+            // @ts-ignore
+            merge(params) {
+              return {pull_number: params.pull_number}
+            }
           }
         }
+      },
+      // @ts-ignore
+      paginate(params): Promise<any[]> {
+        // @ts-ignore
+        return Promise.resolve(files[params.pull_number])
       }
     },
-    // @ts-ignore
-    paginate(params): Promise<any[]> {
-      // @ts-ignore
-      return Promise.resolve(files[params.pull_number])
-    }
-  }, config)
+    config
+  )
 }
 
 const basic: Config = {
@@ -79,9 +82,7 @@ const complex: Config = {
         files: {
           any: ['security/**', 'setup/**'],
           all: ['!app/**'],
-          count: {
-
-          }
+          count: {}
         }
       }
     },
@@ -111,7 +112,7 @@ const complex: Config = {
         files: {
           count: {
             gte: 2,
-            lte: 5,
+            lte: 5
           }
         }
       }
@@ -121,7 +122,7 @@ const complex: Config = {
       matcher: {
         files: {
           count: {
-            gte: 6,
+            gte: 6
           }
         }
       }
@@ -134,10 +135,10 @@ const complex: Config = {
           all: ['!setup/**'],
           count: {
             gte: 2,
-            lte: 4,
-          },
+            lte: 4
+          }
         }
-      },
+      }
     },
     {
       label: 'invalid-1',
@@ -149,10 +150,10 @@ const complex: Config = {
             eq: 1,
             neq: 1,
             gte: 1,
-            lte: 1,
-          },
+            lte: 1
+          }
         }
-      },
+      }
     },
     {
       label: 'invalid-2',
@@ -164,10 +165,10 @@ const complex: Config = {
             eq: 1,
             neq: 1,
             gte: 1,
-            lte: 1,
-          },
+            lte: 1
+          }
         }
-      },
+      }
     },
     {
       label: 'invalid-3',
@@ -179,10 +180,10 @@ const complex: Config = {
             eq: 1,
             neq: 1,
             gte: 1,
-            lte: 1,
-          },
+            lte: 1
+          }
         }
-      },
+      }
     },
     {
       label: 'invalid-4',
@@ -193,10 +194,10 @@ const complex: Config = {
             eq: 1,
             neq: 1,
             gte: 1,
-            lte: 1,
-          },
+            lte: 1
+          }
         }
-      },
+      }
     },
     {
       label: 'invalid-5',
@@ -208,10 +209,10 @@ const complex: Config = {
             eq: 1,
             neq: 1,
             gte: 1,
-            lte: 1,
-          },
+            lte: 1
+          }
         }
-      },
+      }
     },
     {
       label: 'invalid-6',
@@ -222,82 +223,78 @@ const complex: Config = {
             eq: 1,
             neq: 1,
             gte: 1,
-            lte: 1,
-          },
+            lte: 1
+          }
         }
-      },
-    },
+      }
+    }
   ]
 }
 
 const files = {
   1: [
     {
-      filename: '.github/labeler.yml',
+      filename: '.github/labeler.yml'
     },
     {
-      filename: 'app/main.js',
+      filename: 'app/main.js'
     },
     {
-      filename: 'security/main.js',
+      filename: 'security/main.js'
     },
     {
-      filename: 'security/abc/abc.js',
+      filename: 'security/abc/abc.js'
     },
     {
-      filename: 'setup/abc/abc.xml',
+      filename: 'setup/abc/abc.xml'
     },
     {
-      filename: 'setup/abc/abc.js',
-    },
+      filename: 'setup/abc/abc.js'
+    }
   ],
   2: [
     {
-      filename: '.github/labeler.yml',
-    },
+      filename: '.github/labeler.yml'
+    }
   ],
   3: [
     {
-      filename: 'app/main.js',
+      filename: 'app/main.js'
     },
     {
-      filename: 'setup/abc/abc.js',
+      filename: 'setup/abc/abc.js'
     },
     {
-      filename: 'test/abc/abc.js',
+      filename: 'test/abc/abc.js'
     }
   ],
   4: [
     {
-      filename: 'security/main.js',
-    },
+      filename: 'security/main.js'
+    }
   ],
   5: [
     {
-      filename: 'security/abc/abc.js',
-    },
+      filename: 'security/abc/abc.js'
+    }
   ],
   6: [
     {
-      filename: 'setup/abc/abc.xml',
-    },
+      filename: 'setup/abc/abc.xml'
+    }
   ],
   7: [
     {
-      filename: 'setup/abc/abc.js',
+      filename: 'setup/abc/abc.js'
     },
     {
-      filename: '1/abc/abc.js',
+      filename: '1/abc/abc.js'
     },
     {
-      filename: '3/abc/abc.js',
-    },
+      filename: '3/abc/abc.js'
+    }
   ],
-  8: [
-    {filename: 'app/1.js'},
-    {filename: 'app/2.js'},
-    {filename: 'app/3.js'},
-  ]
+  8: [{filename: 'app/1.js'}, {filename: 'app/2.js'}, {filename: 'app/3.js'}]
 }
 
 describe('basic', () => {
@@ -389,7 +386,7 @@ describe('basic', () => {
     const labels = await getMatchedLabels(basic)
     expect(labels).toEqual([])
   })
-});
+})
 
 describe('complex', () => {
   beforeEach(() => {
@@ -413,11 +410,7 @@ describe('complex', () => {
       }
     }
     const labels = await getMatchedLabels(complex)
-    expect(labels).toEqual([
-      'any-app',
-      'NEQ1',
-      'L',
-    ])
+    expect(labels).toEqual(['any-app', 'NEQ1', 'L'])
   })
 
   it('2 should have complex labels', async function () {
@@ -427,10 +420,7 @@ describe('complex', () => {
       }
     }
     const labels = await getMatchedLabels(complex)
-    expect(labels).toEqual([
-      'none-app',
-      'S'
-    ])
+    expect(labels).toEqual(['none-app', 'S'])
   })
 
   it('3 should have complex labels', async function () {
@@ -440,11 +430,7 @@ describe('complex', () => {
       }
     }
     const labels = await getMatchedLabels(complex)
-    expect(labels).toEqual([
-      'any-app',
-      'NEQ1',
-      'M'
-    ])
+    expect(labels).toEqual(['any-app', 'NEQ1', 'M'])
   })
 
   it('4 should have complex labels', async function () {
@@ -454,11 +440,7 @@ describe('complex', () => {
       }
     }
     const labels = await getMatchedLabels(complex)
-    expect(labels).toEqual([
-         "none-app",
-         "all-any",
-         "S",
-    ])
+    expect(labels).toEqual(['none-app', 'all-any', 'S'])
   })
 
   it('5 should have complex labels', async function () {
@@ -468,11 +450,7 @@ describe('complex', () => {
       }
     }
     const labels = await getMatchedLabels(complex)
-    expect(labels).toEqual([
-      "none-app",
-      "all-any",
-      "S",
-    ])
+    expect(labels).toEqual(['none-app', 'all-any', 'S'])
   })
 
   it('6 should have complex labels', async function () {
@@ -482,11 +460,7 @@ describe('complex', () => {
       }
     }
     const labels = await getMatchedLabels(complex)
-    expect(labels).toEqual([
-      "none-app",
-      "all-any",
-      "S",
-    ])
+    expect(labels).toEqual(['none-app', 'all-any', 'S'])
   })
 
   it('7 should have complex labels', async function () {
@@ -496,12 +470,7 @@ describe('complex', () => {
       }
     }
     const labels = await getMatchedLabels(complex)
-    expect(labels).toEqual([
-         "none-app",
-         "all-any",
-         "NEQ1",
-         "M",
-    ])
+    expect(labels).toEqual(['none-app', 'all-any', 'NEQ1', 'M'])
   })
 
   it('8 should have complex labels', async function () {
@@ -511,12 +480,6 @@ describe('complex', () => {
       }
     }
     const labels = await getMatchedLabels(complex)
-    expect(labels).toEqual([
-         "all-app",
-         "any-app",
-         "NEQ1",
-         "M",
-         "mixed-1",
-    ])
+    expect(labels).toEqual(['all-app', 'any-app', 'NEQ1', 'M', 'mixed-1'])
   })
 })

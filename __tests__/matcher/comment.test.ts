@@ -41,7 +41,7 @@ describe('empty', function () {
 
     expect(getMatchedLabels(config)).toEqual([])
   })
-});
+})
 
 describe('comment', () => {
   it('should have checkbox', async function () {

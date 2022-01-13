@@ -64,7 +64,7 @@ describe('empty', function () {
 
     expect(getMatchedLabels(config)).toEqual([])
   })
-});
+})
 
 describe('pull_request', () => {
   it('should have feat', async function () {

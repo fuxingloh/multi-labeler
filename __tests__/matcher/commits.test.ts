@@ -3,23 +3,26 @@ import * as github from '@actions/github'
 import {Config} from '../../src/config'
 
 async function getMatchedLabels(config: Config): Promise<string[]> {
-  return match({
-    pulls: {
-      listCommits: {
-        endpoint: {
-          // @ts-ignore
-          merge(params) {
-            return {pull_number: params.pull_number}
+  return match(
+    {
+      pulls: {
+        listCommits: {
+          endpoint: {
+            // @ts-ignore
+            merge(params) {
+              return {pull_number: params.pull_number}
+            }
           }
         }
+      },
+      // @ts-ignore
+      paginate(params): Promise<any[]> {
+        // @ts-ignore
+        return Promise.resolve(commits[params.pull_number])
       }
     },
-    // @ts-ignore
-    paginate(params): Promise<any[]> {
-      // @ts-ignore
-      return Promise.resolve(commits[params.pull_number])
-    }
-  }, config)
+    config
+  )
 }
 
 const config: Config = {
@@ -37,10 +40,10 @@ const config: Config = {
 const commits = {
   1: [
     {
-      commit: {message: 'no-commit:'},
+      commit: {message: 'no-commit:'}
     },
     {
-      commit: {message: 'commit: commit'},
+      commit: {message: 'commit: commit'}
     }
   ],
   2: [
@@ -50,7 +53,7 @@ const commits = {
     {
       commit: {message: 'feat: yes yes yes'}
     }
-  ],
+  ]
 }
 
 describe('commits', function () {
@@ -83,7 +86,6 @@ describe('commits', function () {
     expect(await getMatchedLabels(config)).toEqual([])
   })
 
-
   it('should have feat', async function () {
     github.context.payload = {
       pull_request: {
@@ -94,6 +96,4 @@ describe('commits', function () {
     const labels = await getMatchedLabels(config)
     expect(labels).toEqual(['feat'])
   })
-});
-
-
+})

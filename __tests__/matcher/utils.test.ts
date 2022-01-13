@@ -1,6 +1,5 @@
-import {matcherRegex} from "../../src/matcher/utils";
+import {matcherRegex} from '../../src/matcher/utils'
 
 it('should always fail', function () {
-  expect(matcherRegex({regex: undefined, text: 'abc'}))
-    .toBeFalsy()
-});
+  expect(matcherRegex({regex: undefined, text: 'abc'})).toBeFalsy()
+})

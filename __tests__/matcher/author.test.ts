@@ -11,7 +11,7 @@ const config: Config = {
   version: 'v1',
   labels: [
     {
-      label: 'empty',
+      label: 'empty'
     },
     {
       label: 'string',
@@ -22,19 +22,13 @@ const config: Config = {
     {
       label: 'array',
       matcher: {
-        author: [
-          'fuxingloh',
-          'claire',
-          'adam',
-        ]
+        author: ['fuxingloh', 'claire', 'adam']
       }
     },
     {
       label: 'dragon',
       matcher: {
-        author: [
-          'dragon'
-        ]
+        author: ['dragon']
       }
     },
     {
@@ -79,7 +73,7 @@ describe('empty', function () {
 
     expect(getMatchedLabels(config)).toEqual([])
   })
-});
+})
 
 describe('pull_request', () => {
   it('should have string and array', async function () {
@@ -94,7 +88,7 @@ describe('pull_request', () => {
     }
 
     const labels = getMatchedLabels(config)
-    expect(labels.sort()).toEqual(['string','array'].sort())
+    expect(labels.sort()).toEqual(['string', 'array'].sort())
   })
 
   it('claire should have array', async function () {
@@ -167,7 +161,7 @@ describe('issue', () => {
     }
 
     const labels = getMatchedLabels(config)
-    expect(labels.sort()).toEqual(['string','array'].sort())
+    expect(labels.sort()).toEqual(['string', 'array'].sort())
   })
 
   it('claire should have array', async function () {
