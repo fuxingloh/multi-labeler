@@ -480,6 +480,18 @@ checks:
       all: [ "app" ]
 ```
 
+#### PR Check none
+
+```yml
+version: v1
+
+checks:
+  - context: "Merge check"
+    description: "Disable merging when 'DO NOT MERGE' label is set"
+    labels:
+      none: [ "DO NOT MERGE" ]
+```
+
 ## Why?
 
 > There are so many labeler why create another? 😧

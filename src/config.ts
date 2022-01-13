@@ -53,7 +53,8 @@ const Check = t.intersection([
     ]),
     labels: t.partial({
       any: t.array(t.string),
-      all: t.array(t.string)
+      all: t.array(t.string),
+      none: t.array(t.string)
     })
   })
 ])

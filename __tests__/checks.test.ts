@@ -316,6 +316,36 @@ describe('is', () => {
       ).toBeFalsy()
     })
   })
+
+  describe('none', function () {
+    it('should none false', function () {
+      expect(
+        is(
+          {
+            context: 'abc',
+            labels: {
+              none: ['b'],
+            }
+          },
+          ['a', 'b']
+        )
+      ).toBeFalsy()
+    })
+
+    it('should none true', function () {
+      expect(
+        is(
+          {
+            context: 'abc',
+            labels: {
+              none: ['c'],
+            }
+          },
+          ['a', 'b']
+        )
+      ).toBeTruthy()
+    })
+  })
 })
 
 describe('checks', () => {
