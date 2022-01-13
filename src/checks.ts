@@ -22,6 +22,12 @@ export function is(check: Check, labels: string[]): boolean {
     }
   }
 
+  if (check.labels?.none?.length) {
+    if (check.labels?.none?.some(label => labels.includes(label))) {
+      return false
+    }
+  }
+
   return true
 }
 
