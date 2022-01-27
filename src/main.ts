@@ -98,7 +98,7 @@ async function addChecks(checks: StatusCheck[]): Promise<void> {
   ])
 }
 
-getConfig(client, configPath)
+getConfig(client, configPath, remoteConfigPath)
   .then(async config => {
     const labeled = await labels(client, config)
     const finalLabels = mergeLabels(labeled, config)

@@ -459,7 +459,7 @@ function addChecks(checks) {
         ]);
     });
 }
-config_1.getConfig(client, configPath)
+config_1.getConfig(client, configPath, remoteConfigPath)
     .then((config) => __awaiter(void 0, void 0, void 0, function* () {
     const labeled = yield labeler_1.labels(client, config);
     const finalLabels = labeler_1.mergeLabels(labeled, config);
