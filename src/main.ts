@@ -5,8 +5,8 @@ import {Config, getConfig} from './config'
 import {checks, StatusCheck} from './checks'
 
 const githubToken = core.getInput('github-token')
-let configPath = core.getInput('config-path')
-let remoteConfigPath = core.getInput('remote-config-path')
+let configPath: string | undefined = core.getInput('config-path')
+let remoteConfigPath: string | undefined = core.getInput('remote-config-path')
 if (configPath === '' && remoteConfigPath === '') {
   throw new Error('Valid config-path or remote-config-path are required')
 } else if (remoteConfigPath !== '') {

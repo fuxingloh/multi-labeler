@@ -205,14 +205,25 @@ function parse(content) {
     }
 }
 exports.parse = parse;
-function getConfig(client, configPath) {
+function getConfig(client, configPath, remoteConfigPath) {
     return __awaiter(this, void 0, void 0, function* () {
-        const response = yield client.repos.getContent({
-            owner: github.context.repo.owner,
-            repo: github.context.repo.repo,
-            ref: github.context.sha,
-            path: configPath
-        });
+        let response;
+        if (configPath) {
+            response = yield client.repos.getContent({
+                owner: github.context.repo.owner,
+                repo: github.context.repo.repo,
+                ref: github.context.sha,
+                path: configPath
+            });
+        }
+        else if (remoteConfigPath) {
+            const remoteInfo = remoteConfigPath.split('/');
+            response = yield client.repos.getContent({
+                owner: remoteInfo[0],
+                repo: remoteInfo[1],
+                path: remoteInfo.slice(2).join('/')
+            });
+        }
         const content = yield Buffer.from(response.data.content, response.data.encoding).toString();
         return parse(content);
     });
@@ -355,7 +366,17 @@ const labeler_1 = __nccwpck_require__(5272);
 const config_1 = __nccwpck_require__(88);
 const checks_1 = __nccwpck_require__(2321);
 const githubToken = core.getInput('github-token');
-const configPath = core.getInput('config-path', { required: true });
+let configPath = core.getInput('config-path');
+let remoteConfigPath = core.getInput('remote-config-path');
+if (configPath === '' && remoteConfigPath === '') {
+    throw new Error('Valid config-path or remote-config-path are required');
+}
+else if (remoteConfigPath !== '') {
+    configPath = undefined;
+}
+else {
+    remoteConfigPath = undefined;
+}
 const client = github.getOctokit(githubToken);
 const payload = github.context.payload.pull_request || github.context.payload.issue;
 if (!(payload === null || payload === void 0 ? void 0 : payload.number)) {
@@ -371,7 +392,7 @@ function addLabels(labels) {
             owner: github.context.repo.owner,
             repo: github.context.repo.repo,
             issue_number: payload.number,
-            labels: labels
+            labels
         });
     });
 }
@@ -415,7 +436,7 @@ function addChecks(checks) {
                 client.repos.createCommitStatus({
                     owner: github.context.repo.owner,
                     repo: github.context.repo.repo,
-                    sha: sha,
+                    sha,
                     context: check.context,
                     state: check.state,
                     description: check.description,
