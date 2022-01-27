@@ -7,19 +7,21 @@ import {checks, StatusCheck} from './checks'
 const githubToken = core.getInput('github-token')
 let configPath: string | undefined = core.getInput('config-path')
 let remoteConfigPath: string | undefined = core.getInput('remote-config-path')
+console.log(`configPath: ${configPath}`)
+console.log(`remoteConfigPath: ${remoteConfigPath}`)
 if (configPath === '' && remoteConfigPath === '') {
   throw new Error('Valid config-path or remote-config-path are required')
 } else if (remoteConfigPath !== '') {
   configPath = undefined
-  throw new Error('Using remoteConfigPath')
 } else {
   remoteConfigPath = undefined
 }
+console.log(`configPath: ${configPath}`)
+console.log(`remoteConfigPath: ${remoteConfigPath}`)
 
 const client = github.getOctokit(githubToken)
 const payload =
   github.context.payload.pull_request || github.context.payload.issue
-
 if (!payload?.number) {
   throw new Error(
     'Could not get issue_number from pull_request or issue from context'

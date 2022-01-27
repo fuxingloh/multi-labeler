@@ -91,22 +91,31 @@ export async function getConfig(
   configPath?: string,
   remoteConfigPath?: string
 ): Promise<Config> {
-  let response: any
+  console.log(`configPath: ${configPath}`)
+  console.log(`remoteConfigPath: ${remoteConfigPath}`)
+  let owner = ''
+  let repo = ''
+  let path = ''
   if (configPath) {
-    response = await client.repos.getContent({
-      owner: github.context.repo.owner,
-      repo: github.context.repo.repo,
-      ref: github.context.sha,
-      path: configPath
-    })
+    owner = github.context.repo.owner
+    repo = github.context.repo.repo
+    // ref = github.context.sha
+    path = configPath
   } else if (remoteConfigPath) {
     const remoteInfo: string[] = remoteConfigPath.split('/')
-    response = await client.repos.getContent({
-      owner: remoteInfo[0],
-      repo: remoteInfo[1],
-      path: remoteInfo.slice(2).join('/')
-    })
+    owner = remoteInfo[0]
+    repo = remoteInfo[1]
+    path = remoteInfo.slice(2).join('/')
   }
+  // FIXME gets http error
+  console.log(`owner: ${owner}`)
+  console.log(`repo: ${repo}`)
+  console.log(`path: ${path}`)
+  const response: any = await client.repos.getContent({
+    owner,
+    repo,
+    path
+  })
 
   const content: string = await Buffer.from(
     response.data.content,

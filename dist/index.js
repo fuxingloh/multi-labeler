@@ -207,23 +207,32 @@ function parse(content) {
 exports.parse = parse;
 function getConfig(client, configPath, remoteConfigPath) {
     return __awaiter(this, void 0, void 0, function* () {
-        let response;
+        console.log(`configPath: ${configPath}`);
+        console.log(`remoteConfigPath: ${remoteConfigPath}`);
+        let owner = '';
+        let repo = '';
+        let path = '';
         if (configPath) {
-            response = yield client.repos.getContent({
-                owner: github.context.repo.owner,
-                repo: github.context.repo.repo,
-                ref: github.context.sha,
-                path: configPath
-            });
+            owner = github.context.repo.owner;
+            repo = github.context.repo.repo;
+            // ref = github.context.sha
+            path = configPath;
         }
         else if (remoteConfigPath) {
             const remoteInfo = remoteConfigPath.split('/');
-            response = yield client.repos.getContent({
-                owner: remoteInfo[0],
-                repo: remoteInfo[1],
-                path: remoteInfo.slice(2).join('/')
-            });
+            owner = remoteInfo[0];
+            repo = remoteInfo[1];
+            path = remoteInfo.slice(2).join('/');
         }
+        // FIXME gets http error
+        console.log(`owner: ${owner}`);
+        console.log(`repo: ${repo}`);
+        console.log(`path: ${path}`);
+        const response = yield client.repos.getContent({
+            owner,
+            repo,
+            path
+        });
         const content = yield Buffer.from(response.data.content, response.data.encoding).toString();
         return parse(content);
     });
@@ -368,6 +377,8 @@ const checks_1 = __nccwpck_require__(2321);
 const githubToken = core.getInput('github-token');
 let configPath = core.getInput('config-path');
 let remoteConfigPath = core.getInput('remote-config-path');
+console.log(`configPath: ${configPath}`);
+console.log(`remoteConfigPath: ${remoteConfigPath}`);
 if (configPath === '' && remoteConfigPath === '') {
     throw new Error('Valid config-path or remote-config-path are required');
 }
@@ -377,6 +388,8 @@ else if (remoteConfigPath !== '') {
 else {
     remoteConfigPath = undefined;
 }
+console.log(`configPath: ${configPath}`);
+console.log(`remoteConfigPath: ${remoteConfigPath}`);
 const client = github.getOctokit(githubToken);
 const payload = github.context.payload.pull_request || github.context.payload.issue;
 if (!(payload === null || payload === void 0 ? void 0 : payload.number)) {
