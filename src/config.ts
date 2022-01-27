@@ -92,8 +92,6 @@ export async function getConfig(
   configPath?: string,
   remoteConfigPath?: string
 ): Promise<Config> {
-  console.log(`configPath: ${configPath}`)
-  console.log(`remoteConfigPath: ${remoteConfigPath}`)
   let owner = ''
   let repo = ''
   let path = ''
@@ -108,10 +106,6 @@ export async function getConfig(
     repo = remoteInfo[1]
     path = remoteInfo.slice(2).join('/')
   }
-  // FIXME gets http error
-  console.log(`owner: ${owner}`)
-  console.log(`repo: ${repo}`)
-  console.log(`path: ${path}`)
   const response: any = await client.repos.getContent({
     owner,
     repo,
