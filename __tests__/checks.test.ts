@@ -316,6 +316,51 @@ describe('is', () => {
       ).toBeFalsy()
     })
   })
+
+  describe('none', function () {
+    it('should be false when none is present', function () {
+      expect(
+        is(
+          {
+            context: 'abc',
+            labels: {
+              none: ['b']
+            }
+          },
+          ['a', 'b']
+        )
+      ).toBeFalsy()
+    })
+
+    it('should be true when none is not present', function () {
+      expect(
+        is(
+          {
+            context: 'abc',
+            labels: {
+              none: ['c']
+            }
+          },
+          ['a', 'b']
+        )
+      ).toBeTruthy()
+    })
+
+    it('should be true when none is not present but all not valid', function () {
+      expect(
+        is(
+          {
+            context: 'abc',
+            labels: {
+              none: ['c'],
+              all: ['b']
+            }
+          },
+          ['a', 'd']
+        )
+      ).toBeFalsy()
+    })
+  })
 })
 
 describe('checks', () => {

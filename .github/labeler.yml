@@ -96,3 +96,10 @@ checks:
         - fix
         - chore
         - docs
+
+  - context: "Do Not Merge"
+    url: "https://github.com/fuxingloh/multi-labeler/blob/main/.github/labeler.yml"
+    description: "Disable merging when 'DO NOT MERGE' label is set"
+    labels:
+      none:
+        - "DO NOT MERGE"
