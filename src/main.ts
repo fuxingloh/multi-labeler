@@ -11,6 +11,7 @@ if (configPath === '' && remoteConfigPath === '') {
   throw new Error('Valid config-path or remote-config-path are required')
 } else if (remoteConfigPath !== '') {
   configPath = undefined
+  throw new Error('Using remoteConfigPath')
 } else {
   remoteConfigPath = undefined
 }
