@@ -70,6 +70,7 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}} # optional, default to '${{ github.token }}'  
           config-path: .github/labeler.yml # optional, default to '.github/labeler.yml'
+          config-repo: my-org/my-repo # optional, default to '${{ github.repository }}'
 ```
 
 #### `.github/labeler.yml`
@@ -288,7 +289,10 @@ labels:
 ## Configuration
 
 Once you’ve added multi-labeler to your repository, it must be enabled by adding a `.github/labeler.yml` configuration
-file to the repository.
+file to the repository. If you want to use a configuration file shared across multiple repositories, you can set the
+`config-repo` input to point to a different repository. However, make sure to set a `github-token` that has permissions
+to access the provided repository, as the default `GITHUB_TOKEN` only has access to the repository the action is 
+running in.
 
 ## Matchers
 
