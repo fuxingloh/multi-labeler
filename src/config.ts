@@ -89,11 +89,12 @@ export function parse(content: string): Config {
 
 export async function getConfig(
   client: InstanceType<typeof GitHub>,
-  configPath: string
+  configPath: string,
+  configRepo: string
 ): Promise<Config> {
   const response: any = await client.repos.getContent({
     owner: github.context.repo.owner,
-    repo: github.context.repo.repo,
+    repo: configRepo,
     ref: github.context.sha,
     path: configPath
   })

@@ -6,6 +6,7 @@ import {checks, StatusCheck} from './checks'
 
 const githubToken = core.getInput('github-token')
 const configPath = core.getInput('config-path', {required: true})
+const configRepo = core.getInput('config-repo')
 
 const client = github.getOctokit(githubToken)
 const payload =
@@ -87,7 +88,7 @@ async function addChecks(checks: StatusCheck[]): Promise<void> {
   ])
 }
 
-getConfig(client, configPath)
+getConfig(client, configPath, configRepo)
   .then(async config => {
     const labeled = await labels(client, config)
     const finalLabels = mergeLabels(labeled, config)
