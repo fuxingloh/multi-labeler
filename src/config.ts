@@ -92,10 +92,14 @@ export async function getConfig(
   configPath: string,
   configRepo: string
 ): Promise<Config> {
+  const [owner, repo] = configRepo.split('/')
   const response: any = await client.repos.getContent({
-    owner: github.context.repo.owner,
-    repo: configRepo,
-    ref: github.context.sha,
+    owner,
+    repo,
+    ref:
+      configRepo === github.context.payload.repository?.full_name
+        ? github.context.sha
+        : undefined,
     path: configPath
   })
 

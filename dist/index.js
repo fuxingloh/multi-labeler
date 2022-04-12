@@ -212,11 +212,15 @@ function parse(content) {
 }
 exports.parse = parse;
 function getConfig(client, configPath, configRepo) {
+    var _a;
     return __awaiter(this, void 0, void 0, function* () {
+        const [owner, repo] = configRepo.split('/');
         const response = yield client.repos.getContent({
-            owner: github.context.repo.owner,
-            repo: configRepo,
-            ref: github.context.sha,
+            owner,
+            repo,
+            ref: configRepo === ((_a = github.context.payload.repository) === null || _a === void 0 ? void 0 : _a.full_name)
+                ? github.context.sha
+                : undefined,
             path: configPath
         });
         const content = yield Buffer.from(response.data.content, response.data.encoding).toString();
