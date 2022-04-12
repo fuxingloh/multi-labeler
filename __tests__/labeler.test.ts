@@ -44,7 +44,7 @@ const client: InstanceType<typeof GitHub> = {
 }
 
 async function runLabels(configPath: string): Promise<string[]> {
-  const config = await getConfig(client, configPath)
+  const config = await getConfig(client, configPath, 'owner-name/repo-name')
   return labels(client, config)
 }
 
