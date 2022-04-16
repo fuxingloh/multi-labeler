@@ -25,7 +25,7 @@ async function runChecks(
   configPath: string,
   labels: string[]
 ): Promise<StatusCheck[]> {
-  const config = await getConfig(client, configPath)
+  const config = await getConfig(client, configPath, 'owner-name/repo-name')
   return checks(client, config, labels)
 }
 

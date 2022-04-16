@@ -211,12 +211,16 @@ function parse(content) {
     }
 }
 exports.parse = parse;
-function getConfig(client, configPath) {
+function getConfig(client, configPath, configRepo) {
+    var _a;
     return __awaiter(this, void 0, void 0, function* () {
+        const [owner, repo] = configRepo.split('/');
         const response = yield client.repos.getContent({
-            owner: github.context.repo.owner,
-            repo: github.context.repo.repo,
-            ref: github.context.sha,
+            owner,
+            repo,
+            ref: configRepo === ((_a = github.context.payload.repository) === null || _a === void 0 ? void 0 : _a.full_name)
+                ? github.context.sha
+                : undefined,
             path: configPath
         });
         const content = yield Buffer.from(response.data.content, response.data.encoding).toString();
@@ -362,6 +366,7 @@ const config_1 = __nccwpck_require__(88);
 const checks_1 = __nccwpck_require__(2321);
 const githubToken = core.getInput('github-token');
 const configPath = core.getInput('config-path', { required: true });
+const configRepo = core.getInput('config-repo');
 const client = github.getOctokit(githubToken);
 const payload = github.context.payload.pull_request || github.context.payload.issue;
 if (!(payload === null || payload === void 0 ? void 0 : payload.number)) {
@@ -431,7 +436,7 @@ function addChecks(checks) {
         ]);
     });
 }
-config_1.getConfig(client, configPath)
+config_1.getConfig(client, configPath, configRepo)
     .then((config) => __awaiter(void 0, void 0, void 0, function* () {
     const labeled = yield labeler_1.labels(client, config);
     const finalLabels = labeler_1.mergeLabels(labeled, config);
