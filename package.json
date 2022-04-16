@@ -30,7 +30,7 @@
     "@actions/github": "^4.0.0",
     "fp-ts": "^2.9.5",
     "io-ts": "^2.2.15",
-    "io-ts-reporters": "^1.2.2",
+    "io-ts-reporters": "^2.0.1",
     "js-yaml": "^4.1.0",
     "lodash": "^4.17.21",
     "minimatch": "^3.0.4"
