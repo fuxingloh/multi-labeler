@@ -26,7 +26,7 @@
   "author": "Fuxing Loh",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "^1.2.6",
+    "@actions/core": "^1.6.0",
     "@actions/github": "^4.0.0",
     "fp-ts": "^2.9.5",
     "io-ts": "^2.2.15",
