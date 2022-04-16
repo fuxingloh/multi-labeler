@@ -8,9 +8,9 @@ labels:
       commits: "^feat:.*"
   - label: dependabot
     matcher:
-      title: "^build(deps).*"
+      title: "^chore(deps).*"
       branch: "^dependabot/.*"
-      commits: "^build(deps).*"
+      commits: "^chore(deps).*"
   - label: "fix"
     matcher:
       title: "^fix:.*"
