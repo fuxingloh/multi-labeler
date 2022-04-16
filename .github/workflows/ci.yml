@@ -16,7 +16,7 @@ jobs:
       - run: npm install
       - run: npm run ci
 
-      - uses: EndBug/add-and-commit@8c12ff729a98cfbcd3fe38b49f55eceb98a5ec02
+      - uses: EndBug/add-and-commit@050a66787244b10a4874a2a5f682130263edc192
         with:
           add: 'dist'
           message: 'npm run ncc, dist updated'
