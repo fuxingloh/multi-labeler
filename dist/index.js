@@ -275,7 +275,7 @@ const title_1 = __importDefault(__nccwpck_require__(9961));
 const body_1 = __importDefault(__nccwpck_require__(5404));
 const comment_1 = __importDefault(__nccwpck_require__(5921));
 const branch_1 = __importDefault(__nccwpck_require__(5832));
-const baseBranch_1 = __importDefault(__nccwpck_require__(5174));
+const base_branch_1 = __importDefault(__nccwpck_require__(8837));
 const commits_1 = __importDefault(__nccwpck_require__(747));
 const files_1 = __importDefault(__nccwpck_require__(1180));
 const author_1 = __importDefault(__nccwpck_require__(8432));
@@ -312,7 +312,7 @@ function labels(client, config) {
             body_1.default(client, config),
             comment_1.default(client, config),
             branch_1.default(client, config),
-            baseBranch_1.default(client, config),
+            base_branch_1.default(client, config),
             commits_1.default(client, config),
             files_1.default(client, config),
             author_1.default(client, config)
@@ -515,7 +515,7 @@ exports["default"] = match;
 
 /***/ }),
 
-/***/ 5174:
+/***/ 8837:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";

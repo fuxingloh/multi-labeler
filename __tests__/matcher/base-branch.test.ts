@@ -1,4 +1,4 @@
-import match from "../../src/matcher/baseBranch";
+import match from "../../src/matcher/base-branch";
 import * as github from "@actions/github";
 import { Config } from "../../src/config";
 
