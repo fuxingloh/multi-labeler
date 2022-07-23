@@ -145,6 +145,7 @@ const Matcher = t.partial({
     comment: t.string,
     commits: t.string,
     branch: t.string,
+    baseBranch: t.string,
     author: t.union([t.string, t.array(t.string)]),
     files: t.union([
         t.string,
@@ -274,6 +275,7 @@ const title_1 = __importDefault(__nccwpck_require__(9961));
 const body_1 = __importDefault(__nccwpck_require__(5404));
 const comment_1 = __importDefault(__nccwpck_require__(5921));
 const branch_1 = __importDefault(__nccwpck_require__(5832));
+const baseBranch_1 = __importDefault(__nccwpck_require__(5174));
 const commits_1 = __importDefault(__nccwpck_require__(747));
 const files_1 = __importDefault(__nccwpck_require__(1180));
 const author_1 = __importDefault(__nccwpck_require__(8432));
@@ -310,6 +312,7 @@ function labels(client, config) {
             body_1.default(client, config),
             comment_1.default(client, config),
             branch_1.default(client, config),
+            baseBranch_1.default(client, config),
             commits_1.default(client, config),
             files_1.default(client, config),
             author_1.default(client, config)
@@ -504,6 +507,52 @@ function match(client, config) {
             return authors.includes(author);
         }
         return false;
+    })
+        .map(value => value.label);
+}
+exports["default"] = match;
+
+
+/***/ }),
+
+/***/ 5174:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const github = __importStar(__nccwpck_require__(5438));
+const utils_1 = __nccwpck_require__(5165);
+function match(client, config) {
+    var _a;
+    const payload = github.context.payload.pull_request;
+    const ref = (_a = payload === null || payload === void 0 ? void 0 : payload.base) === null || _a === void 0 ? void 0 : _a.ref;
+    if (!ref) {
+        return [];
+    }
+    return config
+        .labels.filter(value => {
+        var _a;
+        return utils_1.matcherRegex({ regex: (_a = value.matcher) === null || _a === void 0 ? void 0 : _a.branch, text: ref });
     })
         .map(value => value.label);
 }

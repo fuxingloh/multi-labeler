@@ -6,6 +6,7 @@ import title from './matcher/title'
 import body from './matcher/body'
 import comment from './matcher/comment'
 import branch from './matcher/branch'
+import baseBranch from './matcher/baseBranch'
 import commits from './matcher/commits'
 import files from './matcher/files'
 import author from './matcher/author'
@@ -50,6 +51,7 @@ export async function labels(
     body(client, config),
     comment(client, config),
     branch(client, config),
+    baseBranch(client, config),
     commits(client, config),
     files(client, config),
     author(client, config)

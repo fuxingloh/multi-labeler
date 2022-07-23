@@ -115,6 +115,12 @@ describe('invalid labels matcher', () => {
     )
   })
 
+  it('matcher-baseBranch-invalid.yml', function () {
+    expect(() => parseConfig('invalid/matcher-basebranch-invalid.yml')).toThrow(
+      /labeler\.yml parse error:/
+    )
+  })
+
   it('matcher-comment-invalid.yml', function () {
     expect(() => parseConfig('invalid/matcher-comment-invalid.yml')).toThrow(
       /labeler\.yml parse error:/
