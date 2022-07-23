@@ -552,7 +552,7 @@ function match(client, config) {
     return config
         .labels.filter(value => {
         var _a;
-        return utils_1.matcherRegex({ regex: (_a = value.matcher) === null || _a === void 0 ? void 0 : _a.branch, text: ref });
+        return utils_1.matcherRegex({ regex: (_a = value.matcher) === null || _a === void 0 ? void 0 : _a.baseBranch, text: ref });
     })
         .map(value => value.label);
 }
