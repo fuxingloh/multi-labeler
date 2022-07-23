@@ -297,12 +297,13 @@ labels:
 Once you’ve added multi-labeler to your repository, it must be enabled by adding a `.github/labeler.yml` configuration
 file to the repository. If you want to use a configuration file shared across multiple repositories, you can set the
 `config-repo` input to point to a different repository. However, make sure to set a `github-token` that has permissions
-to access the provided repository, as the default `GITHUB_TOKEN` only has access to the repository the action is 
+to access the provided repository, as the default `GITHUB_TOKEN` only has access to the repository the action is
 running in.
 
 ## Matchers
 
-> RegEx matcher requires backslash '\' to be double slashed '\\'. Hence, to match brackets '()' you need a regex of '\\(\\)'. See https://github.com/fuxingloh/multi-labeler/issues/103
+> RegEx matcher requires backslash '\' to be double slashed '\\'. Hence, to match brackets '()' you need a regex of '\\(
+> \\)'. See https://github.com/fuxingloh/multi-labeler/issues/103
 
 ### PR/Issue Title: RegEx
 
@@ -517,10 +518,11 @@ checks:
 
 > There are so many labeler why create another? 😧
 
-1. I want a lightweight labeler that is written in TypeScript so that it don't have to build a docker image everytime it  runs.
+1. I want a lightweight labeler that is written in TypeScript so that it don't have to build a docker image everytime it
+   runs.
 2. I want a simple match first append based multi-labeler without it being a turing complete solution.
 3. I want to write my rules with `.github/labeler.yml` for a single source of label truth.
 4. I don't want it to do anything else, labels only.
-   1. Assume you are using GitHub branch protection (labels only).
-   2. I want to run this in PR triage before everything else (labels only).
-   3. Chain this action with another action; this should just be for (labels only). 
+  1. Assume you are using GitHub branch protection (labels only).
+  2. I want to run this in PR triage before everything else (labels only).
+  3. Chain this action with another action; this should just be for (labels only). 
