@@ -5,8 +5,8 @@
 [![Release](https://img.shields.io/github/v/release/fuxingloh/multi-labeler)](https://github.com/fuxingloh/multi-labeler/releases)
 [![License MIT](https://img.shields.io/github/license/fuxingloh/multi-labeler)](https://github.com/fuxingloh/multi-labeler/blob/main/LICENSE)
 
-Multi labeler for title, body, comments, commit messages, branch, author or files. Optionally, generate a status check
-based on the labels.
+Multi labeler for title, body, comments, commit messages, branch, base branch, author or files. Optionally, generate a
+status check based on the labels.
 
 [Who is using `fuxingloh/multi-labeler`?](https://github.com/search?o=desc&q=fuxingloh+%2F+multi-labeler&s=indexed&type=Code)
 
@@ -22,6 +22,7 @@ based on the labels.
   - PR/Issue comments
   - PR commit messages
   - PR branch name
+  - PR base (target) branch name
 - File Matcher:
   - Files count
   - Files any glob match
@@ -84,11 +85,12 @@ labels:
   - label: "feat"
     sync: true # remove label if match failed, default: false (pull_request/issue only)
     matcher:
-      # Matcher will match on any 7 matcher
+      # Matcher will match on any 8 matchers
       title: "^feat:.*"
       body: "/feat"
       comment: "/feat"
       branch: "^feat/.*"
+      baseBranch: "^feat/.*"
       commits: "^feat:.*"
       author:
         - github-actions
@@ -216,6 +218,10 @@ labels:
       title: "^fix:.*"
       branch: "^fix/.*"
       commits: "^fix:.*"
+
+  - label: "release"
+    matcher:
+      baseBranch: "^release/.*"
 ```
 
 </details>
@@ -341,6 +347,17 @@ labels:
   - label: "feat"
     matcher:
       branch: "^feat/.*"
+```
+
+### PR Base Branch: RegEx
+
+```yml
+version: v1
+
+labels:
+  - label: "release"
+    matcher:
+      baseBranch: "^release/.*"
 ```
 
 ### PR Commits: RegEx
