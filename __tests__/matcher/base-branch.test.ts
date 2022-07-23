@@ -17,9 +17,9 @@ const config: Config = {
       }
     },
     {
-      label: "main",
+      label: "master",
       matcher: {
-        baseBranch: "main"
+        baseBranch: "master"
       }
     }
   ]
@@ -68,12 +68,12 @@ describe("pull_request", () => {
         number: 1,
         title: "spaceship",
         base: {
-          ref: "main"
+          ref: "master"
         }
       }
     };
 
     const labels = getMatchedLabels(config);
-    expect(labels).toEqual(["main"]);
+    expect(labels).toEqual(["master"]);
   });
 });
