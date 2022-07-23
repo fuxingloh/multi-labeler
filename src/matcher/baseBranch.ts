@@ -16,7 +16,7 @@ export default function match(
 
   return config
     .labels!.filter(value => {
-      return matcherRegex({regex: value.matcher?.branch, text: ref})
+      return matcherRegex({regex: value.matcher?.baseBranch, text: ref})
     })
     .map(value => value.label)
 }

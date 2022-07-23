@@ -13,7 +13,7 @@ const config: Config = {
     {
       label: 'release',
       matcher: {
-        branch: '^release/.*'
+        baseBranch: '^release/.*'
       }
     }
   ]
