@@ -88,6 +88,14 @@ labels:
     matcher:
       author: fuxingloh
 
+  - label: "branch: main"
+    matcher:
+      baseBranch: main
+
+  - label: "branch: release"
+    matcher:
+      baseBranch: "^release/.*"
+
 checks:
   - context: "Semantic Pull Request"
     url: "https://github.com/fuxingloh/multi-labeler/blob/main/.github/labeler.yml"
