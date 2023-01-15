@@ -42,7 +42,7 @@
     "@types/minimatch": "^3.0.5",
     "@types/node": "^14.14.31",
     "@typescript-eslint/parser": "^4.33.0",
-    "@vercel/ncc": "^0.34.0",
+    "@vercel/ncc": "^0.36.0",
     "codecov": "^3.8.2",
     "eslint": "^7.21.0",
     "eslint-plugin-github": "^4.1.1",
