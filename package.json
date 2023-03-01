@@ -33,7 +33,7 @@
     "io-ts-reporters": "^1.2.2",
     "js-yaml": "^4.1.0",
     "lodash": "^4.17.21",
-    "minimatch": "^3.0.5"
+    "minimatch": "^7.3.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.20",
