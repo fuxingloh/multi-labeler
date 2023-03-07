@@ -38,7 +38,9 @@ status check based on the labels.
 
 ```yml
 on:
-  pull_request_target: # for OSS with public contributions (forked PR)   
+  pull_request_target:
+  # for OSS with public contributions (forked PR)   
+
   pull_request:
   # Useful for triaging code review, and generate compliance status check.
   # Semantic release? Done.
@@ -55,11 +57,11 @@ on:
 
 permissions:
   # Setting up permissions in the workflow to limit the scope of what it can do. Optional!
-  contents: read
-  issues: write
-  pull-requests: write
-  statuses: write
-  checks: write
+  contents: read # the config file
+  issues: write # for labeling issues (on: issues)
+  pull-requests: write # for labeling pull requests (on: pull_request_target or on: pull_request)
+  statuses: write # to generate status
+  checks: write # to generate status
 
 jobs:
   labeler:
@@ -67,7 +69,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # follows semantic versioning. Lock to different version: v1, v1.5, v1.5.0 or use a commit hash.
-      - uses: fuxingloh/multi-labeler@v1
+      - uses: fuxingloh/multi-labeler@v2 # v2
         with:
           github-token: ${{secrets.GITHUB_TOKEN}} # optional, default to '${{ github.token }}'  
           config-path: .github/labeler.yml # optional, default to '.github/labeler.yml'
