@@ -1,22 +1,103 @@
 name: CI
 
 on:
-  pull_request:
   push:
-    branches:
-      - main
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  merge_group:
+    branches: [ main ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  packages: read
 
 jobs:
-  build:
-    name: Build
+  package:
+    name: Package
     runs-on: ubuntu-latest
+    environment: fuxingloh/multi-labeler workflow
     steps:
-      - uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+      - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
+
+      - uses: actions/setup-node@5e21ff4d9bc1a8cf6de233a3057d20ec6b3fb69d # v3.8.1
+        with:
+          node-version-file: '.nvmrc'
 
       - run: npm install
-      - run: npm run ci
+      - run: npm run build
+      - run: npm run package
+
+      - id: app
+        uses: tibdex/github-app-token@3beb63f4bd073e61482598c45c71c1019b59b73a # v2.1.0
+        with:
+          app_id: ${{ secrets.WORKFLOW_APP_ID }}
+          private_key: ${{ secrets.WORKFLOW_PRIVATE_KEY }}
 
       - uses: EndBug/add-and-commit@61a88be553afe4206585b31aa72387c64295d08b # v9.1.1
         with:
           add: 'dist'
-          message: 'npm run ncc, dist updated'
+          message: 'chore: npm run package'
+          github_token: ${{ steps.app.outputs.token }}
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
+
+      - uses: actions/setup-node@5e21ff4d9bc1a8cf6de233a3057d20ec6b3fb69d # v3.8.1
+        with:
+          node-version-file: '.nvmrc'
+
+      - run: npm install
+      - run: npm run build
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - uses: actions/setup-node@5e21ff4d9bc1a8cf6de233a3057d20ec6b3fb69d # v3.8.1
+        with:
+          node-version-file: '.nvmrc'
+
+      - run: npm install
+
+      - run: npx jest --ci --coverage
+
+      - run: npx codecov
+        continue-on-error: true
+
+  lint_prettier:
+    name: Lint [prettier]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
+
+      - uses: actions/setup-node@5e21ff4d9bc1a8cf6de233a3057d20ec6b3fb69d # v3.8.1
+        with:
+          node-version-file: '.nvmrc'
+
+      - run: npm install
+
+      - run: npx prettier --check .
+
+  lint_eslint:
+    name: Lint [eslint]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
+
+      - uses: actions/setup-node@5e21ff4d9bc1a8cf6de233a3057d20ec6b3fb69d # v3.8.1
+        with:
+          node-version-file: '.nvmrc'
+
+      - run: npm install
+
+      - run: npx eslint src/**/*.ts
