@@ -1,25 +1,28 @@
-import match from '../../src/matcher/files'
-import * as github from '@actions/github'
-import {Config} from '../../src/config'
+import match from '../../src/matcher/files';
+import * as github from '@actions/github';
+import { Config } from '../../src/config';
 
 async function getMatchedLabels(config: Config): Promise<string[]> {
-  return match({
-    pulls: {
-      listFiles: {
-        endpoint: {
-          // @ts-ignore
-          merge(params) {
-            return {pull_number: params.pull_number}
-          }
-        }
-      }
-    },
-    // @ts-ignore
-    paginate(params): Promise<any[]> {
+  return match(
+    {
+      pulls: {
+        listFiles: {
+          endpoint: {
+            // @ts-ignore
+            merge(params) {
+              return { pull_number: params.pull_number };
+            },
+          },
+        },
+      },
       // @ts-ignore
-      return Promise.resolve(files[params.pull_number])
-    }
-  }, config)
+      paginate(params): Promise<any[]> {
+        // @ts-ignore
+        return Promise.resolve(files[params.pull_number]);
+      },
+    },
+    config,
+  );
 }
 
 const basic: Config = {
@@ -28,23 +31,23 @@ const basic: Config = {
     {
       label: 'security',
       matcher: {
-        files: ['security/**', 'setup/**.xml']
-      }
+        files: ['security/**', 'setup/**.xml'],
+      },
     },
     {
       label: 'app',
       matcher: {
-        files: 'app/**'
-      }
+        files: 'app/**',
+      },
     },
     {
       label: 'labeler',
       matcher: {
-        files: '.github/labeler.yml'
-      }
-    }
-  ]
-}
+        files: '.github/labeler.yml',
+      },
+    },
+  ],
+};
 
 const complex: Config = {
   version: 'v1',
@@ -53,25 +56,25 @@ const complex: Config = {
       label: 'all-app',
       matcher: {
         files: {
-          all: ['app/**']
-        }
-      }
+          all: ['app/**'],
+        },
+      },
     },
     {
       label: 'any-app',
       matcher: {
         files: {
-          any: ['app/**']
-        }
-      }
+          any: ['app/**'],
+        },
+      },
     },
     {
       label: 'none-app',
       matcher: {
         files: {
-          all: ['!app/**']
-        }
-      }
+          all: ['!app/**'],
+        },
+      },
     },
     {
       label: 'all-any',
@@ -79,31 +82,29 @@ const complex: Config = {
         files: {
           any: ['security/**', 'setup/**'],
           all: ['!app/**'],
-          count: {
-
-          }
-        }
-      }
+          count: {},
+        },
+      },
     },
     {
       label: 'S',
       matcher: {
         files: {
           count: {
-            eq: 1
-          }
-        }
-      }
+            eq: 1,
+          },
+        },
+      },
     },
     {
       label: 'NEQ1',
       matcher: {
         files: {
           count: {
-            neq: 1
-          }
-        }
-      }
+            neq: 1,
+          },
+        },
+      },
     },
     {
       label: 'M',
@@ -112,9 +113,9 @@ const complex: Config = {
           count: {
             gte: 2,
             lte: 5,
-          }
-        }
-      }
+          },
+        },
+      },
     },
     {
       label: 'L',
@@ -122,9 +123,9 @@ const complex: Config = {
         files: {
           count: {
             gte: 6,
-          }
-        }
-      }
+          },
+        },
+      },
     },
     {
       label: 'mixed-1',
@@ -136,7 +137,7 @@ const complex: Config = {
             gte: 2,
             lte: 4,
           },
-        }
+        },
       },
     },
     {
@@ -151,7 +152,7 @@ const complex: Config = {
             gte: 1,
             lte: 1,
           },
-        }
+        },
       },
     },
     {
@@ -166,7 +167,7 @@ const complex: Config = {
             gte: 1,
             lte: 1,
           },
-        }
+        },
       },
     },
     {
@@ -181,7 +182,7 @@ const complex: Config = {
             gte: 1,
             lte: 1,
           },
-        }
+        },
       },
     },
     {
@@ -195,7 +196,7 @@ const complex: Config = {
             gte: 1,
             lte: 1,
           },
-        }
+        },
       },
     },
     {
@@ -210,7 +211,7 @@ const complex: Config = {
             gte: 1,
             lte: 1,
           },
-        }
+        },
       },
     },
     {
@@ -224,11 +225,11 @@ const complex: Config = {
             gte: 1,
             lte: 1,
           },
-        }
+        },
       },
     },
-  ]
-}
+  ],
+};
 
 const files = {
   1: [
@@ -265,7 +266,7 @@ const files = {
     },
     {
       filename: 'test/abc/abc.js',
-    }
+    },
   ],
   4: [
     {
@@ -293,12 +294,8 @@ const files = {
       filename: '3/abc/abc.js',
     },
   ],
-  8: [
-    {filename: 'app/1.js'},
-    {filename: 'app/2.js'},
-    {filename: 'app/3.js'},
-  ]
-}
+  8: [{ filename: 'app/1.js' }, { filename: 'app/2.js' }, { filename: 'app/3.js' }],
+};
 
 describe('basic', () => {
   beforeEach(() => {
@@ -306,89 +303,89 @@ describe('basic', () => {
     jest.spyOn(github.context, 'repo', 'get').mockImplementation(() => {
       return {
         owner: 'owner-name',
-        repo: 'repo-name'
-      }
-    })
-  })
+        repo: 'repo-name',
+      };
+    });
+  });
 
   afterAll(() => {
-    jest.restoreAllMocks()
-  })
+    jest.restoreAllMocks();
+  });
 
   it('payload empty should be empty', async function () {
-    github.context.payload = {}
-    expect(await getMatchedLabels(basic)).toEqual([])
-  })
+    github.context.payload = {};
+    expect(await getMatchedLabels(basic)).toEqual([]);
+  });
 
   it('1 should have security/app/labeler', async function () {
     github.context.payload = {
       pull_request: {
-        number: 1
-      }
-    }
-    const labels = await getMatchedLabels(basic)
-    expect(labels).toEqual(['security', 'app', 'labeler'])
-  })
+        number: 1,
+      },
+    };
+    const labels = await getMatchedLabels(basic);
+    expect(labels).toEqual(['security', 'app', 'labeler']);
+  });
 
   it('2 should have labeler', async function () {
     github.context.payload = {
       pull_request: {
-        number: 2
-      }
-    }
-    const labels = await getMatchedLabels(basic)
-    expect(labels).toEqual(['labeler'])
-  })
+        number: 2,
+      },
+    };
+    const labels = await getMatchedLabels(basic);
+    expect(labels).toEqual(['labeler']);
+  });
 
   it('3 should have app', async function () {
     github.context.payload = {
       pull_request: {
-        number: 3
-      }
-    }
-    const labels = await getMatchedLabels(basic)
-    expect(labels).toEqual(['app'])
-  })
+        number: 3,
+      },
+    };
+    const labels = await getMatchedLabels(basic);
+    expect(labels).toEqual(['app']);
+  });
 
   it('4 should have security', async function () {
     github.context.payload = {
       pull_request: {
-        number: 4
-      }
-    }
-    const labels = await getMatchedLabels(basic)
-    expect(labels).toEqual(['security'])
-  })
+        number: 4,
+      },
+    };
+    const labels = await getMatchedLabels(basic);
+    expect(labels).toEqual(['security']);
+  });
 
   it('5 should have security', async function () {
     github.context.payload = {
       pull_request: {
-        number: 5
-      }
-    }
-    const labels = await getMatchedLabels(basic)
-    expect(labels).toEqual(['security'])
-  })
+        number: 5,
+      },
+    };
+    const labels = await getMatchedLabels(basic);
+    expect(labels).toEqual(['security']);
+  });
 
   it('6 should be empty', async function () {
     github.context.payload = {
       pull_request: {
-        number: 6
-      }
-    }
-    const labels = await getMatchedLabels(basic)
-    expect(labels).toEqual([])
-  })
+        number: 6,
+      },
+    };
+    const labels = await getMatchedLabels(basic);
+    expect(labels).toEqual([]);
+  });
 
   it('7 should be empty', async function () {
     github.context.payload = {
       pull_request: {
-        number: 7
-      }
-    }
-    const labels = await getMatchedLabels(basic)
-    expect(labels).toEqual([])
-  })
+        number: 7,
+      },
+    };
+    const labels = await getMatchedLabels(basic);
+    expect(labels).toEqual([]);
+  });
 });
 
 describe('complex', () => {
@@ -397,126 +394,92 @@ describe('complex', () => {
     jest.spyOn(github.context, 'repo', 'get').mockImplementation(() => {
       return {
         owner: 'owner-name',
-        repo: 'repo-name'
-      }
-    })
-  })
+        repo: 'repo-name',
+      };
+    });
+  });
 
   afterAll(() => {
-    jest.restoreAllMocks()
-  })
+    jest.restoreAllMocks();
+  });
 
   it('1 should have complex labels', async function () {
     github.context.payload = {
       pull_request: {
-        number: 1
-      }
-    }
-    const labels = await getMatchedLabels(complex)
-    expect(labels).toEqual([
-      'any-app',
-      'NEQ1',
-      'L',
-    ])
-  })
+        number: 1,
+      },
+    };
+    const labels = await getMatchedLabels(complex);
+    expect(labels).toEqual(['any-app', 'NEQ1', 'L']);
+  });
 
   it('2 should have complex labels', async function () {
     github.context.payload = {
       pull_request: {
-        number: 2
-      }
-    }
-    const labels = await getMatchedLabels(complex)
-    expect(labels).toEqual([
-      'none-app',
-      'S'
-    ])
-  })
+        number: 2,
+      },
+    };
+    const labels = await getMatchedLabels(complex);
+    expect(labels).toEqual(['none-app', 'S']);
+  });
 
   it('3 should have complex labels', async function () {
     github.context.payload = {
       pull_request: {
-        number: 3
-      }
-    }
-    const labels = await getMatchedLabels(complex)
-    expect(labels).toEqual([
-      'any-app',
-      'NEQ1',
-      'M'
-    ])
-  })
+        number: 3,
+      },
+    };
+    const labels = await getMatchedLabels(complex);
+    expect(labels).toEqual(['any-app', 'NEQ1', 'M']);
+  });
 
   it('4 should have complex labels', async function () {
     github.context.payload = {
       pull_request: {
-        number: 4
-      }
-    }
-    const labels = await getMatchedLabels(complex)
-    expect(labels).toEqual([
-         "none-app",
-         "all-any",
-         "S",
-    ])
-  })
+        number: 4,
+      },
+    };
+    const labels = await getMatchedLabels(complex);
+    expect(labels).toEqual(['none-app', 'all-any', 'S']);
+  });
 
   it('5 should have complex labels', async function () {
     github.context.payload = {
       pull_request: {
-        number: 5
-      }
-    }
-    const labels = await getMatchedLabels(complex)
-    expect(labels).toEqual([
-      "none-app",
-      "all-any",
-      "S",
-    ])
-  })
+        number: 5,
+      },
+    };
+    const labels = await getMatchedLabels(complex);
+    expect(labels).toEqual(['none-app', 'all-any', 'S']);
+  });
 
   it('6 should have complex labels', async function () {
     github.context.payload = {
       pull_request: {
-        number: 6
-      }
-    }
-    const labels = await getMatchedLabels(complex)
-    expect(labels).toEqual([
-      "none-app",
-      "all-any",
-      "S",
-    ])
-  })
+        number: 6,
+      },
+    };
+    const labels = await getMatchedLabels(complex);
+    expect(labels).toEqual(['none-app', 'all-any', 'S']);
+  });
 
   it('7 should have complex labels', async function () {
     github.context.payload = {
       pull_request: {
-        number: 7
-      }
-    }
-    const labels = await getMatchedLabels(complex)
-    expect(labels).toEqual([
-         "none-app",
-         "all-any",
-         "NEQ1",
-         "M",
-    ])
-  })
+        number: 7,
+      },
+    };
+    const labels = await getMatchedLabels(complex);
+    expect(labels).toEqual(['none-app', 'all-any', 'NEQ1', 'M']);
+  });
 
   it('8 should have complex labels', async function () {
     github.context.payload = {
       pull_request: {
-        number: 8
-      }
-    }
-    const labels = await getMatchedLabels(complex)
-    expect(labels).toEqual([
-         "all-app",
-         "any-app",
-         "NEQ1",
-         "M",
-         "mixed-1",
-    ])
-  })
-})
+        number: 8,
+      },
+    };
+    const labels = await getMatchedLabels(complex);
+    expect(labels).toEqual(['all-app', 'any-app', 'NEQ1', 'M', 'mixed-1']);
+  });
+});

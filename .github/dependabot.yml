@@ -5,19 +5,19 @@ updates:
     schedule:
       interval: 'monthly'
     ignore:
-      - dependency-name: "@types/*"
-      - dependency-name: "eslint"
-      - dependency-name: "eslint-*"
-      - dependency-name: "typescript"
-      - dependency-name: "jest"
-      - dependency-name: "jest-*"
+      - dependency-name: '@types/*'
+      - dependency-name: 'eslint'
+      - dependency-name: 'eslint-*'
+      - dependency-name: 'typescript'
+      - dependency-name: 'jest'
+      - dependency-name: 'jest-*'
     versioning-strategy: 'increase'
     commit-message:
-      prefix: "chore(deps): "
+      prefix: 'chore(deps): '
 
-  - package-ecosystem: "github-actions"
-    directory: "/"
+  - package-ecosystem: 'github-actions'
+    directory: '/'
     schedule:
-      interval: "monthly"
+      interval: 'monthly'
     commit-message:
-      prefix: "chore(deps): "
+      prefix: 'chore(deps): '

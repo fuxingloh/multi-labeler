@@ -1,3 +1,5 @@
 dist/
 lib/
 node_modules/
+__tests__/fixtures/invalid/malformed-escaping.yml
+__tests__/fixtures/invalid/malformed-indent.yml

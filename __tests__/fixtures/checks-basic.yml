@@ -1,8 +1,8 @@
 version: v1
 
 checks:
-  - context: "Semantic Pull Request"
-    url: "https://github.com/fuxingloh/multi-labeler/blob/main/.github/labeler.yml"
+  - context: 'Semantic Pull Request'
+    url: 'https://github.com/fuxingloh/multi-labeler/blob/main/.github/labeler.yml'
     description: Ready for review & merge.
     labels:
       any:

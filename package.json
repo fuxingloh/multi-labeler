@@ -3,20 +3,20 @@
   "version": "0.0.0",
   "private": true,
   "description": "Multi labeler for title, body, comments, commit messages, branch or files with automated status checks.",
-  "main": "lib/main.js",
-  "scripts": {
-    "build": "tsc",
-    "format": "prettier --write .",
-    "lint": "eslint --fix src/**/*.ts",
-    "package": "ncc build --source-map --license licenses.txt",
-    "test": "jest"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/fuxingloh/multi-labeler.git"
   },
-  "author": "Fuxing Loh",
   "license": "MIT",
+  "author": "Fuxing Loh",
+  "main": "lib/main.js",
+  "scripts": {
+    "build": "tsc",
+    "format": "prettier --write .",
+    "lint": "eslint --fix .",
+    "package": "ncc build --source-map --license licenses.txt",
+    "test": "jest"
+  },
   "dependencies": {
     "@actions/core": "^1.10.0",
     "@actions/github": "^4.0.0",
@@ -28,20 +28,26 @@
     "minimatch": "^3.0.5"
   },
   "devDependencies": {
+    "@eslint/js": "^8.56.0",
     "@types/jest": "^26.0.20",
     "@types/js-yaml": "^4.0.5",
     "@types/lodash": "^4.14.178",
     "@types/minimatch": "^3.0.5",
     "@types/node": "^14.14.31",
-    "@typescript-eslint/parser": "^4.33.0",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
     "@vercel/ncc": "^0.36.1",
     "codecov": "^3.8.2",
-    "eslint": "^7.21.0",
-    "eslint-plugin-github": "^4.1.1",
-    "eslint-plugin-jest": "^24.1.5",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-no-only-tests": "^3.1.0",
+    "eslint-plugin-simple-import-sort": "^10.0.0",
+    "eslint-plugin-unused-imports": "^3.0.0",
     "jest": "^26.4.4",
     "jest-circus": "^26.4.4",
-    "prettier": "2.8.8",
+    "prettier": "3.2.5",
+    "prettier-plugin-packagejson": "^2.4.10",
     "ts-jest": "^26.5.6",
     "typescript": "^4.1.3"
   }

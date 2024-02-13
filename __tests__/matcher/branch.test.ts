@@ -1,10 +1,10 @@
-import match from '../../src/matcher/branch'
-import * as github from '@actions/github'
-import {Config} from '../../src/config'
+import match from '../../src/matcher/branch';
+import * as github from '@actions/github';
+import { Config } from '../../src/config';
 
 function getMatchedLabels(config: Config): string[] {
   // @ts-ignore
-  return match(null, config)
+  return match(null, config);
 }
 
 const config: Config = {
@@ -13,17 +13,17 @@ const config: Config = {
     {
       label: 'feat',
       matcher: {
-        branch: '^feat/.*'
-      }
-    }
-  ]
-}
+        branch: '^feat/.*',
+      },
+    },
+  ],
+};
 
 describe('empty', function () {
   it('no payload should be undefined', async function () {
-    github.context.payload = {}
-    expect(getMatchedLabels(config)).toEqual([])
-  })
+    github.context.payload = {};
+    expect(getMatchedLabels(config)).toEqual([]);
+  });
 
   it('pull_request should be empty', async function () {
     github.context.payload = {
@@ -31,13 +31,13 @@ describe('empty', function () {
         number: 1,
         title: 'nothing interesting',
         head: {
-          ref: 'spaceship'
-        }
-      }
-    }
+          ref: 'spaceship',
+        },
+      },
+    };
 
-    expect(getMatchedLabels(config)).toEqual([])
-  })
+    expect(getMatchedLabels(config)).toEqual([]);
+  });
 });
 
 describe('pull_request', () => {
@@ -47,13 +47,12 @@ describe('pull_request', () => {
         number: 1,
         title: 'spaceship',
         head: {
-          ref: 'feat/spaceship'
-        }
-      }
-    }
+          ref: 'feat/spaceship',
+        },
+      },
+    };
 
-    const labels = getMatchedLabels(config)
-    expect(labels).toEqual(['feat'])
-  })
-})
-
+    const labels = getMatchedLabels(config);
+    expect(labels).toEqual(['feat']);
+  });
+});

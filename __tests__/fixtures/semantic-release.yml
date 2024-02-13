@@ -1,25 +1,25 @@
 version: v1
 
 labels:
-  - label: "feat"
+  - label: 'feat'
     matcher:
-      title: "^feat:.*"
+      title: '^feat:.*'
 
-  - label: "fix"
+  - label: 'fix'
     matcher:
-      title: "^fix:.*"
+      title: '^fix:.*'
 
-  - label: "chore"
+  - label: 'chore'
     matcher:
-      title: "^chore:.*"
+      title: '^chore:.*'
 
-  - label: "docs"
+  - label: 'docs'
     matcher:
-      title: "^docs:.*"
+      title: '^docs:.*'
 
 checks:
-  - context: "Semantic Pull Request"
-    url: "https://github.com/fuxingloh/multi-labeler/blob/main/.github/labeler.yml"
+  - context: 'Semantic Pull Request'
+    url: 'https://github.com/fuxingloh/multi-labeler/blob/main/.github/labeler.yml'
     description:
       success: Ready for review & merge.
       failure: Missing semantic label for merge.

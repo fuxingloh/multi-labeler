@@ -1,6 +1,6 @@
 version: v1
 
 labels:
-  - label: "release"
+  - label: 'release'
     matcher:
-      baseBranch: [ ]
+      baseBranch: []

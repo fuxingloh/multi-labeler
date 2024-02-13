@@ -1,9 +1,9 @@
-import * as core from '@actions/core'
-import * as github from '@actions/github'
-import {GitHub} from '@actions/github/lib/utils'
-import {getConfig} from '../src/config'
-import * as fs from 'fs'
-import {checks, is, StatusCheck} from '../src/checks'
+import * as core from '@actions/core';
+import * as github from '@actions/github';
+import { GitHub } from '@actions/github/lib/utils';
+import { getConfig } from '../src/config';
+import * as fs from 'fs';
+import { checks, is, StatusCheck } from '../src/checks';
 
 const client: InstanceType<typeof GitHub> = {
   repos: {
@@ -13,20 +13,17 @@ const client: InstanceType<typeof GitHub> = {
         return {
           data: {
             content: fs.readFileSync(params.path, 'utf8'),
-            encoding: 'utf-8'
-          }
-        }
+            encoding: 'utf-8',
+          },
+        };
       }
-    }
-  }
-}
+    },
+  },
+};
 
-async function runChecks(
-  configPath: string,
-  labels: string[]
-): Promise<StatusCheck[]> {
-  const config = await getConfig(client, configPath, 'owner-name/repo-name')
-  return checks(client, config, labels)
+async function runChecks(configPath: string, labels: string[]): Promise<StatusCheck[]> {
+  const config = await getConfig(client, configPath, 'owner-name/repo-name');
+  return checks(client, config, labels);
 }
 
 describe('is', () => {
@@ -34,24 +31,24 @@ describe('is', () => {
     expect(
       is(
         {
-          context: 'abc'
+          context: 'abc',
         },
-        ['a']
-      )
-    ).toBeTruthy()
-  })
+        ['a'],
+      ),
+    ).toBeTruthy();
+  });
 
   it('should empty true with labels', function () {
     expect(
       is(
         {
           context: 'abc',
-          labels: {}
+          labels: {},
         },
-        ['a']
-      )
-    ).toBeTruthy()
-  })
+        ['a'],
+      ),
+    ).toBeTruthy();
+  });
 
   it('should any true a', function () {
     expect(
@@ -59,13 +56,13 @@ describe('is', () => {
         {
           context: 'abc',
           labels: {
-            any: ['a']
-          }
+            any: ['a'],
+          },
         },
-        ['a', 'b']
-      )
-    ).toBeTruthy()
-  })
+        ['a', 'b'],
+      ),
+    ).toBeTruthy();
+  });
 
   it('should any true b', function () {
     expect(
@@ -73,13 +70,13 @@ describe('is', () => {
         {
           context: 'abc',
           labels: {
-            any: ['b']
-          }
+            any: ['b'],
+          },
         },
-        ['a', 'b']
-      )
-    ).toBeTruthy()
-  })
+        ['a', 'b'],
+      ),
+    ).toBeTruthy();
+  });
 
   it('should any false', function () {
     expect(
@@ -87,13 +84,13 @@ describe('is', () => {
         {
           context: 'abc',
           labels: {
-            any: ['c']
-          }
+            any: ['c'],
+          },
         },
-        ['a', 'b']
-      )
-    ).toBeFalsy()
-  })
+        ['a', 'b'],
+      ),
+    ).toBeFalsy();
+  });
 
   it('should any all 3/3', function () {
     expect(
@@ -101,13 +98,13 @@ describe('is', () => {
         {
           context: 'abc',
           labels: {
-            all: ['a', 'b', 'c']
-          }
+            all: ['a', 'b', 'c'],
+          },
         },
-        ['a', 'b', 'c']
-      )
-    ).toBeTruthy()
-  })
+        ['a', 'b', 'c'],
+      ),
+    ).toBeTruthy();
+  });
 
   it('should all true 3/4', function () {
     expect(
@@ -115,13 +112,13 @@ describe('is', () => {
         {
           context: 'abc',
           labels: {
-            all: ['a', 'b', 'c']
-          }
+            all: ['a', 'b', 'c'],
+          },
         },
-        ['a', 'b', 'c', 'd']
-      )
-    ).toBeTruthy()
-  })
+        ['a', 'b', 'c', 'd'],
+      ),
+    ).toBeTruthy();
+  });
 
   it('should all false 4/3', function () {
     expect(
@@ -129,13 +126,13 @@ describe('is', () => {
         {
           context: 'abc',
           labels: {
-            all: ['a', 'b', 'c', 'd']
-          }
+            all: ['a', 'b', 'c', 'd'],
+          },
         },
-        ['a', 'b', 'c']
-      )
-    ).toBeFalsy()
-  })
+        ['a', 'b', 'c'],
+      ),
+    ).toBeFalsy();
+  });
 
   it('should all false 4/1', function () {
     expect(
@@ -143,13 +140,13 @@ describe('is', () => {
         {
           context: 'abc',
           labels: {
-            all: ['a', 'b', 'c', 'd']
-          }
+            all: ['a', 'b', 'c', 'd'],
+          },
         },
-        ['a']
-      )
-    ).toBeFalsy()
-  })
+        ['a'],
+      ),
+    ).toBeFalsy();
+  });
 
   it('should all false 1/1', function () {
     expect(
@@ -157,13 +154,13 @@ describe('is', () => {
         {
           context: 'abc',
           labels: {
-            all: ['d']
-          }
+            all: ['d'],
+          },
         },
-        ['a']
-      )
-    ).toBeFalsy()
-  })
+        ['a'],
+      ),
+    ).toBeFalsy();
+  });
 
   describe('any all', function () {
     it('should any all true', function () {
@@ -173,13 +170,13 @@ describe('is', () => {
             context: 'abc',
             labels: {
               any: ['a', 'b'],
-              all: ['d']
-            }
+              all: ['d'],
+            },
           },
-          ['a', 'd']
-        )
-      ).toBeTruthy()
-    })
+          ['a', 'd'],
+        ),
+      ).toBeTruthy();
+    });
 
     it('should any all true', function () {
       expect(
@@ -188,13 +185,13 @@ describe('is', () => {
             context: 'abc',
             labels: {
               any: ['a', 'b'],
-              all: ['d']
-            }
+              all: ['d'],
+            },
           },
-          ['b', 'd']
-        )
-      ).toBeTruthy()
-    })
+          ['b', 'd'],
+        ),
+      ).toBeTruthy();
+    });
 
     it('should any all true', function () {
       expect(
@@ -203,13 +200,13 @@ describe('is', () => {
             context: 'abc',
             labels: {
               any: ['a', 'b'],
-              all: ['d', 'e']
-            }
+              all: ['d', 'e'],
+            },
           },
-          ['a', 'd', 'e']
-        )
-      ).toBeTruthy()
-    })
+          ['a', 'd', 'e'],
+        ),
+      ).toBeTruthy();
+    });
 
     it('should any all true', function () {
       expect(
@@ -218,13 +215,13 @@ describe('is', () => {
             context: 'abc',
             labels: {
               any: ['a', 'b'],
-              all: ['d', 'e']
-            }
+              all: ['d', 'e'],
+            },
           },
-          ['b', 'd', 'e']
-        )
-      ).toBeTruthy()
-    })
+          ['b', 'd', 'e'],
+        ),
+      ).toBeTruthy();
+    });
 
     it('should any all false', function () {
       expect(
@@ -233,13 +230,13 @@ describe('is', () => {
             context: 'abc',
             labels: {
               any: ['a', 'b'],
-              all: ['d', 'e']
-            }
+              all: ['d', 'e'],
+            },
           },
-          []
-        )
-      ).toBeFalsy()
-    })
+          [],
+        ),
+      ).toBeFalsy();
+    });
 
     it('should any all false', function () {
       expect(
@@ -248,13 +245,13 @@ describe('is', () => {
             context: 'abc',
             labels: {
               any: ['a', 'b'],
-              all: ['d', 'e']
-            }
+              all: ['d', 'e'],
+            },
           },
-          ['d', 'e']
-        )
-      ).toBeFalsy()
-    })
+          ['d', 'e'],
+        ),
+      ).toBeFalsy();
+    });
 
     it('should any all false', function () {
       expect(
@@ -263,13 +260,13 @@ describe('is', () => {
             context: 'abc',
             labels: {
               any: ['a', 'b'],
-              all: ['d', 'e']
-            }
+              all: ['d', 'e'],
+            },
           },
-          ['d', 'e', 'f']
-        )
-      ).toBeFalsy()
-    })
+          ['d', 'e', 'f'],
+        ),
+      ).toBeFalsy();
+    });
 
     it('should any all false', function () {
       expect(
@@ -278,13 +275,13 @@ describe('is', () => {
             context: 'abc',
             labels: {
               any: ['a', 'b'],
-              all: ['d', 'e']
-            }
+              all: ['d', 'e'],
+            },
           },
-          ['d', 'a', 'f']
-        )
-      ).toBeFalsy()
-    })
+          ['d', 'a', 'f'],
+        ),
+      ).toBeFalsy();
+    });
 
     it('should any all false', function () {
       expect(
@@ -293,13 +290,13 @@ describe('is', () => {
             context: 'abc',
             labels: {
               any: ['a', 'b'],
-              all: ['d', 'e']
-            }
+              all: ['d', 'e'],
+            },
           },
-          ['d', 'a', 'b']
-        )
-      ).toBeFalsy()
-    })
+          ['d', 'a', 'b'],
+        ),
+      ).toBeFalsy();
+    });
 
     it('should any all false', function () {
       expect(
@@ -308,14 +305,14 @@ describe('is', () => {
             context: 'abc',
             labels: {
               any: ['a', 'b'],
-              all: ['d', 'e']
-            }
+              all: ['d', 'e'],
+            },
           },
-          ['e', 'b']
-        )
-      ).toBeFalsy()
-    })
-  })
+          ['e', 'b'],
+        ),
+      ).toBeFalsy();
+    });
+  });
 
   describe('none', function () {
     it('should be false when none is present', function () {
@@ -324,13 +321,13 @@ describe('is', () => {
           {
             context: 'abc',
             labels: {
-              none: ['b']
-            }
+              none: ['b'],
+            },
           },
-          ['a', 'b']
-        )
-      ).toBeFalsy()
-    })
+          ['a', 'b'],
+        ),
+      ).toBeFalsy();
+    });
 
     it('should be true when none is not present', function () {
       expect(
@@ -338,13 +335,13 @@ describe('is', () => {
           {
             context: 'abc',
             labels: {
-              none: ['c']
-            }
+              none: ['c'],
+            },
           },
-          ['a', 'b']
-        )
-      ).toBeTruthy()
-    })
+          ['a', 'b'],
+        ),
+      ).toBeTruthy();
+    });
 
     it('should be true when none is not present but all not valid', function () {
       expect(
@@ -353,159 +350,133 @@ describe('is', () => {
             context: 'abc',
             labels: {
               none: ['c'],
-              all: ['b']
-            }
+              all: ['b'],
+            },
           },
-          ['a', 'd']
-        )
-      ).toBeFalsy()
-    })
-  })
-})
+          ['a', 'd'],
+        ),
+      ).toBeFalsy();
+    });
+  });
+});
 
 describe('checks', () => {
   beforeEach(() => {
-    jest.spyOn(core, 'warning').mockImplementation(jest.fn())
-    jest.spyOn(core, 'info').mockImplementation(jest.fn())
-    jest.spyOn(core, 'debug').mockImplementation(jest.fn())
-    jest.spyOn(core, 'setFailed').mockImplementation(jest.fn())
+    jest.spyOn(core, 'warning').mockImplementation(jest.fn());
+    jest.spyOn(core, 'info').mockImplementation(jest.fn());
+    jest.spyOn(core, 'debug').mockImplementation(jest.fn());
+    jest.spyOn(core, 'setFailed').mockImplementation(jest.fn());
 
     jest.spyOn(github.context, 'repo', 'get').mockImplementation(() => {
       return {
         owner: 'owner-name',
-        repo: 'repo-name'
-      }
-    })
+        repo: 'repo-name',
+      };
+    });
 
     github.context.payload = {
       pull_request: {
         number: 1,
-        labels: []
-      }
-    }
-  })
+        labels: [],
+      },
+    };
+  });
 
   afterAll(() => {
-    jest.restoreAllMocks()
-  })
+    jest.restoreAllMocks();
+  });
 
   it('should be empty without payload', async function () {
-    github.context.payload = {}
+    github.context.payload = {};
 
-    const checks = await runChecks('__tests__/fixtures/basic.yml', ['feat'])
+    const checks = await runChecks('__tests__/fixtures/basic.yml', ['feat']);
 
-    expect(checks.length).toBe(0)
-  })
+    expect(checks.length).toBe(0);
+  });
 
   it('no checks', async function () {
-    const checks = await runChecks('__tests__/fixtures/basic.yml', ['feat'])
+    const checks = await runChecks('__tests__/fixtures/basic.yml', ['feat']);
 
-    expect(checks.length).toBe(0)
-  })
+    expect(checks.length).toBe(0);
+  });
 
   it('success always', async function () {
-    const checks = await runChecks('__tests__/fixtures/checks-always.yml', [])
+    const checks = await runChecks('__tests__/fixtures/checks-always.yml', []);
 
-    expect(checks.length).toBe(1)
-    expect(checks[0].url).toBeFalsy()
-    expect(checks[0].context).toBe('Always')
-    expect(checks[0].state).toBe('success')
-    expect(checks[0].description).toBe('Always description')
-  })
+    expect(checks.length).toBe(1);
+    expect(checks[0].url).toBeFalsy();
+    expect(checks[0].context).toBe('Always');
+    expect(checks[0].state).toBe('success');
+    expect(checks[0].description).toBe('Always description');
+  });
 
   it('failure always', async function () {
-    const checks = await runChecks('__tests__/fixtures/checks-failure.yml', [])
+    const checks = await runChecks('__tests__/fixtures/checks-failure.yml', []);
 
-    expect(checks.length).toBe(1)
-    expect(checks[0].url).toBeFalsy()
-    expect(checks[0].context).toBe('Always')
-    expect(checks[0].state).toBe('failure')
-    expect(checks[0].description).toBe('Always failure')
-  })
-
-  it('feat: success state', async function () {
-    const checks = await runChecks('__tests__/fixtures/semantic-release.yml', [
-      'feat'
-    ])
-
-    expect(checks.length).toBe(1)
-    expect(checks[0].context).toBe('Semantic Pull Request')
-    expect(checks[0].url).toBe(
-      'https://github.com/fuxingloh/multi-labeler/blob/main/.github/labeler.yml'
-    )
-    expect(checks[0].state).toBe('success')
-    expect(checks[0].description).toBe('Ready for review & merge.')
-  })
+    expect(checks.length).toBe(1);
+    expect(checks[0].url).toBeFalsy();
+    expect(checks[0].context).toBe('Always');
+    expect(checks[0].state).toBe('failure');
+    expect(checks[0].description).toBe('Always failure');
+  });
 
   it('feat: success state', async function () {
-    const checks = await runChecks('__tests__/fixtures/semantic-release.yml', [
-      'feat'
-    ])
+    const checks = await runChecks('__tests__/fixtures/semantic-release.yml', ['feat']);
 
-    expect(checks.length).toBe(1)
-    expect(checks[0].context).toBe('Semantic Pull Request')
-    expect(checks[0].url).toBe(
-      'https://github.com/fuxingloh/multi-labeler/blob/main/.github/labeler.yml'
-    )
-    expect(checks[0].state).toBe('success')
-    expect(checks[0].description).toBe('Ready for review & merge.')
-  })
+    expect(checks.length).toBe(1);
+    expect(checks[0].context).toBe('Semantic Pull Request');
+    expect(checks[0].url).toBe('https://github.com/fuxingloh/multi-labeler/blob/main/.github/labeler.yml');
+    expect(checks[0].state).toBe('success');
+    expect(checks[0].description).toBe('Ready for review & merge.');
+  });
+
+  it('feat: success state', async function () {
+    const checks = await runChecks('__tests__/fixtures/semantic-release.yml', ['feat']);
+
+    expect(checks.length).toBe(1);
+    expect(checks[0].context).toBe('Semantic Pull Request');
+    expect(checks[0].url).toBe('https://github.com/fuxingloh/multi-labeler/blob/main/.github/labeler.yml');
+    expect(checks[0].state).toBe('success');
+    expect(checks[0].description).toBe('Ready for review & merge.');
+  });
 
   it('chore: success state', async function () {
-    const checks = await runChecks('__tests__/fixtures/semantic-release.yml', [
-      'chore'
-    ])
+    const checks = await runChecks('__tests__/fixtures/semantic-release.yml', ['chore']);
 
-    expect(checks.length).toBe(1)
-    expect(checks[0].context).toBe('Semantic Pull Request')
-    expect(checks[0].url).toBe(
-      'https://github.com/fuxingloh/multi-labeler/blob/main/.github/labeler.yml'
-    )
-    expect(checks[0].state).toBe('success')
-    expect(checks[0].description).toBe('Ready for review & merge.')
-  })
+    expect(checks.length).toBe(1);
+    expect(checks[0].context).toBe('Semantic Pull Request');
+    expect(checks[0].url).toBe('https://github.com/fuxingloh/multi-labeler/blob/main/.github/labeler.yml');
+    expect(checks[0].state).toBe('success');
+    expect(checks[0].description).toBe('Ready for review & merge.');
+  });
 
   it('docs: success state', async function () {
-    const checks = await runChecks('__tests__/fixtures/semantic-release.yml', [
-      'docs'
-    ])
+    const checks = await runChecks('__tests__/fixtures/semantic-release.yml', ['docs']);
 
-    expect(checks.length).toBe(1)
-    expect(checks[0].context).toBe('Semantic Pull Request')
-    expect(checks[0].url).toBe(
-      'https://github.com/fuxingloh/multi-labeler/blob/main/.github/labeler.yml'
-    )
-    expect(checks[0].state).toBe('success')
-    expect(checks[0].description).toBe('Ready for review & merge.')
-  })
+    expect(checks.length).toBe(1);
+    expect(checks[0].context).toBe('Semantic Pull Request');
+    expect(checks[0].url).toBe('https://github.com/fuxingloh/multi-labeler/blob/main/.github/labeler.yml');
+    expect(checks[0].state).toBe('success');
+    expect(checks[0].description).toBe('Ready for review & merge.');
+  });
 
   it('fix: success state', async function () {
-    const checks = await runChecks('__tests__/fixtures/semantic-release.yml', [
-      'none',
-      'bug',
-      'fix'
-    ])
+    const checks = await runChecks('__tests__/fixtures/semantic-release.yml', ['none', 'bug', 'fix']);
 
-    expect(checks.length).toBe(1)
-    expect(checks[0].context).toBe('Semantic Pull Request')
-    expect(checks[0].url).toBe(
-      'https://github.com/fuxingloh/multi-labeler/blob/main/.github/labeler.yml'
-    )
-    expect(checks[0].state).toBe('success')
-    expect(checks[0].description).toBe('Ready for review & merge.')
-  })
+    expect(checks.length).toBe(1);
+    expect(checks[0].context).toBe('Semantic Pull Request');
+    expect(checks[0].url).toBe('https://github.com/fuxingloh/multi-labeler/blob/main/.github/labeler.yml');
+    expect(checks[0].state).toBe('success');
+    expect(checks[0].description).toBe('Ready for review & merge.');
+  });
 
   it('failure state', async function () {
-    const checks = await runChecks('__tests__/fixtures/semantic-release.yml', [
-      'c'
-    ])
+    const checks = await runChecks('__tests__/fixtures/semantic-release.yml', ['c']);
 
-    expect(checks.length).toBe(1)
-    expect(checks[0].context).toBe('Semantic Pull Request')
-    expect(checks[0].url).toBe(
-      'https://github.com/fuxingloh/multi-labeler/blob/main/.github/labeler.yml'
-    )
-    expect(checks[0].state).toBe('failure')
-    expect(checks[0].description).toBe('Missing semantic label for merge.')
-  })
-})
+    expect(checks.length).toBe(1);
+    expect(checks[0].context).toBe('Semantic Pull Request');
+    expect(checks[0].url).toBe('https://github.com/fuxingloh/multi-labeler/blob/main/.github/labeler.yml');
+    expect(checks[0].state).toBe('failure');
+    expect(checks[0].description).toBe('Missing semantic label for merge.');
+  });
+});

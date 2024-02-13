@@ -1,6 +1,6 @@
 version: v1
 
 labels:
-  - label: "files"
+  - label: 'files'
     matcher:
       files: false

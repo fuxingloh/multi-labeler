@@ -1,23 +1,19 @@
-import {Config} from '../config'
-import {GitHub} from '@actions/github/lib/utils'
-import * as github from '@actions/github'
-import {matcherRegex} from './utils'
+import { Config } from '../config';
+import { GitHub } from '@actions/github/lib/utils';
+import * as github from '@actions/github';
+import { matcherRegex } from './utils';
 
-export default function match(
-  client: InstanceType<typeof GitHub>,
-  config: Config
-): string[] {
-  const payload =
-    github.context.payload.pull_request || github.context.payload.issue
-  const title = payload?.title
+export default function match(client: InstanceType<typeof GitHub>, config: Config): string[] {
+  const payload = github.context.payload.pull_request || github.context.payload.issue;
+  const title = payload?.title;
 
   if (!title) {
-    return []
+    return [];
   }
 
   return config
-    .labels!.filter(value => {
-      return matcherRegex({regex: value.matcher?.title, text: title})
+    .labels!.filter((value) => {
+      return matcherRegex({ regex: value.matcher?.title, text: title });
     })
-    .map(value => value.label)
+    .map((value) => value.label);
 }

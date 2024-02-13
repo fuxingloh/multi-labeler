@@ -1,9 +1,9 @@
-import * as yaml from 'js-yaml'
-import * as t from 'io-ts'
-import reporter from 'io-ts-reporters'
-import {isRight} from 'fp-ts/Either'
-import {GitHub} from '@actions/github/lib/utils'
-import * as github from '@actions/github'
+import * as yaml from 'js-yaml';
+import * as t from 'io-ts';
+import reporter from 'io-ts-reporters';
+import { isRight } from 'fp-ts/Either';
+import { GitHub } from '@actions/github/lib/utils';
+import * as github from '@actions/github';
 
 const Matcher = t.partial({
   title: t.string,
@@ -23,25 +23,25 @@ const Matcher = t.partial({
         lte: t.number,
         gte: t.number,
         eq: t.number,
-        neq: t.number
-      })
-    })
-  ])
-})
+        neq: t.number,
+      }),
+    }),
+  ]),
+});
 
 const Label = t.intersection([
   t.type({
-    label: t.string
+    label: t.string,
   }),
   t.partial({
     sync: t.boolean,
-    matcher: Matcher
-  })
-])
+    matcher: Matcher,
+  }),
+]);
 
 const Check = t.intersection([
   t.type({
-    context: t.string
+    context: t.string,
   }),
   t.partial({
     url: t.string,
@@ -49,64 +49,56 @@ const Check = t.intersection([
       t.string,
       t.partial({
         success: t.string,
-        failure: t.string
-      })
+        failure: t.string,
+      }),
     ]),
     labels: t.partial({
       any: t.array(t.string),
       all: t.array(t.string),
-      none: t.array(t.string)
-    })
-  })
-])
+      none: t.array(t.string),
+    }),
+  }),
+]);
 
 const Config = t.intersection([
   t.type({
-    version: t.literal('v1')
+    version: t.literal('v1'),
   }),
   t.partial({
     labels: t.array(Label),
-    checks: t.array(Check)
-  })
-])
+    checks: t.array(Check),
+  }),
+]);
 
-export type Matcher = t.TypeOf<typeof Matcher>
-export type Label = t.TypeOf<typeof Label>
-export type Check = t.TypeOf<typeof Check>
-export type Config = t.TypeOf<typeof Config>
+export type Matcher = t.TypeOf<typeof Matcher>;
+export type Label = t.TypeOf<typeof Label>;
+export type Check = t.TypeOf<typeof Check>;
+export type Config = t.TypeOf<typeof Config>;
 
 export function parse(content: string): Config {
-  const config: any = yaml.load(content)
+  const config: any = yaml.load(content);
 
-  const decoded = Config.decode(config)
+  const decoded = Config.decode(config);
   if (isRight(decoded)) {
-    return decoded.right
+    return decoded.right;
   } else {
-    throw new Error(
-      `labeler.yml parse error:\\n${reporter.report(decoded).join('\\n')}`
-    )
+    throw new Error(`labeler.yml parse error:\\n${reporter.report(decoded).join('\\n')}`);
   }
 }
 
 export async function getConfig(
   client: InstanceType<typeof GitHub>,
   configPath: string,
-  configRepo: string
+  configRepo: string,
 ): Promise<Config> {
-  const [owner, repo] = configRepo.split('/')
+  const [owner, repo] = configRepo.split('/');
   const response: any = await client.repos.getContent({
     owner,
     repo,
-    ref:
-      configRepo === github.context.payload.repository?.full_name
-        ? github.context.sha
-        : undefined,
-    path: configPath
-  })
+    ref: configRepo === github.context.payload.repository?.full_name ? github.context.sha : undefined,
+    path: configPath,
+  });
 
-  const content: string = await Buffer.from(
-    response.data.content,
-    response.data.encoding
-  ).toString()
-  return parse(content)
+  const content: string = await Buffer.from(response.data.content, response.data.encoding).toString();
+  return parse(content);
 }

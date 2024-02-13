@@ -1,12 +1,12 @@
 version: v1
 
 labels:
-  - label: "feat"
+  - label: 'feat'
     matcher:
-      title: "^feat:.*"
+      title: '^feat:.*'
 
 checks:
-  - url: "https://github.com/fuxingloh/multi-labeler/blob/main/.github/labeler.yml"
+  - url: 'https://github.com/fuxingloh/multi-labeler/blob/main/.github/labeler.yml'
     description:
       success: Ready for review & merge.
       failure: Missing semantic label for merge.

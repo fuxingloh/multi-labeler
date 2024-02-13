@@ -1,62 +1,62 @@
 version: v1
 
 labels:
-  - label: "feat"
+  - label: 'feat'
     matcher:
-      title: "^feat:.*"
-      branch: "^feat/.*"
-      commits: "^feat:.*"
+      title: '^feat:.*'
+      branch: '^feat/.*'
+      commits: '^feat:.*'
   - label: dependabot
     matcher:
-      title: "^chore(deps).*"
-      branch: "^dependabot/.*"
-      commits: "^chore(deps).*"
-  - label: "fix"
+      title: '^chore(deps).*'
+      branch: '^dependabot/.*'
+      commits: '^chore(deps).*'
+  - label: 'fix'
     matcher:
-      title: "^fix:.*"
-      branch: "^fix/.*"
-      commits: "^fix:.*"
+      title: '^fix:.*'
+      branch: '^fix/.*'
+      commits: '^fix:.*'
 
-  - label: "chore"
+  - label: 'chore'
     matcher:
       title: "^chore(\\((deps|ci)\\))?:.*"
-      branch: "^chore/.*"
+      branch: '^chore/.*'
       commits: "^chore(\\((deps|ci)\\))?:.*"
 
-  - label: "docs"
+  - label: 'docs'
     matcher:
-      title: "^docs:.*"
-      branch: "^docs/.*"
-      commits: "^docs:.*"
+      title: '^docs:.*'
+      branch: '^docs/.*'
+      commits: '^docs:.*'
 
-  - label: "test:labeler"
+  - label: 'test:labeler'
     sync: true
     matcher:
-      files: ".github/labeler.yml"
+      files: '.github/labeler.yml'
 
-  - label: "test:dist"
+  - label: 'test:dist'
     sync: true
     matcher:
-      files: [ "dist/*" ]
+      files: ['dist/*']
 
-  - label: "test:tests"
+  - label: 'test:tests'
     sync: true
     matcher:
-      files: [ "__tests__/matcher/**", "__tests__/*.ts" ]
+      files: ['__tests__/matcher/**', '__tests__/*.ts']
 
-  - label: "test:body"
+  - label: 'test:body'
     matcher:
       body: "(\\n|.)*- \\[x\\] test(\\n|.)*"
 
-  - label: "test:comment"
+  - label: 'test:comment'
     matcher:
       comment: "# \\[Codecov\\] .*"
 
-  - label: "test:stale"
+  - label: 'test:stale'
     matcher:
-      comment: "/stale"
+      comment: '/stale'
 
-  - label: "test: s"
+  - label: 'test: s'
     sync: true
     matcher:
       files:
@@ -64,7 +64,7 @@ labels:
           gte: 1
           lte: 4
 
-  - label: "test: m"
+  - label: 'test: m'
     sync: true
     matcher:
       files:
@@ -72,33 +72,33 @@ labels:
           gte: 5
           lte: 10
 
-  - label: "test: l"
+  - label: 'test: l'
     sync: true
     matcher:
       files:
         count:
           gte: 11
 
-  - label: "Maintainer"
+  - label: 'Maintainer'
     matcher:
       author:
         - fuxingloh
 
-  - label: "Owner"
+  - label: 'Owner'
     matcher:
       author: fuxingloh
 
-  - label: "branch: main"
+  - label: 'branch: main'
     matcher:
       baseBranch: main
 
-  - label: "branch: release"
+  - label: 'branch: release'
     matcher:
-      baseBranch: "^release/.*"
+      baseBranch: '^release/.*'
 
 checks:
-  - context: "Semantic Pull Request"
-    url: "https://github.com/fuxingloh/multi-labeler/blob/main/.github/labeler.yml"
+  - context: 'Semantic Pull Request'
+    url: 'https://github.com/fuxingloh/multi-labeler/blob/main/.github/labeler.yml'
     description:
       success: Ready for review & merge.
       failure: Missing semantic label for merge.
@@ -109,9 +109,9 @@ checks:
         - chore
         - docs
 
-  - context: "Do Not Merge"
-    url: "https://github.com/fuxingloh/multi-labeler/blob/main/.github/labeler.yml"
+  - context: 'Do Not Merge'
+    url: 'https://github.com/fuxingloh/multi-labeler/blob/main/.github/labeler.yml'
     description: "Disable merging when 'DO NOT MERGE' label is set"
     labels:
       none:
-        - "DO NOT MERGE"
+        - 'DO NOT MERGE'

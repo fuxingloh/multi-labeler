@@ -1,10 +1,10 @@
-import match from '../../src/matcher/author'
-import * as github from '@actions/github'
-import {Config} from '../../src/config'
+import match from '../../src/matcher/author';
+import * as github from '@actions/github';
+import { Config } from '../../src/config';
 
 function getMatchedLabels(config: Config): string[] {
   // @ts-ignore
-  return match(null, config)
+  return match(null, config);
 }
 
 const config: Config = {
@@ -16,41 +16,35 @@ const config: Config = {
     {
       label: 'string',
       matcher: {
-        author: 'fuxingloh'
-      }
+        author: 'fuxingloh',
+      },
     },
     {
       label: 'array',
       matcher: {
-        author: [
-          'fuxingloh',
-          'claire',
-          'adam',
-        ]
-      }
+        author: ['fuxingloh', 'claire', 'adam'],
+      },
     },
     {
       label: 'dragon',
       matcher: {
-        author: [
-          'dragon'
-        ]
-      }
+        author: ['dragon'],
+      },
     },
     {
       label: 'tiger',
       matcher: {
-        author: 'tiger'
-      }
-    }
-  ]
-}
+        author: 'tiger',
+      },
+    },
+  ],
+};
 
 describe('empty', function () {
   it('no payload should be empty', async function () {
-    github.context.payload = {}
-    expect(getMatchedLabels(config)).toEqual([])
-  })
+    github.context.payload = {};
+    expect(getMatchedLabels(config)).toEqual([]);
+  });
 
   it('pull_request should be empty', async function () {
     github.context.payload = {
@@ -58,13 +52,13 @@ describe('empty', function () {
         number: 1,
         title: 'nothing interesting',
         user: {
-          login: 'github-actions'
-        }
-      }
-    }
+          login: 'github-actions',
+        },
+      },
+    };
 
-    expect(getMatchedLabels(config)).toEqual([])
-  })
+    expect(getMatchedLabels(config)).toEqual([]);
+  });
 
   it('issue should be empty', async function () {
     github.context.payload = {
@@ -72,13 +66,13 @@ describe('empty', function () {
         number: 1,
         title: 'nothing interesting',
         user: {
-          login: 'github-actions'
-        }
-      }
-    }
+          login: 'github-actions',
+        },
+      },
+    };
 
-    expect(getMatchedLabels(config)).toEqual([])
-  })
+    expect(getMatchedLabels(config)).toEqual([]);
+  });
 });
 
 describe('pull_request', () => {
@@ -88,71 +82,71 @@ describe('pull_request', () => {
         number: 1,
         title: 'this is a pull_request',
         user: {
-          login: 'fuxingloh'
-        }
-      }
-    }
+          login: 'fuxingloh',
+        },
+      },
+    };
 
-    const labels = getMatchedLabels(config)
-    expect(labels.sort()).toEqual(['string','array'].sort())
-  })
+    const labels = getMatchedLabels(config);
+    expect(labels.sort()).toEqual(['string', 'array'].sort());
+  });
 
   it('claire should have array', async function () {
     github.context.payload = {
       pull_request: {
         number: 1,
         user: {
-          login: 'claire'
-        }
-      }
-    }
+          login: 'claire',
+        },
+      },
+    };
 
-    const labels = getMatchedLabels(config)
-    expect(labels).toEqual(['array'])
-  })
+    const labels = getMatchedLabels(config);
+    expect(labels).toEqual(['array']);
+  });
 
   it('adam should have array', async function () {
     github.context.payload = {
       pull_request: {
         number: 1,
         user: {
-          login: 'adam'
-        }
-      }
-    }
+          login: 'adam',
+        },
+      },
+    };
 
-    const labels = getMatchedLabels(config)
-    expect(labels).toEqual(['array'])
-  })
+    const labels = getMatchedLabels(config);
+    expect(labels).toEqual(['array']);
+  });
 
   it('should have dragon', async function () {
     github.context.payload = {
       pull_request: {
         number: 1,
         user: {
-          login: 'dragon'
-        }
-      }
-    }
+          login: 'dragon',
+        },
+      },
+    };
 
-    const labels = getMatchedLabels(config)
-    expect(labels).toEqual(['dragon'])
-  })
+    const labels = getMatchedLabels(config);
+    expect(labels).toEqual(['dragon']);
+  });
 
   it('should have tiger', async function () {
     github.context.payload = {
       pull_request: {
         number: 1,
         user: {
-          login: 'tiger'
-        }
-      }
-    }
+          login: 'tiger',
+        },
+      },
+    };
 
-    const labels = getMatchedLabels(config)
-    expect(labels).toEqual(['tiger'])
-  })
-})
+    const labels = getMatchedLabels(config);
+    expect(labels).toEqual(['tiger']);
+  });
+});
 
 describe('issue', () => {
   it('should have string and array', async function () {
@@ -161,68 +155,68 @@ describe('issue', () => {
         number: 1,
         title: 'this is a issue',
         user: {
-          login: 'fuxingloh'
-        }
-      }
-    }
+          login: 'fuxingloh',
+        },
+      },
+    };
 
-    const labels = getMatchedLabels(config)
-    expect(labels.sort()).toEqual(['string','array'].sort())
-  })
+    const labels = getMatchedLabels(config);
+    expect(labels.sort()).toEqual(['string', 'array'].sort());
+  });
 
   it('claire should have array', async function () {
     github.context.payload = {
       issue: {
         number: 1,
         user: {
-          login: 'claire'
-        }
-      }
-    }
+          login: 'claire',
+        },
+      },
+    };
 
-    const labels = getMatchedLabels(config)
-    expect(labels).toEqual(['array'])
-  })
+    const labels = getMatchedLabels(config);
+    expect(labels).toEqual(['array']);
+  });
 
   it('adam should have array', async function () {
     github.context.payload = {
       issue: {
         number: 1,
         user: {
-          login: 'adam'
-        }
-      }
-    }
+          login: 'adam',
+        },
+      },
+    };
 
-    const labels = getMatchedLabels(config)
-    expect(labels).toEqual(['array'])
-  })
+    const labels = getMatchedLabels(config);
+    expect(labels).toEqual(['array']);
+  });
 
   it('should have dragon', async function () {
     github.context.payload = {
       issue: {
         number: 1,
         user: {
-          login: 'dragon'
-        }
-      }
-    }
+          login: 'dragon',
+        },
+      },
+    };
 
-    const labels = getMatchedLabels(config)
-    expect(labels).toEqual(['dragon'])
-  })
+    const labels = getMatchedLabels(config);
+    expect(labels).toEqual(['dragon']);
+  });
 
   it('should have tiger', async function () {
     github.context.payload = {
       issue: {
         number: 1,
         user: {
-          login: 'tiger'
-        }
-      }
-    }
+          login: 'tiger',
+        },
+      },
+    };
 
-    const labels = getMatchedLabels(config)
-    expect(labels).toEqual(['tiger'])
-  })
-})
+    const labels = getMatchedLabels(config);
+    expect(labels).toEqual(['tiger']);
+  });
+});
