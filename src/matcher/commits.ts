@@ -19,7 +19,7 @@ export default async function match(client: InstanceType<typeof GitHub>, config:
   }
 
   const responses = await client.paginate(
-    client.pulls.listCommits.endpoint.merge({
+    client.rest.pulls.listCommits.endpoint.merge({
       owner: github.context.repo.owner,
       repo: github.context.repo.repo,
       pull_number: number,

@@ -6,33 +6,35 @@ import { Config, getConfig } from '../src/config';
 import * as fs from 'fs';
 
 const client: InstanceType<typeof GitHub> = {
-  repos: {
-    // @ts-ignore
-    getContent(params) {
-      if (params?.path) {
-        return {
-          data: {
-            content: fs.readFileSync(params.path, 'utf8'),
-            encoding: 'utf-8',
-          },
-        };
-      }
-    },
-  },
-  pulls: {
-    listCommits: {
-      endpoint: {
-        // @ts-ignore
-        merge() {
-          return {};
-        },
+  rest: {
+    repos: {
+      // @ts-ignore
+      getContent(params) {
+        if (params?.path) {
+          return {
+            data: {
+              content: fs.readFileSync(params.path, 'utf8'),
+              encoding: 'utf-8',
+            },
+          };
+        }
       },
     },
-    listFiles: {
-      endpoint: {
-        // @ts-ignore
-        merge() {
-          return {};
+    pulls: {
+      listCommits: {
+        endpoint: {
+          // @ts-ignore
+          merge() {
+            return {};
+          },
+        },
+      },
+      listFiles: {
+        endpoint: {
+          // @ts-ignore
+          merge() {
+            return {};
+          },
         },
       },
     },
