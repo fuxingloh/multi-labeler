@@ -19,7 +19,6 @@ jobs:
   package:
     name: Package
     runs-on: ubuntu-latest
-    environment: fuxingloh/multi-labeler workflow
     steps:
       - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
 
@@ -31,17 +30,7 @@ jobs:
       - run: npm run build
       - run: npm run package
 
-      - id: app
-        uses: tibdex/github-app-token@3beb63f4bd073e61482598c45c71c1019b59b73a # v2.1.0
-        with:
-          app_id: ${{ secrets.WORKFLOW_APP_ID }}
-          private_key: ${{ secrets.WORKFLOW_PRIVATE_KEY }}
-
-      - uses: EndBug/add-and-commit@61a88be553afe4206585b31aa72387c64295d08b # v9.1.1
-        with:
-          add: 'dist'
-          message: 'chore: npm run package'
-          github_token: ${{ steps.app.outputs.token }}
+      - run: git diff --exit-code || (echo "::error ::Files have been modified" && exit 1)
 
   build:
     name: Build
