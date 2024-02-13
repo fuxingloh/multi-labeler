@@ -20,7 +20,7 @@ const client: InstanceType<typeof GitHub> = {
         }
       },
     },
-  }
+  },
 };
 
 async function runChecks(configPath: string, labels: string[]): Promise<StatusCheck[]> {
