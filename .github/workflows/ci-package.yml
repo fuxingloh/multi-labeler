@@ -1,4 +1,4 @@
-name: CI
+name: CI Package
 
 on:
   push:
@@ -12,8 +12,7 @@ permissions:
   contents: read
 
 jobs:
-  package:
-    name: Package
+  main:
     runs-on: ubuntu-latest
     environment: fuxingloh/multi-labeler workflow
     steps:
