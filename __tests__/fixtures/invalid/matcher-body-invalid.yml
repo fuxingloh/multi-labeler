@@ -1,6 +1,6 @@
 version: v1
 
 labels:
-  - label: "body"
+  - label: 'body'
     matcher:
       body: ['abc']

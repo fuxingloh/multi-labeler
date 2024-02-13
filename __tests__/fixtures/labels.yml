@@ -1,8 +1,7 @@
 version: v1
 
 labels:
-  - label: "feat"
-  - label: "fix"
-  - label: "chore"
-  - label: "docs"
-
+  - label: 'feat'
+  - label: 'fix'
+  - label: 'chore'
+  - label: 'docs'

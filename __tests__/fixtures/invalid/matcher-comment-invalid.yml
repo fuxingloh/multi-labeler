@@ -1,6 +1,6 @@
 version: v1
 
 labels:
-  - label: "comment"
+  - label: 'comment'
     matcher:
-      comment: [ ]
+      comment: []

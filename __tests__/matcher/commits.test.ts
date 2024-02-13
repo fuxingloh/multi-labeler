@@ -1,25 +1,28 @@
-import match from '../../src/matcher/commits'
-import * as github from '@actions/github'
-import {Config} from '../../src/config'
+import match from '../../src/matcher/commits';
+import * as github from '@actions/github';
+import { Config } from '../../src/config';
 
 async function getMatchedLabels(config: Config): Promise<string[]> {
-  return match({
-    pulls: {
-      listCommits: {
-        endpoint: {
-          // @ts-ignore
-          merge(params) {
-            return {pull_number: params.pull_number}
-          }
-        }
-      }
-    },
-    // @ts-ignore
-    paginate(params): Promise<any[]> {
+  return match(
+    {
+      pulls: {
+        listCommits: {
+          endpoint: {
+            // @ts-ignore
+            merge(params) {
+              return { pull_number: params.pull_number };
+            },
+          },
+        },
+      },
       // @ts-ignore
-      return Promise.resolve(commits[params.pull_number])
-    }
-  }, config)
+      paginate(params): Promise<any[]> {
+        // @ts-ignore
+        return Promise.resolve(commits[params.pull_number]);
+      },
+    },
+    config,
+  );
 }
 
 const config: Config = {
@@ -28,30 +31,30 @@ const config: Config = {
     {
       label: 'feat',
       matcher: {
-        commits: '^feat: .*'
-      }
-    }
-  ]
-}
+        commits: '^feat: .*',
+      },
+    },
+  ],
+};
 
 const commits = {
   1: [
     {
-      commit: {message: 'no-commit:'},
+      commit: { message: 'no-commit:' },
     },
     {
-      commit: {message: 'commit: commit'},
-    }
+      commit: { message: 'commit: commit' },
+    },
   ],
   2: [
     {
-      commit: {message: 'init'}
+      commit: { message: 'init' },
     },
     {
-      commit: {message: 'feat: yes yes yes'}
-    }
+      commit: { message: 'feat: yes yes yes' },
+    },
   ],
-}
+};
 
 describe('commits', function () {
   beforeEach(() => {
@@ -59,41 +62,38 @@ describe('commits', function () {
     jest.spyOn(github.context, 'repo', 'get').mockImplementation(() => {
       return {
         owner: 'owner-name',
-        repo: 'repo-name'
-      }
-    })
+        repo: 'repo-name',
+      };
+    });
 
     github.context.payload = {
       pull_request: {
         number: 1,
         title: 'nothing interesting',
         head: {
-          ref: 'spaceship'
-        }
-      }
-    }
-  })
+          ref: 'spaceship',
+        },
+      },
+    };
+  });
 
   it('should be empty', async function () {
-    expect(await getMatchedLabels(config)).toEqual([])
-  })
+    expect(await getMatchedLabels(config)).toEqual([]);
+  });
 
   it('payload empty should be empty', async function () {
-    github.context.payload = {}
-    expect(await getMatchedLabels(config)).toEqual([])
-  })
-
+    github.context.payload = {};
+    expect(await getMatchedLabels(config)).toEqual([]);
+  });
 
   it('should have feat', async function () {
     github.context.payload = {
       pull_request: {
-        number: 2
-      }
-    }
+        number: 2,
+      },
+    };
 
-    const labels = await getMatchedLabels(config)
-    expect(labels).toEqual(['feat'])
-  })
+    const labels = await getMatchedLabels(config);
+    expect(labels).toEqual(['feat']);
+  });
 });
-
-

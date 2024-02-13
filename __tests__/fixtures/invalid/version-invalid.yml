@@ -1,6 +1,6 @@
 version: v100
 
 labels:
-  - label: "feat"
+  - label: 'feat'
     matcher:
-      title: "^feat:.*"
+      title: '^feat:.*'

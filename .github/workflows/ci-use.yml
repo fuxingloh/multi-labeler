@@ -2,7 +2,7 @@ name: CI
 
 on:
   pull_request:
-    types: [ opened, reopened, edited, synchronize, ready_for_review, labeled, unlabeled ]
+    types: [opened, reopened, edited, synchronize, ready_for_review, labeled, unlabeled]
   issues:
   issue_comment:
 

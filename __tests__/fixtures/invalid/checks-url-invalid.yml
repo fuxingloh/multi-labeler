@@ -1,9 +1,9 @@
 version: v1
 
 labels:
-  - label: "feat"
+  - label: 'feat'
     matcher:
-      title: "^feat:.*"
+      title: '^feat:.*'
 
 checks:
   - context: Seamtnic Pull Request
