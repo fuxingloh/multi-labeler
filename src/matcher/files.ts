@@ -69,7 +69,7 @@ function getMatchers(config: Config): FileMatcher[] {
 
 async function getFiles(client: InstanceType<typeof GitHub>, pr_number: number): Promise<string[]> {
   const responses = await client.paginate(
-    client.pulls.listFiles.endpoint.merge({
+    client.rest.pulls.listFiles.endpoint.merge({
       owner: github.context.repo.owner,
       repo: github.context.repo.repo,
       pull_number: pr_number,

@@ -5,12 +5,14 @@ import { Config } from '../../src/config';
 async function getMatchedLabels(config: Config): Promise<string[]> {
   return match(
     {
-      pulls: {
-        listCommits: {
-          endpoint: {
-            // @ts-ignore
-            merge(params) {
-              return { pull_number: params.pull_number };
+      rest: {
+        pulls: {
+          listCommits: {
+            endpoint: {
+              // @ts-ignore
+              merge(params) {
+                return { pull_number: params.pull_number };
+              },
             },
           },
         },

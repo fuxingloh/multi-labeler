@@ -22,7 +22,7 @@ async function addLabels(labels: string[]): Promise<void> {
     return;
   }
 
-  await client.issues.addLabels({
+  await client.rest.issues.addLabels({
     owner: github.context.repo.owner,
     repo: github.context.repo.repo,
     issue_number: payload!.number,
@@ -43,7 +43,7 @@ async function removeLabels(labels: string[], config: Config): Promise<unknown[]
         return label.sync && !labels.includes(label.label);
       })
       .map((label) => {
-        return client.issues
+        return client.rest.issues
           .removeLabel({
             owner: github.context.repo.owner,
             repo: github.context.repo.repo,
@@ -69,7 +69,7 @@ async function addChecks(checks: StatusCheck[]): Promise<void> {
   const sha = github.context.payload.pull_request?.head.sha as string;
   await Promise.all([
     checks.map((check) => {
-      client.repos.createCommitStatus({
+      client.rest.repos.createCommitStatus({
         owner: github.context.repo.owner,
         repo: github.context.repo.repo,
         sha: sha,

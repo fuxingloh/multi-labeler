@@ -6,19 +6,21 @@ import * as fs from 'fs';
 import { checks, is, StatusCheck } from '../src/checks';
 
 const client: InstanceType<typeof GitHub> = {
-  repos: {
-    // @ts-ignore
-    getContent(params) {
-      if (params?.path) {
-        return {
-          data: {
-            content: fs.readFileSync(params.path, 'utf8'),
-            encoding: 'utf-8',
-          },
-        };
-      }
+  rest: {
+    repos: {
+      // @ts-ignore
+      getContent(params) {
+        if (params?.path) {
+          return {
+            data: {
+              content: fs.readFileSync(params.path, 'utf8'),
+              encoding: 'utf-8',
+            },
+          };
+        }
+      },
     },
-  },
+  }
 };
 
 async function runChecks(configPath: string, labels: string[]): Promise<StatusCheck[]> {
