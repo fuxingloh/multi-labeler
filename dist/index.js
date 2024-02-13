@@ -29,66 +29,52 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.checks = exports.is = void 0;
 const github = __importStar(__nccwpck_require__(5438));
 function is(check, labels) {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
-    if ((_b = (_a = check.labels) === null || _a === void 0 ? void 0 : _a.any) === null || _b === void 0 ? void 0 : _b.length) {
-        if (!labels.some((label) => { var _a, _b; return (_b = (_a = check.labels) === null || _a === void 0 ? void 0 : _a.any) === null || _b === void 0 ? void 0 : _b.includes(label); })) {
+    if (check.labels?.any?.length) {
+        if (!labels.some((label) => check.labels?.any?.includes(label))) {
             return false;
         }
     }
-    if ((_d = (_c = check.labels) === null || _c === void 0 ? void 0 : _c.all) === null || _d === void 0 ? void 0 : _d.length) {
-        if (!((_f = (_e = check.labels) === null || _e === void 0 ? void 0 : _e.all) === null || _f === void 0 ? void 0 : _f.every((label) => labels.includes(label)))) {
+    if (check.labels?.all?.length) {
+        if (!check.labels?.all?.every((label) => labels.includes(label))) {
             return false;
         }
     }
-    if ((_h = (_g = check.labels) === null || _g === void 0 ? void 0 : _g.none) === null || _h === void 0 ? void 0 : _h.length) {
-        if ((_k = (_j = check.labels) === null || _j === void 0 ? void 0 : _j.none) === null || _k === void 0 ? void 0 : _k.some((label) => labels.includes(label))) {
+    if (check.labels?.none?.length) {
+        if (check.labels?.none?.some((label) => labels.includes(label))) {
             return false;
         }
     }
     return true;
 }
 exports.is = is;
-function checks(client, config, labels) {
-    var _a;
-    return __awaiter(this, void 0, void 0, function* () {
-        if (!github.context.payload.pull_request) {
-            return [];
+async function checks(client, config, labels) {
+    if (!github.context.payload.pull_request) {
+        return [];
+    }
+    if (!config.checks?.length) {
+        return [];
+    }
+    return config.checks.map((check) => {
+        if (is(check, labels)) {
+            return {
+                context: check.context,
+                url: check.url,
+                state: 'success',
+                description: typeof check.description === 'string' ? check.description : check.description?.success,
+            };
         }
-        if (!((_a = config.checks) === null || _a === void 0 ? void 0 : _a.length)) {
-            return [];
+        else {
+            return {
+                context: check.context,
+                url: check.url,
+                state: 'failure',
+                description: typeof check.description === 'string' ? check.description : check.description?.failure,
+            };
         }
-        return config.checks.map((check) => {
-            var _a, _b;
-            if (is(check, labels)) {
-                return {
-                    context: check.context,
-                    url: check.url,
-                    state: 'success',
-                    description: typeof check.description === 'string' ? check.description : (_a = check.description) === null || _a === void 0 ? void 0 : _a.success,
-                };
-            }
-            else {
-                return {
-                    context: check.context,
-                    url: check.url,
-                    state: 'failure',
-                    description: typeof check.description === 'string' ? check.description : (_b = check.description) === null || _b === void 0 ? void 0 : _b.failure,
-                };
-            }
-        });
     });
 }
 exports.checks = checks;
@@ -123,15 +109,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
     if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
-};
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
 };
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -215,19 +192,16 @@ function parse(content) {
     }
 }
 exports.parse = parse;
-function getConfig(client, configPath, configRepo) {
-    var _a;
-    return __awaiter(this, void 0, void 0, function* () {
-        const [owner, repo] = configRepo.split('/');
-        const response = yield client.rest.repos.getContent({
-            owner,
-            repo,
-            ref: configRepo === ((_a = github.context.payload.repository) === null || _a === void 0 ? void 0 : _a.full_name) ? github.context.sha : undefined,
-            path: configPath,
-        });
-        const content = yield Buffer.from(response.data.content, response.data.encoding).toString();
-        return parse(content);
+async function getConfig(client, configPath, configRepo) {
+    const [owner, repo] = configRepo.split('/');
+    const response = await client.rest.repos.getContent({
+        owner,
+        repo,
+        ref: configRepo === github.context.payload.repository?.full_name ? github.context.sha : undefined,
+        path: configPath,
     });
+    const content = await Buffer.from(response.data.content, response.data.encoding).toString();
+    return parse(content);
 }
 exports.getConfig = getConfig;
 
@@ -262,15 +236,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -291,10 +256,9 @@ const github = __importStar(__nccwpck_require__(5438));
  * @param {Config} config of the labels
  */
 function mergeLabels(labels, config) {
-    var _a;
     const context = github.context;
     const payload = context.payload.pull_request || context.payload.issue;
-    const currents = ((_a = payload === null || payload === void 0 ? void 0 : payload.labels) === null || _a === void 0 ? void 0 : _a.map((label) => label.name)) || [];
+    const currents = payload?.labels?.map((label) => label.name) || [];
     const removals = (config.labels || [])
         .filter((label) => {
         // Is sync, not matched and currently added as a label in payload
@@ -304,26 +268,23 @@ function mergeLabels(labels, config) {
     return (0, lodash_1.difference)((0, lodash_1.uniq)((0, lodash_1.concat)(labels, currents)), removals);
 }
 exports.mergeLabels = mergeLabels;
-function labels(client, config) {
-    var _a;
-    return __awaiter(this, void 0, void 0, function* () {
-        if (!((_a = config.labels) === null || _a === void 0 ? void 0 : _a.length)) {
-            return [];
-        }
-        const labels = yield Promise.all([
-            (0, title_1.default)(client, config),
-            (0, body_1.default)(client, config),
-            (0, comment_1.default)(client, config),
-            (0, branch_1.default)(client, config),
-            (0, base_branch_1.default)(client, config),
-            (0, commits_1.default)(client, config),
-            (0, files_1.default)(client, config),
-            (0, author_1.default)(client, config),
-        ]).then((value) => {
-            return (0, lodash_1.uniq)((0, lodash_1.concat)(...value));
-        });
-        return mergeLabels(labels, config);
+async function labels(client, config) {
+    if (!config.labels?.length) {
+        return [];
+    }
+    const labels = await Promise.all([
+        (0, title_1.default)(client, config),
+        (0, body_1.default)(client, config),
+        (0, comment_1.default)(client, config),
+        (0, branch_1.default)(client, config),
+        (0, base_branch_1.default)(client, config),
+        (0, commits_1.default)(client, config),
+        (0, files_1.default)(client, config),
+        (0, author_1.default)(client, config),
+    ]).then((value) => {
+        return (0, lodash_1.uniq)((0, lodash_1.concat)(...value));
     });
+    return mergeLabels(labels, config);
 }
 exports.labels = labels;
 
@@ -358,15 +319,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
@@ -378,83 +330,76 @@ const configPath = core.getInput('config-path', { required: true });
 const configRepo = core.getInput('config-repo');
 const client = github.getOctokit(githubToken);
 const payload = github.context.payload.pull_request || github.context.payload.issue;
-if (!(payload === null || payload === void 0 ? void 0 : payload.number)) {
+if (!payload?.number) {
     throw new Error('Could not get issue_number from pull_request or issue from context');
 }
-function addLabels(labels) {
-    return __awaiter(this, void 0, void 0, function* () {
-        core.setOutput('labels', labels);
-        if (!labels.length) {
-            return;
-        }
-        yield client.rest.issues.addLabels({
+async function addLabels(labels) {
+    core.setOutput('labels', labels);
+    if (!labels.length) {
+        return;
+    }
+    await client.rest.issues.addLabels({
+        owner: github.context.repo.owner,
+        repo: github.context.repo.repo,
+        issue_number: payload.number,
+        labels: labels,
+    });
+}
+async function removeLabels(labels, config) {
+    const eventName = github.context.eventName;
+    if (!['pull_request', 'pull_request_target', 'issue'].includes(eventName)) {
+        return [];
+    }
+    return Promise.all((config.labels || [])
+        .filter((label) => {
+        // Is sync, not matched in final set of labels
+        return label.sync && !labels.includes(label.label);
+    })
+        .map((label) => {
+        return client.rest.issues
+            .removeLabel({
             owner: github.context.repo.owner,
             repo: github.context.repo.repo,
             issue_number: payload.number,
-            labels: labels,
-        });
-    });
-}
-function removeLabels(labels, config) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const eventName = github.context.eventName;
-        if (!['pull_request', 'pull_request_target', 'issue'].includes(eventName)) {
-            return [];
-        }
-        return Promise.all((config.labels || [])
-            .filter((label) => {
-            // Is sync, not matched in final set of labels
-            return label.sync && !labels.includes(label.label);
+            name: label.label,
         })
-            .map((label) => {
-            return client.rest.issues
-                .removeLabel({
+            .catch((ignored) => {
+            return undefined;
+        });
+    }));
+}
+async function addChecks(checks) {
+    if (!checks.length) {
+        return;
+    }
+    if (!github.context.payload.pull_request) {
+        return;
+    }
+    const sha = github.context.payload.pull_request?.head.sha;
+    await Promise.all([
+        checks.map((check) => {
+            client.rest.repos.createCommitStatus({
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
-                issue_number: payload.number,
-                name: label.label,
-            })
-                .catch((ignored) => {
-                return undefined;
+                sha: sha,
+                context: check.context,
+                state: check.state,
+                description: check.description,
+                target_url: check.url,
             });
-        }));
-    });
-}
-function addChecks(checks) {
-    var _a;
-    return __awaiter(this, void 0, void 0, function* () {
-        if (!checks.length) {
-            return;
-        }
-        if (!github.context.payload.pull_request) {
-            return;
-        }
-        const sha = (_a = github.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.head.sha;
-        yield Promise.all([
-            checks.map((check) => {
-                client.rest.repos.createCommitStatus({
-                    owner: github.context.repo.owner,
-                    repo: github.context.repo.repo,
-                    sha: sha,
-                    context: check.context,
-                    state: check.state,
-                    description: check.description,
-                    target_url: check.url,
-                });
-            }),
-        ]);
-    });
+        }),
+    ]);
 }
 (0, config_1.getConfig)(client, configPath, configRepo)
-    .then((config) => __awaiter(void 0, void 0, void 0, function* () {
-    const labeled = yield (0, labeler_1.labels)(client, config);
+    .then(async (config) => {
+    const labeled = await (0, labeler_1.labels)(client, config);
     const finalLabels = (0, labeler_1.mergeLabels)(labeled, config);
     return Promise.all([
         addLabels(finalLabels),
         removeLabels(finalLabels, config),
         (0, checks_1.checks)(client, config, finalLabels).then((checks) => addChecks(checks)),
     ]);
-}))
+})
     .catch((error) => {
     core.error(error);
     core.setFailed(error.message);
@@ -494,8 +439,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const github = __importStar(__nccwpck_require__(5438));
 function getAuthors(label) {
-    var _a;
-    const author = (_a = label.matcher) === null || _a === void 0 ? void 0 : _a.author;
+    const author = label.matcher?.author;
     if (typeof author === 'string') {
         return [author];
     }
@@ -505,9 +449,8 @@ function getAuthors(label) {
     return [];
 }
 function match(client, config) {
-    var _a;
     const payload = github.context.payload.pull_request || github.context.payload.issue;
-    const author = (_a = payload === null || payload === void 0 ? void 0 : payload.user) === null || _a === void 0 ? void 0 : _a.login;
+    const author = payload?.user?.login;
     if (!author) {
         return [];
     }
@@ -558,16 +501,14 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const github = __importStar(__nccwpck_require__(5438));
 const utils_1 = __nccwpck_require__(5165);
 function match(client, config) {
-    var _a;
     const payload = github.context.payload.pull_request;
-    const ref = (_a = payload === null || payload === void 0 ? void 0 : payload.base) === null || _a === void 0 ? void 0 : _a.ref;
+    const ref = payload?.base?.ref;
     if (!ref) {
         return [];
     }
     return config
         .labels.filter((value) => {
-        var _a;
-        return (0, utils_1.matcherRegex)({ regex: (_a = value.matcher) === null || _a === void 0 ? void 0 : _a.baseBranch, text: ref });
+        return (0, utils_1.matcherRegex)({ regex: value.matcher?.baseBranch, text: ref });
     })
         .map((value) => value.label);
 }
@@ -609,14 +550,13 @@ const github = __importStar(__nccwpck_require__(5438));
 const utils_1 = __nccwpck_require__(5165);
 function match(client, config) {
     const payload = github.context.payload.pull_request || github.context.payload.issue;
-    const body = payload === null || payload === void 0 ? void 0 : payload.body;
+    const body = payload?.body;
     if (!body) {
         return [];
     }
     return config
         .labels.filter((value) => {
-        var _a;
-        return (0, utils_1.matcherRegex)({ regex: (_a = value.matcher) === null || _a === void 0 ? void 0 : _a.body, text: body });
+        return (0, utils_1.matcherRegex)({ regex: value.matcher?.body, text: body });
     })
         .map((value) => value.label);
 }
@@ -657,16 +597,14 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const github = __importStar(__nccwpck_require__(5438));
 const utils_1 = __nccwpck_require__(5165);
 function match(client, config) {
-    var _a;
     const payload = github.context.payload.pull_request;
-    const ref = (_a = payload === null || payload === void 0 ? void 0 : payload.head) === null || _a === void 0 ? void 0 : _a.ref;
+    const ref = payload?.head?.ref;
     if (!ref) {
         return [];
     }
     return config
         .labels.filter((value) => {
-        var _a;
-        return (0, utils_1.matcherRegex)({ regex: (_a = value.matcher) === null || _a === void 0 ? void 0 : _a.branch, text: ref });
+        return (0, utils_1.matcherRegex)({ regex: value.matcher?.branch, text: ref });
     })
         .map((value) => value.label);
 }
@@ -707,15 +645,13 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const github = __importStar(__nccwpck_require__(5438));
 const utils_1 = __nccwpck_require__(5165);
 function match(client, config) {
-    var _a;
-    const body = (_a = github.context.payload.comment) === null || _a === void 0 ? void 0 : _a.body;
+    const body = github.context.payload.comment?.body;
     if (!body) {
         return [];
     }
     return config
         .labels.filter((value) => {
-        var _a;
-        return (0, utils_1.matcherRegex)({ regex: (_a = value.matcher) === null || _a === void 0 ? void 0 : _a.comment, text: body });
+        return (0, utils_1.matcherRegex)({ regex: value.matcher?.comment, text: body });
     })
         .map((value) => value.label);
 }
@@ -752,45 +688,32 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const github = __importStar(__nccwpck_require__(5438));
 const utils_1 = __nccwpck_require__(5165);
-function match(client, config) {
-    var _a;
-    return __awaiter(this, void 0, void 0, function* () {
-        const number = (_a = github.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.number;
-        if (!number) {
-            return [];
-        }
-        const matchers = config.labels.filter((value) => {
-            var _a;
-            return (_a = value.matcher) === null || _a === void 0 ? void 0 : _a.commits;
-        });
-        if (!matchers.length) {
-            return [];
-        }
-        const responses = yield client.paginate(client.rest.pulls.listCommits.endpoint.merge({
-            owner: github.context.repo.owner,
-            repo: github.context.repo.repo,
-            pull_number: number,
-        }));
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const messages = responses.map((c) => c.commit.message);
-        return matchers
-            .filter((value) => {
-            return (0, utils_1.matcherRegexAny)(value.matcher.commits, messages);
-        })
-            .map((value) => value.label);
+async function match(client, config) {
+    const number = github.context.payload.pull_request?.number;
+    if (!number) {
+        return [];
+    }
+    const matchers = config.labels.filter((value) => {
+        return value.matcher?.commits;
     });
+    if (!matchers.length) {
+        return [];
+    }
+    const responses = await client.paginate(client.rest.pulls.listCommits.endpoint.merge({
+        owner: github.context.repo.owner,
+        repo: github.context.repo.repo,
+        pull_number: number,
+    }));
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const messages = responses.map((c) => c.commit.message);
+    return matchers
+        .filter((value) => {
+        return (0, utils_1.matcherRegexAny)(value.matcher.commits, messages);
+    })
+        .map((value) => value.label);
 }
 exports["default"] = match;
 
@@ -825,15 +748,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const github = __importStar(__nccwpck_require__(5438));
 const minimatch_1 = __nccwpck_require__(1953);
@@ -843,14 +757,12 @@ const minimatch_1 = __nccwpck_require__(1953);
 function getMatchers(config) {
     return config
         .labels.filter((value) => {
-        var _a, _b, _c;
-        if (Array.isArray((_a = value.matcher) === null || _a === void 0 ? void 0 : _a.files)) {
-            return (_b = value.matcher) === null || _b === void 0 ? void 0 : _b.files.length;
+        if (Array.isArray(value.matcher?.files)) {
+            return value.matcher?.files.length;
         }
-        return (_c = value.matcher) === null || _c === void 0 ? void 0 : _c.files;
+        return value.matcher?.files;
     })
         .map(({ label, matcher }) => {
-        var _a, _b, _c, _d;
         const files = matcher.files;
         if (typeof files === 'string') {
             return {
@@ -871,27 +783,25 @@ function getMatchers(config) {
             any: files.any || [],
             all: files.all || [],
             count: {
-                lte: (_a = files.count) === null || _a === void 0 ? void 0 : _a.lte,
-                gte: (_b = files.count) === null || _b === void 0 ? void 0 : _b.gte,
-                eq: (_c = files.count) === null || _c === void 0 ? void 0 : _c.eq,
-                neq: (_d = files.count) === null || _d === void 0 ? void 0 : _d.neq,
+                lte: files.count?.lte,
+                gte: files.count?.gte,
+                eq: files.count?.eq,
+                neq: files.count?.neq,
             },
         };
     })
         .filter(({ any, all, count }) => {
-        return any.length || all.length || (count === null || count === void 0 ? void 0 : count.lte) || (count === null || count === void 0 ? void 0 : count.gte) || (count === null || count === void 0 ? void 0 : count.eq) || (count === null || count === void 0 ? void 0 : count.neq);
+        return any.length || all.length || count?.lte || count?.gte || count?.eq || count?.neq;
     });
 }
-function getFiles(client, pr_number) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const responses = yield client.paginate(client.rest.pulls.listFiles.endpoint.merge({
-            owner: github.context.repo.owner,
-            repo: github.context.repo.repo,
-            pull_number: pr_number,
-        }));
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return responses.map((c) => c.filename);
-    });
+async function getFiles(client, pr_number) {
+    const responses = await client.paginate(client.rest.pulls.listFiles.endpoint.merge({
+        owner: github.context.repo.owner,
+        repo: github.context.repo.repo,
+        pull_number: pr_number,
+    }));
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return responses.map((c) => c.filename);
 }
 /**
  * if globs is empty = matched
@@ -935,29 +845,26 @@ function countMatch(files, count) {
     if (!count) {
         return true;
     }
-    return (((count === null || count === void 0 ? void 0 : count.eq) === undefined || count.eq === files.length) &&
-        ((count === null || count === void 0 ? void 0 : count.neq) === undefined || count.neq !== files.length) &&
-        ((count === null || count === void 0 ? void 0 : count.lte) === undefined || count.lte >= files.length) &&
-        ((count === null || count === void 0 ? void 0 : count.gte) === undefined || count.gte <= files.length));
+    return ((count?.eq === undefined || count.eq === files.length) &&
+        (count?.neq === undefined || count.neq !== files.length) &&
+        (count?.lte === undefined || count.lte >= files.length) &&
+        (count?.gte === undefined || count.gte <= files.length));
 }
-function match(client, config) {
-    var _a;
-    return __awaiter(this, void 0, void 0, function* () {
-        const pr_number = (_a = github.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.number;
-        if (!pr_number) {
-            return [];
-        }
-        const matchers = getMatchers(config);
-        if (!matchers.length) {
-            return [];
-        }
-        const files = yield getFiles(client, pr_number);
-        return matchers
-            .filter((matcher) => {
-            return allMatch(files, matcher.all) && anyMatch(files, matcher.any) && countMatch(files, matcher.count);
-        })
-            .map((value) => value.label);
-    });
+async function match(client, config) {
+    const pr_number = github.context.payload.pull_request?.number;
+    if (!pr_number) {
+        return [];
+    }
+    const matchers = getMatchers(config);
+    if (!matchers.length) {
+        return [];
+    }
+    const files = await getFiles(client, pr_number);
+    return matchers
+        .filter((matcher) => {
+        return allMatch(files, matcher.all) && anyMatch(files, matcher.any) && countMatch(files, matcher.count);
+    })
+        .map((value) => value.label);
 }
 exports["default"] = match;
 
@@ -997,14 +904,13 @@ const github = __importStar(__nccwpck_require__(5438));
 const utils_1 = __nccwpck_require__(5165);
 function match(client, config) {
     const payload = github.context.payload.pull_request || github.context.payload.issue;
-    const title = payload === null || payload === void 0 ? void 0 : payload.title;
+    const title = payload?.title;
     if (!title) {
         return [];
     }
     return config
         .labels.filter((value) => {
-        var _a;
-        return (0, utils_1.matcherRegex)({ regex: (_a = value.matcher) === null || _a === void 0 ? void 0 : _a.title, text: title });
+        return (0, utils_1.matcherRegex)({ regex: value.matcher?.title, text: title });
     })
         .map((value) => value.label);
 }
