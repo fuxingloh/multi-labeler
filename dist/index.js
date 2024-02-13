@@ -40,17 +40,17 @@ const github = __importStar(__nccwpck_require__(5438));
 function is(check, labels) {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
     if ((_b = (_a = check.labels) === null || _a === void 0 ? void 0 : _a.any) === null || _b === void 0 ? void 0 : _b.length) {
-        if (!labels.some(label => { var _a, _b; return (_b = (_a = check.labels) === null || _a === void 0 ? void 0 : _a.any) === null || _b === void 0 ? void 0 : _b.includes(label); })) {
+        if (!labels.some((label) => { var _a, _b; return (_b = (_a = check.labels) === null || _a === void 0 ? void 0 : _a.any) === null || _b === void 0 ? void 0 : _b.includes(label); })) {
             return false;
         }
     }
     if ((_d = (_c = check.labels) === null || _c === void 0 ? void 0 : _c.all) === null || _d === void 0 ? void 0 : _d.length) {
-        if (!((_f = (_e = check.labels) === null || _e === void 0 ? void 0 : _e.all) === null || _f === void 0 ? void 0 : _f.every(label => labels.includes(label)))) {
+        if (!((_f = (_e = check.labels) === null || _e === void 0 ? void 0 : _e.all) === null || _f === void 0 ? void 0 : _f.every((label) => labels.includes(label)))) {
             return false;
         }
     }
     if ((_h = (_g = check.labels) === null || _g === void 0 ? void 0 : _g.none) === null || _h === void 0 ? void 0 : _h.length) {
-        if ((_k = (_j = check.labels) === null || _j === void 0 ? void 0 : _j.none) === null || _k === void 0 ? void 0 : _k.some(label => labels.includes(label))) {
+        if ((_k = (_j = check.labels) === null || _j === void 0 ? void 0 : _j.none) === null || _k === void 0 ? void 0 : _k.some((label) => labels.includes(label))) {
             return false;
         }
     }
@@ -66,16 +66,14 @@ function checks(client, config, labels) {
         if (!((_a = config.checks) === null || _a === void 0 ? void 0 : _a.length)) {
             return [];
         }
-        return config.checks.map(check => {
+        return config.checks.map((check) => {
             var _a, _b;
             if (is(check, labels)) {
                 return {
                     context: check.context,
                     url: check.url,
                     state: 'success',
-                    description: typeof check.description === 'string'
-                        ? check.description
-                        : (_a = check.description) === null || _a === void 0 ? void 0 : _a.success
+                    description: typeof check.description === 'string' ? check.description : (_a = check.description) === null || _a === void 0 ? void 0 : _a.success,
                 };
             }
             else {
@@ -83,9 +81,7 @@ function checks(client, config, labels) {
                     context: check.context,
                     url: check.url,
                     state: 'failure',
-                    description: typeof check.description === 'string'
-                        ? check.description
-                        : (_b = check.description) === null || _b === void 0 ? void 0 : _b.failure
+                    description: typeof check.description === 'string' ? check.description : (_b = check.description) === null || _b === void 0 ? void 0 : _b.failure,
                 };
             }
         });
@@ -157,23 +153,23 @@ const Matcher = t.partial({
                 lte: t.number,
                 gte: t.number,
                 eq: t.number,
-                neq: t.number
-            })
-        })
-    ])
+                neq: t.number,
+            }),
+        }),
+    ]),
 });
 const Label = t.intersection([
     t.type({
-        label: t.string
+        label: t.string,
     }),
     t.partial({
         sync: t.boolean,
-        matcher: Matcher
-    })
+        matcher: Matcher,
+    }),
 ]);
 const Check = t.intersection([
     t.type({
-        context: t.string
+        context: t.string,
     }),
     t.partial({
         url: t.string,
@@ -181,24 +177,24 @@ const Check = t.intersection([
             t.string,
             t.partial({
                 success: t.string,
-                failure: t.string
-            })
+                failure: t.string,
+            }),
         ]),
         labels: t.partial({
             any: t.array(t.string),
             all: t.array(t.string),
-            none: t.array(t.string)
-        })
-    })
+            none: t.array(t.string),
+        }),
+    }),
 ]);
 const Config = t.intersection([
     t.type({
-        version: t.literal('v1')
+        version: t.literal('v1'),
     }),
     t.partial({
         labels: t.array(Label),
-        checks: t.array(Check)
-    })
+        checks: t.array(Check),
+    }),
 ]);
 function parse(content) {
     const config = yaml.load(content);
@@ -218,10 +214,8 @@ function getConfig(client, configPath, configRepo) {
         const response = yield client.repos.getContent({
             owner,
             repo,
-            ref: configRepo === ((_a = github.context.payload.repository) === null || _a === void 0 ? void 0 : _a.full_name)
-                ? github.context.sha
-                : undefined,
-            path: configPath
+            ref: configRepo === ((_a = github.context.payload.repository) === null || _a === void 0 ? void 0 : _a.full_name) ? github.context.sha : undefined,
+            path: configPath,
         });
         const content = yield Buffer.from(response.data.content, response.data.encoding).toString();
         return parse(content);
@@ -288,16 +282,13 @@ function mergeLabels(labels, config) {
     var _a;
     const context = github.context;
     const payload = context.payload.pull_request || context.payload.issue;
-    const currents = ((_a = payload === null || payload === void 0 ? void 0 : payload.labels) === null || _a === void 0 ? void 0 : _a.map((label) => label.name)) ||
-        [];
+    const currents = ((_a = payload === null || payload === void 0 ? void 0 : payload.labels) === null || _a === void 0 ? void 0 : _a.map((label) => label.name)) || [];
     const removals = (config.labels || [])
-        .filter(label => {
+        .filter((label) => {
         // Is sync, not matched and currently added as a label in payload
-        return (label.sync &&
-            !labels.includes(label.label) &&
-            currents.includes(label.label));
+        return label.sync && !labels.includes(label.label) && currents.includes(label.label);
     })
-        .map(value => value.label);
+        .map((value) => value.label);
     return lodash_1.difference(lodash_1.uniq(lodash_1.concat(labels, currents)), removals);
 }
 exports.mergeLabels = mergeLabels;
@@ -315,8 +306,8 @@ function labels(client, config) {
             base_branch_1.default(client, config),
             commits_1.default(client, config),
             files_1.default(client, config),
-            author_1.default(client, config)
-        ]).then(value => {
+            author_1.default(client, config),
+        ]).then((value) => {
             return lodash_1.uniq(lodash_1.concat(...value));
         });
         return mergeLabels(labels, config);
@@ -384,7 +375,7 @@ function addLabels(labels) {
             owner: github.context.repo.owner,
             repo: github.context.repo.repo,
             issue_number: payload.number,
-            labels: labels
+            labels: labels,
         });
     });
 }
@@ -395,19 +386,19 @@ function removeLabels(labels, config) {
             return [];
         }
         return Promise.all((config.labels || [])
-            .filter(label => {
+            .filter((label) => {
             // Is sync, not matched in final set of labels
             return label.sync && !labels.includes(label.label);
         })
-            .map(label => {
+            .map((label) => {
             return client.issues
                 .removeLabel({
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
                 issue_number: payload.number,
-                name: label.label
+                name: label.label,
             })
-                .catch(ignored => {
+                .catch((ignored) => {
                 return undefined;
             });
         }));
@@ -424,7 +415,7 @@ function addChecks(checks) {
         }
         const sha = (_a = github.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.head.sha;
         yield Promise.all([
-            checks.map(check => {
+            checks.map((check) => {
                 client.repos.createCommitStatus({
                     owner: github.context.repo.owner,
                     repo: github.context.repo.repo,
@@ -432,9 +423,9 @@ function addChecks(checks) {
                     context: check.context,
                     state: check.state,
                     description: check.description,
-                    target_url: check.url
+                    target_url: check.url,
                 });
-            })
+            }),
         ]);
     });
 }
@@ -445,10 +436,10 @@ config_1.getConfig(client, configPath, configRepo)
     return Promise.all([
         addLabels(finalLabels),
         removeLabels(finalLabels, config),
-        checks_1.checks(client, config, finalLabels).then(checks => addChecks(checks))
+        checks_1.checks(client, config, finalLabels).then((checks) => addChecks(checks)),
     ]);
 }))
-    .catch(error => {
+    .catch((error) => {
     core.error(error);
     core.setFailed(error.message);
 });
@@ -501,14 +492,14 @@ function match(client, config) {
         return [];
     }
     return config
-        .labels.filter(label => {
+        .labels.filter((label) => {
         const authors = getAuthors(label);
         if (authors.length > 0) {
             return authors.includes(author);
         }
         return false;
     })
-        .map(value => value.label);
+        .map((value) => value.label);
 }
 exports["default"] = match;
 
@@ -550,11 +541,11 @@ function match(client, config) {
         return [];
     }
     return config
-        .labels.filter(value => {
+        .labels.filter((value) => {
         var _a;
         return utils_1.matcherRegex({ regex: (_a = value.matcher) === null || _a === void 0 ? void 0 : _a.baseBranch, text: ref });
     })
-        .map(value => value.label);
+        .map((value) => value.label);
 }
 exports["default"] = match;
 
@@ -595,11 +586,11 @@ function match(client, config) {
         return [];
     }
     return config
-        .labels.filter(value => {
+        .labels.filter((value) => {
         var _a;
         return utils_1.matcherRegex({ regex: (_a = value.matcher) === null || _a === void 0 ? void 0 : _a.body, text: body });
     })
-        .map(value => value.label);
+        .map((value) => value.label);
 }
 exports["default"] = match;
 
@@ -641,11 +632,11 @@ function match(client, config) {
         return [];
     }
     return config
-        .labels.filter(value => {
+        .labels.filter((value) => {
         var _a;
         return utils_1.matcherRegex({ regex: (_a = value.matcher) === null || _a === void 0 ? void 0 : _a.branch, text: ref });
     })
-        .map(value => value.label);
+        .map((value) => value.label);
 }
 exports["default"] = match;
 
@@ -686,11 +677,11 @@ function match(client, config) {
         return [];
     }
     return config
-        .labels.filter(value => {
+        .labels.filter((value) => {
         var _a;
         return utils_1.matcherRegex({ regex: (_a = value.matcher) === null || _a === void 0 ? void 0 : _a.comment, text: body });
     })
-        .map(value => value.label);
+        .map((value) => value.label);
 }
 exports["default"] = match;
 
@@ -740,7 +731,7 @@ function match(client, config) {
         if (!number) {
             return [];
         }
-        const matchers = config.labels.filter(value => {
+        const matchers = config.labels.filter((value) => {
             var _a;
             return (_a = value.matcher) === null || _a === void 0 ? void 0 : _a.commits;
         });
@@ -750,15 +741,15 @@ function match(client, config) {
         const responses = yield client.paginate(client.pulls.listCommits.endpoint.merge({
             owner: github.context.repo.owner,
             repo: github.context.repo.repo,
-            pull_number: number
+            pull_number: number,
         }));
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const messages = responses.map((c) => c.commit.message);
         return matchers
-            .filter(value => {
+            .filter((value) => {
             return utils_1.matcherRegexAny(value.matcher.commits, messages);
         })
-            .map(value => value.label);
+            .map((value) => value.label);
     });
 }
 exports["default"] = match;
@@ -807,7 +798,7 @@ const minimatch_1 = __nccwpck_require__(3973);
  */
 function getMatchers(config) {
     return config
-        .labels.filter(value => {
+        .labels.filter((value) => {
         var _a, _b, _c;
         if (Array.isArray((_a = value.matcher) === null || _a === void 0 ? void 0 : _a.files)) {
             return (_b = value.matcher) === null || _b === void 0 ? void 0 : _b.files.length;
@@ -821,14 +812,14 @@ function getMatchers(config) {
             return {
                 label,
                 any: [files],
-                all: []
+                all: [],
             };
         }
         if (Array.isArray(files)) {
             return {
                 label,
                 any: files,
-                all: []
+                all: [],
             };
         }
         return {
@@ -839,13 +830,12 @@ function getMatchers(config) {
                 lte: (_a = files.count) === null || _a === void 0 ? void 0 : _a.lte,
                 gte: (_b = files.count) === null || _b === void 0 ? void 0 : _b.gte,
                 eq: (_c = files.count) === null || _c === void 0 ? void 0 : _c.eq,
-                neq: (_d = files.count) === null || _d === void 0 ? void 0 : _d.neq
-            }
+                neq: (_d = files.count) === null || _d === void 0 ? void 0 : _d.neq,
+            },
         };
     })
         .filter(({ any, all, count }) => {
-        return (any.length ||
-            all.length || (count === null || count === void 0 ? void 0 : count.lte) || (count === null || count === void 0 ? void 0 : count.gte) || (count === null || count === void 0 ? void 0 : count.eq) || (count === null || count === void 0 ? void 0 : count.neq));
+        return any.length || all.length || (count === null || count === void 0 ? void 0 : count.lte) || (count === null || count === void 0 ? void 0 : count.gte) || (count === null || count === void 0 ? void 0 : count.eq) || (count === null || count === void 0 ? void 0 : count.neq);
     });
 }
 function getFiles(client, pr_number) {
@@ -853,7 +843,7 @@ function getFiles(client, pr_number) {
         const responses = yield client.paginate(client.pulls.listFiles.endpoint.merge({
             owner: github.context.repo.owner,
             repo: github.context.repo.repo,
-            pull_number: pr_number
+            pull_number: pr_number,
         }));
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return responses.map((c) => c.filename);
@@ -867,7 +857,7 @@ function anyMatch(files, globs) {
     if (!globs.length) {
         return true;
     }
-    const matchers = globs.map(g => new minimatch_1.Minimatch(g));
+    const matchers = globs.map((g) => new minimatch_1.Minimatch(g));
     for (const matcher of matchers) {
         for (const file of files) {
             if (matcher.match(file)) {
@@ -882,7 +872,7 @@ function anyMatch(files, globs) {
  * if globs is not empty, all files must match
  */
 function allMatch(files, globs) {
-    const matchers = globs.map(g => new minimatch_1.Minimatch(g));
+    const matchers = globs.map((g) => new minimatch_1.Minimatch(g));
     for (const matcher of matchers) {
         for (const file of files) {
             if (!matcher.match(file)) {
@@ -919,12 +909,10 @@ function match(client, config) {
         }
         const files = yield getFiles(client, pr_number);
         return matchers
-            .filter(matcher => {
-            return (allMatch(files, matcher.all) &&
-                anyMatch(files, matcher.any) &&
-                countMatch(files, matcher.count));
+            .filter((matcher) => {
+            return allMatch(files, matcher.all) && anyMatch(files, matcher.any) && countMatch(files, matcher.count);
         })
-            .map(value => value.label);
+            .map((value) => value.label);
     });
 }
 exports["default"] = match;
@@ -966,11 +954,11 @@ function match(client, config) {
         return [];
     }
     return config
-        .labels.filter(value => {
+        .labels.filter((value) => {
         var _a;
         return utils_1.matcherRegex({ regex: (_a = value.matcher) === null || _a === void 0 ? void 0 : _a.title, text: title });
     })
-        .map(value => value.label);
+        .map((value) => value.label);
 }
 exports["default"] = match;
 
@@ -993,7 +981,7 @@ function matcherRegex({ regex, text }) {
 exports.matcherRegex = matcherRegex;
 function matcherRegexAny(regex, anyTexts) {
     const re = new RegExp(regex);
-    return !!anyTexts.find(text => {
+    return !!anyTexts.find((text) => {
         return re.test(text);
     });
 }
