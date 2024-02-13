@@ -6,11 +6,13 @@ labels:
       title: '^feat:.*'
       branch: '^feat/.*'
       commits: '^feat:.*'
+
   - label: dependabot
     matcher:
       title: '^chore(deps).*'
       branch: '^dependabot/.*'
       commits: '^chore(deps).*'
+
   - label: 'fix'
     matcher:
       title: '^fix:.*'

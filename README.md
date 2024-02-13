@@ -6,7 +6,7 @@
 [![License MIT](https://img.shields.io/github/license/fuxingloh/multi-labeler)](https://github.com/fuxingloh/multi-labeler/blob/main/LICENSE)
 
 Multi labeler for title, body, comments, commit messages, branch, base branch, author or files.
-Optionally, generate a status check based on the labels. 
+Optionally, generate a status check based on the labels.
 
 [Who is using `fuxingloh/multi-labeler`?](https://github.com/search?o=desc&q=fuxingloh+%2F+multi-labeler&s=indexed&type=Code)
 
@@ -301,7 +301,7 @@ it must be enabled by adding a `.github/labeler.yml` configuration file to the r
 If you want to use a configuration file shared across multiple repositories,
 you can set the`config-repo` input to point to a different repository.
 However, make sure to set a `github-token` that has permissions to access the provided repository,
-as the default `GITHUB_TOKEN` only has access to the repository the action is running in. 
+as the default `GITHUB_TOKEN` only has access to the repository the action is running in.
 
 ## Matchers
 
@@ -398,7 +398,7 @@ labels:
 
 Maximum of 3000 files only.
 If you use this to audit changes, take note of the 3000 files limitation.
-Matchers within files are 'and condition'; all must match. 
+Matchers within files are 'and condition'; all must match.
 
 #### PR Files Basic
 
