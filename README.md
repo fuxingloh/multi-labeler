@@ -5,8 +5,8 @@
 [![Release](https://img.shields.io/github/v/release/fuxingloh/multi-labeler)](https://github.com/fuxingloh/multi-labeler/releases)
 [![License MIT](https://img.shields.io/github/license/fuxingloh/multi-labeler)](https://github.com/fuxingloh/multi-labeler/blob/main/LICENSE)
 
-Multi labeler for title, body, comments, commit messages, branch, base branch, author or files. Optionally, generate a
-status check based on the labels.
+Multi labeler for title, body, comments, commit messages, branch, base branch, author or files.
+Optionally, generate a status check based on the labels. 
 
 [Who is using `fuxingloh/multi-labeler`?](https://github.com/search?o=desc&q=fuxingloh+%2F+multi-labeler&s=indexed&type=Code)
 
@@ -69,7 +69,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # follows semantic versioning. Lock to different version: v1, v1.5, v1.5.0 or use a commit hash.
-      - uses: fuxingloh/multi-labeler@v2 # v2
+      - uses: fuxingloh/multi-labeler@v4 # v4
         with:
           github-token: ${{secrets.GITHUB_TOKEN}} # optional, default to '${{ github.token }}'
           config-path: .github/labeler.yml # optional, default to '.github/labeler.yml'
@@ -139,7 +139,7 @@ jobs:
     name: Labeler
     runs-on: ubuntu-latest
     steps:
-      - uses: fuxingloh/multi-labeler@v1
+      - uses: fuxingloh/multi-labeler@v4
 ```
 
 #### `.github/labeler.yml`
@@ -200,7 +200,7 @@ jobs:
     name: Labeler
     runs-on: ubuntu-latest
     steps:
-      - uses: fuxingloh/multi-labeler@v1
+      - uses: fuxingloh/multi-labeler@v4
 ```
 
 #### `.github/labeler.yml`
@@ -243,7 +243,7 @@ jobs:
     name: Labeler
     runs-on: ubuntu-latest
     steps:
-      - uses: fuxingloh/multi-labeler@v1
+      - uses: fuxingloh/multi-labeler@v4
 ```
 
 #### `.github/labeler.yml`
@@ -274,7 +274,7 @@ jobs:
     name: Labeler
     runs-on: ubuntu-latest
     steps:
-      - uses: fuxingloh/multi-labeler@v1
+      - uses: fuxingloh/multi-labeler@v4
 ```
 
 #### `.github/labeler.yml`
@@ -296,11 +296,12 @@ labels:
 
 ## Configuration
 
-Once you’ve added multi-labeler to your repository, it must be enabled by adding a `.github/labeler.yml` configuration
-file to the repository. If you want to use a configuration file shared across multiple repositories, you can set the
-`config-repo` input to point to a different repository. However, make sure to set a `github-token` that has permissions
-to access the provided repository, as the default `GITHUB_TOKEN` only has access to the repository the action is
-running in.
+Once you’ve added fuxingloh/multi-labeler to your repository,
+it must be enabled by adding a `.github/labeler.yml` configuration file to the repository.
+If you want to use a configuration file shared across multiple repositories,
+you can set the`config-repo` input to point to a different repository.
+However, make sure to set a `github-token` that has permissions to access the provided repository,
+as the default `GITHUB_TOKEN` only has access to the repository the action is running in. 
 
 ## Matchers
 
@@ -395,8 +396,9 @@ labels:
 
 ### PR Files: [Glob Matcher](https://github.com/isaacs/minimatch)
 
-Maximum of 3000 files only. If you use this to audit changes, take note of the 3000 files limitation. Matcher within
-files are 'and condition', all must match.
+Maximum of 3000 files only.
+If you use this to audit changes, take note of the 3000 files limitation.
+Matchers within files are 'and condition'; all must match. 
 
 #### PR Files Basic
 
@@ -517,9 +519,9 @@ checks:
 
 ## Why?
 
-> There are so many labeler why create another? 😧
+> There are so many labelers why create another? 😧
 
-1. I want a lightweight labeler that is written in TypeScript so that it don't have to build a docker image everytime it runs.
+1. I want a lightweight labeler written in TypeScript so that it doesn't have to build a docker image every time it runs.
 2. I want a simple match first append based multi-labeler without it being a turing complete solution.
 3. I want to write my rules with `.github/labeler.yml` for a single source of label truth.
 4. I don't want it to do anything else, labels only.
