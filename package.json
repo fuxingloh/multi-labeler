@@ -30,7 +30,7 @@
   "devDependencies": {
     "@types/jest": "^26.0.20",
     "@types/js-yaml": "^4.0.5",
-    "@types/lodash": "^4.14.178",
+    "@types/lodash": "^4.14.202",
     "@types/minimatch": "^3.0.5",
     "@types/node": "^14.14.31",
     "@typescript-eslint/parser": "^4.33.0",
