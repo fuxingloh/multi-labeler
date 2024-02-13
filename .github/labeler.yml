@@ -23,6 +23,10 @@ labels:
       branch: '^chore/.*'
       commits: "^chore(\\((deps|ci)\\))?:.*"
 
+  - label: 'chore'
+    matcher:
+      title: "^bump(\\((deps|ci)\\))?:.*"
+
   - label: 'docs'
     matcher:
       title: '^docs:.*'
