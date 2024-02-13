@@ -23454,7 +23454,7 @@ var errorMessageSimple = function (expectedType, path, error, options) {
         "Expecting " + truncateType(expectedType, options),
         path === '' ? '' : "at " + path,
         "but instead got: " + jsToString(error.value),
-        error.message ? "(" + error.message + ")" : ''
+        error.message ? "(" + error.message + ")" : '',
     ]
         .filter(Boolean)
         .join(' ');
@@ -23463,9 +23463,11 @@ var errorMessageUnion = function (expectedTypes, path, value, options) {
     // https://github.com/elm-lang/core/blob/18c9e84e975ed22649888bfad15d1efdb0128ab2/src/Native/Json.js#L199
     return [
         'Expecting one of:\n',
-        expectedTypes.map(function (type) { return "    " + truncateType(type, options); }).join('\n'),
+        expectedTypes
+            .map(function (type) { return "    " + truncateType(type, options); })
+            .join('\n'),
         path === '' ? '\n' : "\nat " + path + " ",
-        "but instead got: " + jsToString(value)
+        "but instead got: " + jsToString(value),
     ]
         .filter(Boolean)
         .join('');
@@ -23505,12 +23507,13 @@ var format = function (path, errors, options) {
  * @category formatters
  * @since 1.0.0
  */
-exports.formatValidationError = function (error, options) { return formatValidationCommonError(keyPath(error.context), error, options); };
+var formatValidationError = function (error, options) { return formatValidationCommonError(keyPath(error.context), error, options); };
+exports.formatValidationError = formatValidationError;
 /**
  * Format validation errors (`t.Errors`).
  *
  * @example
- * import * as E from 'fp-ts/lib/Either'
+ * import * as E from 'fp-ts/Either'
  * import * as t from 'io-ts'
  * import { formatValidationErrors } from 'io-ts-reporters'
  *
@@ -23524,12 +23527,13 @@ exports.formatValidationError = function (error, options) { return formatValidat
  * @category formatters
  * @since 1.2.0
  */
-exports.formatValidationErrors = function (errors, options) {
+var formatValidationErrors = function (errors, options) {
     return pipeable_1.pipe(errors, groupByKey, R.mapWithIndex(function (path, errors) { return format(path, errors, options); }), R.compact, R.toArray, A.map(function (_a) {
         var _key = _a[0], error = _a[1];
         return error;
     }));
 };
+exports.formatValidationErrors = formatValidationErrors;
 /**
  * Deprecated, use the default export instead.
  *
@@ -23537,9 +23541,10 @@ exports.formatValidationErrors = function (errors, options) {
  * @deprecated
  * @since 1.0.0
  */
-exports.reporter = function (validation, options) {
+var reporter = function (validation, options) {
     return pipeable_1.pipe(validation, E.mapLeft(function (errors) { return exports.formatValidationErrors(errors, options); }), E.fold(function (errors) { return errors; }, function () { return []; }));
 };
+exports.reporter = reporter;
 var prettyReporter = { report: exports.reporter };
 exports["default"] = prettyReporter;
 //# sourceMappingURL=index.js.map
@@ -23557,17 +23562,20 @@ exports.takeUntil = void 0;
  * @since 1.1.0
  */
 /* eslint-disable @typescript-eslint/array-type */
-exports.takeUntil = function (predicate) { return function (as) {
-    var init = [];
-    // eslint-disable-next-line unicorn/no-for-loop
-    for (var i = 0; i < as.length; i++) {
-        init[i] = as[i];
-        if (predicate(as[i])) {
-            return init;
+var takeUntil = function (predicate) {
+    return function (as) {
+        var init = [];
+        // eslint-disable-next-line unicorn/no-for-loop
+        for (var i = 0; i < as.length; i++) {
+            init[i] = as[i];
+            if (predicate(as[i])) {
+                return init;
+            }
         }
-    }
-    return init;
-}; };
+        return init;
+    };
+};
+exports.takeUntil = takeUntil;
 /* eslint-enable @typescript-eslint/array-type */
 //# sourceMappingURL=utils.js.map
 
