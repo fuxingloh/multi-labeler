@@ -36,8 +36,8 @@ jobs:
       - uses: peter-evans/create-pull-request@b1ddad2c994a25fbc81a28b3ec0e368bb2021c50 # v6.0.0
         with:
           token: ${{ steps.app.outputs.token }}
-          commit-message: 'chore(package): npm run package'
-          title: 'chore(package): npm run package'
+          commit-message: 'chore(ci): npm run package'
+          title: 'chore(ci): npm run package'
           body: |
             #### What this PR does / why we need it:
 
