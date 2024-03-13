@@ -11341,7 +11341,12 @@ exports.toUnion = (0, exports.foldW)(function_1.identity, function_1.identity);
  * @since 2.0.0
  */
 function toError(e) {
-    return e instanceof Error ? e : new Error(String(e));
+    try {
+        return e instanceof Error ? e : new Error(String(e));
+    }
+    catch (error) {
+        return new Error();
+    }
 }
 exports.toError = toError;
 function elem(E) {
