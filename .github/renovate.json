@@ -9,27 +9,18 @@
   "rangeStrategy": "bump",
   "packageRules": [
     {
-      "matchPackagePatterns": [
-        "^typescript$",
-        "^@types/.*"
-      ],
+      "matchPackagePatterns": ["^typescript$", "^@types/.*"],
       "enabled": false
     },
     {
-      "matchPackagePatterns": [
-        "eslint",
-        "prettier"
-      ],
+      "matchPackagePatterns": ["eslint", "prettier"],
       "groupName": "eslint",
       "enabled": false
     },
     {
-      "matchPackagePatterns": [
-        "jest"
-      ],
+      "matchPackagePatterns": ["jest"],
       "groupName": "jest",
       "enabled": false
     }
   ]
 }
-
