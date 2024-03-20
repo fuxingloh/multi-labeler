@@ -57,10 +57,7 @@ jobs:
 
       - run: npm install
 
-      - run: npx jest --ci --coverage
-
-      - run: npx codecov
-        continue-on-error: true
+      - run: npx jest --ci
 
   lint_prettier:
     name: Lint [prettier]
