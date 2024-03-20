@@ -1,6 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:base", "helpers:pinGitHubActionDigests", ":semanticCommitTypeAll(bump)"],
+  "extends": ["config:base", "helpers:pinGitHubActionDigests", ":semanticCommits", ":semanticCommitTypeAll(bump)"],
   "dependencyDashboard": true,
   "dependencyDashboardAutoclose": false,
   "major": {
@@ -9,12 +9,27 @@
   "rangeStrategy": "bump",
   "packageRules": [
     {
-      "matchPackagePatterns": ["eslint"],
-      "groupName": "eslint"
+      "matchPackagePatterns": [
+        "^typescript$",
+        "^@types/.*"
+      ],
+      "enabled": false
     },
     {
-      "matchPackagePatterns": ["jest"],
-      "groupName": "jest"
+      "matchPackagePatterns": [
+        "eslint",
+        "prettier"
+      ],
+      "groupName": "eslint",
+      "enabled": false
+    },
+    {
+      "matchPackagePatterns": [
+        "jest"
+      ],
+      "groupName": "jest",
+      "enabled": false
     }
   ]
 }
+
