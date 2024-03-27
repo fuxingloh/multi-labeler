@@ -7779,7 +7779,10 @@ var chainWithIndex = function (f) {
     return function (as) {
         var out = [];
         for (var i = 0; i < as.length; i++) {
-            out.push.apply(out, f(i, as[i]));
+            var bs = f(i, as[i]);
+            for (var j = 0; j < bs.length; j++) {
+                out.push(bs[j]);
+            }
         }
         return out;
     };
@@ -12654,7 +12657,10 @@ var chainWithIndex = function (f) {
     return function (as) {
         var out = (0, exports.fromReadonlyNonEmptyArray)(f(0, (0, exports.head)(as)));
         for (var i = 1; i < as.length; i++) {
-            out.push.apply(out, f(i, as[i]));
+            var bs = f(i, as[i]);
+            for (var j = 0; j < bs.length; j++) {
+                out.push(bs[j]);
+            }
         }
         return out;
     };
@@ -15489,7 +15495,10 @@ var chainWithIndex = function (f) {
         }
         var out = [];
         for (var i = 0; i < as.length; i++) {
-            out.push.apply(out, f(i, as[i]));
+            var bs = f(i, as[i]);
+            for (var j = 0; j < bs.length; j++) {
+                out.push(bs[j]);
+            }
         }
         return out;
     };
@@ -17990,7 +17999,10 @@ var chainWithIndex = function (f) {
     return function (as) {
         var out = _.fromReadonlyNonEmptyArray(f(0, (0, exports.head)(as)));
         for (var i = 1; i < as.length; i++) {
-            out.push.apply(out, f(i, as[i]));
+            var bs = f(i, as[i]);
+            for (var j = 0; j < bs.length; j++) {
+                out.push(bs[j]);
+            }
         }
         return out;
     };
