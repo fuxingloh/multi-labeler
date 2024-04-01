@@ -25,7 +25,7 @@
     "io-ts-reporters": "^2.0.1",
     "js-yaml": "^4.1.0",
     "lodash": "^4.17.21",
-    "minimatch": "^9.0.3"
+    "minimatch": "^9.0.4"
   },
   "devDependencies": {
     "@eslint/js": "^8.57.0",
