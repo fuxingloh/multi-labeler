@@ -34,7 +34,7 @@ Optionally, generate a status check based on the labels.
 
 ## Usage
 
-#### `.github/workflow/labeler.yml`
+#### `.github/workflows/labeler.yml`
 
 ```yml
 on:
