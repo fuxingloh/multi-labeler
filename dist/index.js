@@ -7158,7 +7158,8 @@ exports.Deprecation = Deprecation;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getApplicativeComposition = exports.getApplicativeMonoid = void 0;
+exports.getApplicativeMonoid = getApplicativeMonoid;
+exports.getApplicativeComposition = getApplicativeComposition;
 /**
  * The `Applicative` type class extends the `Apply` type class with a `of` function, which can be used to create values
  * of type `f a` from values of type `a`.
@@ -7188,7 +7189,6 @@ function getApplicativeMonoid(F) {
         empty: F.of(M.empty)
     }); };
 }
-exports.getApplicativeMonoid = getApplicativeMonoid;
 /** @deprecated */
 function getApplicativeComposition(F, G) {
     var map = (0, Functor_1.getFunctorComposition)(F, G).map;
@@ -7199,7 +7199,6 @@ function getApplicativeComposition(F, G) {
         ap: function (fgab, fga) { return (0, function_1.pipe)(fgab, _ap(fga)); }
     };
 }
-exports.getApplicativeComposition = getApplicativeComposition;
 
 
 /***/ }),
@@ -7233,7 +7232,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.sequenceS = exports.sequenceT = exports.getApplySemigroup = exports.apS = exports.apSecond = exports.apFirst = exports.ap = void 0;
+exports.ap = ap;
+exports.apFirst = apFirst;
+exports.apSecond = apSecond;
+exports.apS = apS;
+exports.getApplySemigroup = getApplySemigroup;
+exports.sequenceT = sequenceT;
+exports.sequenceS = sequenceS;
 /**
  * The `Apply` class provides the `ap` which is used to apply a function to an argument under a type constructor.
  *
@@ -7280,13 +7285,11 @@ function ap(F, G) {
         };
     };
 }
-exports.ap = ap;
 function apFirst(A) {
     return function (second) { return function (first) {
         return A.ap(A.map(first, function (a) { return function () { return a; }; }), second);
     }; };
 }
-exports.apFirst = apFirst;
 function apSecond(A) {
     return function (second) {
         return function (first) {
@@ -7294,7 +7297,6 @@ function apSecond(A) {
         };
     };
 }
-exports.apSecond = apSecond;
 function apS(F) {
     return function (name, fb) {
         return function (fa) {
@@ -7305,7 +7307,6 @@ function apS(F) {
         };
     };
 }
-exports.apS = apS;
 function getApplySemigroup(F) {
     return function (S) { return ({
         concat: function (first, second) {
@@ -7313,7 +7314,6 @@ function getApplySemigroup(F) {
         }
     }); };
 }
-exports.getApplySemigroup = getApplySemigroup;
 function curried(f, n, acc) {
     return function (x) {
         var combined = Array(acc.length + 1);
@@ -7352,7 +7352,6 @@ function sequenceT(F) {
         return fas;
     };
 }
-exports.sequenceT = sequenceT;
 function getRecordConstructor(keys) {
     var len = keys.length;
     switch (len) {
@@ -7418,7 +7417,6 @@ function sequenceS(F) {
         return fr;
     };
 }
-exports.sequenceS = sequenceS;
 
 
 /***/ }),
@@ -7452,10 +7450,21 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.lefts = exports.rights = exports.reverse = exports.modifyAt = exports.deleteAt = exports.updateAt = exports.insertAt = exports.copy = exports.findLastIndex = exports.findLastMap = exports.findLast = exports.findFirstMap = exports.findFirst = exports.findIndex = exports.dropLeftWhile = exports.dropRight = exports.dropLeft = exports.spanLeft = exports.takeLeftWhile = exports.takeRight = exports.takeLeft = exports.init = exports.tail = exports.last = exports.head = exports.lookup = exports.isOutOfBound = exports.size = exports.scanRight = exports.scanLeft = exports.chainWithIndex = exports.foldRight = exports.matchRight = exports.matchRightW = exports.foldLeft = exports.matchLeft = exports.matchLeftW = exports.match = exports.matchW = exports.fromEither = exports.fromOption = exports.fromPredicate = exports.replicate = exports.makeBy = exports.appendW = exports.append = exports.prependW = exports.prepend = exports.isNonEmpty = exports.isEmpty = void 0;
-exports.traverseWithIndex = exports.sequence = exports.traverse = exports.reduceRightWithIndex = exports.reduceRight = exports.reduceWithIndex = exports.reduce = exports.foldMapWithIndex = exports.foldMap = exports.duplicate = exports.extend = exports.filterWithIndex = exports.alt = exports.altW = exports.partitionMapWithIndex = exports.partitionMap = exports.partitionWithIndex = exports.partition = exports.filter = exports.separate = exports.compact = exports.filterMap = exports.filterMapWithIndex = exports.mapWithIndex = exports.flatten = exports.flatMap = exports.ap = exports.map = exports.zero = exports.of = exports.difference = exports.intersection = exports.union = exports.concat = exports.concatW = exports.comprehension = exports.fromOptionK = exports.chunksOf = exports.splitAt = exports.chop = exports.sortBy = exports.uniq = exports.elem = exports.rotate = exports.intersperse = exports.prependAll = exports.unzip = exports.zip = exports.zipWith = exports.sort = void 0;
-exports.some = exports.every = exports.unsafeDeleteAt = exports.unsafeUpdateAt = exports.unsafeInsertAt = exports.fromEitherK = exports.FromEither = exports.filterE = exports.ChainRecBreadthFirst = exports.chainRecBreadthFirst = exports.ChainRecDepthFirst = exports.chainRecDepthFirst = exports.Witherable = exports.TraversableWithIndex = exports.Traversable = exports.FoldableWithIndex = exports.Foldable = exports.FilterableWithIndex = exports.Filterable = exports.Compactable = exports.Extend = exports.Alternative = exports.guard = exports.Zero = exports.Alt = exports.Unfoldable = exports.Monad = exports.chainFirst = exports.Chain = exports.Applicative = exports.apSecond = exports.apFirst = exports.Apply = exports.FunctorWithIndex = exports.Pointed = exports.flap = exports.Functor = exports.getDifferenceMagma = exports.getIntersectionSemigroup = exports.getUnionMonoid = exports.getUnionSemigroup = exports.getOrd = exports.getEq = exports.getMonoid = exports.getSemigroup = exports.getShow = exports.URI = exports.unfold = exports.wilt = exports.wither = void 0;
-exports.array = exports.prependToAll = exports.snoc = exports.cons = exports.empty = exports.range = exports.chain = exports.apS = exports.bind = exports["let"] = exports.bindTo = exports.Do = exports.intercalate = exports.exists = void 0;
+exports.rotate = exports.intersperse = exports.prependAll = exports.unzip = exports.zipWith = exports.sort = exports.lefts = exports.rights = exports.reverse = exports.modifyAt = exports.deleteAt = exports.updateAt = exports.insertAt = exports.copy = exports.findLastIndex = exports.findLastMap = exports.findFirstMap = exports.findIndex = exports.dropRight = exports.dropLeft = exports.takeRight = exports.takeLeft = exports.init = exports.tail = exports.last = exports.head = exports.lookup = exports.isOutOfBound = exports.size = exports.scanRight = exports.scanLeft = exports.chainWithIndex = exports.foldRight = exports.matchRight = exports.matchRightW = exports.foldLeft = exports.matchLeft = exports.matchLeftW = exports.match = exports.matchW = exports.fromEither = exports.fromOption = exports.replicate = exports.makeBy = exports.appendW = exports.append = exports.prependW = exports.prepend = exports.isNonEmpty = exports.isEmpty = void 0;
+exports.getUnionMonoid = exports.getUnionSemigroup = exports.getOrd = exports.getEq = exports.getMonoid = exports.getSemigroup = exports.getShow = exports.URI = exports.unfold = exports.wilt = exports.wither = exports.traverseWithIndex = exports.sequence = exports.traverse = exports.reduceRightWithIndex = exports.reduceRight = exports.reduceWithIndex = exports.reduce = exports.foldMapWithIndex = exports.foldMap = exports.duplicate = exports.extend = exports.filterWithIndex = exports.alt = exports.altW = exports.partitionMapWithIndex = exports.partitionMap = exports.partitionWithIndex = exports.partition = exports.filter = exports.separate = exports.compact = exports.filterMap = exports.filterMapWithIndex = exports.mapWithIndex = exports.flatten = exports.flatMap = exports.ap = exports.map = exports.zero = exports.of = exports.concat = exports.concatW = exports.fromOptionK = exports.chunksOf = exports.splitAt = exports.chop = exports.sortBy = exports.uniq = exports.elem = void 0;
+exports.cons = exports.empty = exports.range = exports.chain = exports.apS = exports.bind = exports["let"] = exports.bindTo = exports.Do = exports.intercalate = exports.exists = exports.some = exports.every = exports.unsafeDeleteAt = exports.unsafeUpdateAt = exports.unsafeInsertAt = exports.fromEitherK = exports.FromEither = exports.filterE = exports.ChainRecBreadthFirst = exports.chainRecBreadthFirst = exports.ChainRecDepthFirst = exports.chainRecDepthFirst = exports.Witherable = exports.TraversableWithIndex = exports.Traversable = exports.FoldableWithIndex = exports.Foldable = exports.FilterableWithIndex = exports.Filterable = exports.Compactable = exports.Extend = exports.Alternative = exports.guard = exports.Zero = exports.Alt = exports.Unfoldable = exports.Monad = exports.chainFirst = exports.Chain = exports.Applicative = exports.apSecond = exports.apFirst = exports.Apply = exports.FunctorWithIndex = exports.Pointed = exports.flap = exports.Functor = exports.getDifferenceMagma = exports.getIntersectionSemigroup = void 0;
+exports.array = exports.prependToAll = exports.snoc = void 0;
+exports.fromPredicate = fromPredicate;
+exports.takeLeftWhile = takeLeftWhile;
+exports.spanLeft = spanLeft;
+exports.dropLeftWhile = dropLeftWhile;
+exports.findFirst = findFirst;
+exports.findLast = findLast;
+exports.zip = zip;
+exports.comprehension = comprehension;
+exports.union = union;
+exports.intersection = intersection;
+exports.difference = difference;
 var Apply_1 = __nccwpck_require__(205);
 var Chain_1 = __nccwpck_require__(2372);
 var FromEither_1 = __nccwpck_require__(1964);
@@ -7586,7 +7595,6 @@ exports.replicate = replicate;
 function fromPredicate(predicate) {
     return function (a) { return (predicate(a) ? [a] : []); };
 }
-exports.fromPredicate = fromPredicate;
 // -------------------------------------------------------------------------------------
 // conversions
 // -------------------------------------------------------------------------------------
@@ -7983,7 +7991,6 @@ function takeLeftWhile(predicate) {
         return out;
     };
 }
-exports.takeLeftWhile = takeLeftWhile;
 var spanLeftIndex = function (as, predicate) {
     var l = as.length;
     var i = 0;
@@ -8000,7 +8007,6 @@ function spanLeft(predicate) {
         return { init: init, rest: rest };
     };
 }
-exports.spanLeft = spanLeft;
 /**
  * Creates a new `Array` which is a copy of the input dropping a max number of elements from the start.
  *
@@ -8046,7 +8052,6 @@ exports.dropRight = dropRight;
 function dropLeftWhile(predicate) {
     return function (as) { return as.slice(spanLeftIndex(as, predicate)); };
 }
-exports.dropLeftWhile = dropLeftWhile;
 /**
  * `findIndex` returns an `Option` containing the first index for which a predicate holds.
  * It returns `None` if no element satisfies the predicate.
@@ -8065,7 +8070,6 @@ exports.findIndex = RA.findIndex;
 function findFirst(predicate) {
     return RA.findFirst(predicate);
 }
-exports.findFirst = findFirst;
 /**
  * Given a selector function which takes an element and returns an option,
  * this function applies the selector to each element of the array and
@@ -8097,7 +8101,6 @@ exports.findFirstMap = RA.findFirstMap;
 function findLast(predicate) {
     return RA.findLast(predicate);
 }
-exports.findLast = findLast;
 /**
  * Given a selector function which takes an element and returns an option,
  * this function applies the selector to each element of the array starting from the
@@ -8324,7 +8327,6 @@ function zip(as, bs) {
     }
     return (0, exports.zipWith)(as, bs, function (a, b) { return [a, b]; });
 }
-exports.zip = zip;
 /**
  * The function is reverse of `zip`. Takes an array of pairs and return two corresponding arrays
  *
@@ -8548,7 +8550,6 @@ function comprehension(input, f, g) {
     };
     return go([], input);
 }
-exports.comprehension = comprehension;
 /**
  * @since 2.11.0
  */
@@ -8576,7 +8577,6 @@ function union(E) {
                 : (0, exports.copy)(second);
     };
 }
-exports.union = union;
 function intersection(E) {
     var elemE = (0, exports.elem)(E);
     return function (xs, ys) {
@@ -8587,7 +8587,6 @@ function intersection(E) {
         return xs.filter(function (a) { return elemE(a, ys); });
     };
 }
-exports.intersection = intersection;
 function difference(E) {
     var elemE = (0, exports.elem)(E);
     return function (xs, ys) {
@@ -8598,7 +8597,6 @@ function difference(E) {
         return xs.filter(function (a) { return !elemE(a, ys); });
     };
 }
-exports.difference = difference;
 var _map = function (fa, f) { return (0, function_1.pipe)(fa, (0, exports.map)(f)); };
 /* istanbul ignore next */
 var _mapWithIndex = function (fa, f) { return (0, function_1.pipe)(fa, (0, exports.mapWithIndex)(f)); };
@@ -10058,24 +10056,23 @@ exports.array = {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.bind = exports.tap = exports.chainFirst = void 0;
+exports.chainFirst = chainFirst;
+exports.tap = tap;
+exports.bind = bind;
 function chainFirst(M) {
     var tapM = tap(M);
     return function (f) { return function (first) { return tapM(first, f); }; };
 }
-exports.chainFirst = chainFirst;
 /** @internal */
 function tap(M) {
     return function (first, f) { return M.chain(first, function (a) { return M.map(f(a), function () { return a; }); }); };
 }
-exports.tap = tap;
 function bind(M) {
     return function (name, f) { return function (ma) { return M.chain(ma, function (a) { return M.map(f(a), function (b) {
         var _a;
         return Object.assign({}, a, (_a = {}, _a[name] = b, _a));
     }); }); }; };
 }
-exports.bind = bind;
 
 
 /***/ }),
@@ -10132,8 +10129,12 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.match = exports.foldW = exports.matchW = exports.isRight = exports.isLeft = exports.fromOption = exports.fromPredicate = exports.FromEither = exports.MonadThrow = exports.throwError = exports.ChainRec = exports.Extend = exports.extend = exports.Alt = exports.alt = exports.altW = exports.Bifunctor = exports.mapLeft = exports.bimap = exports.Traversable = exports.sequence = exports.traverse = exports.Foldable = exports.reduceRight = exports.foldMap = exports.reduce = exports.Monad = exports.Chain = exports.Applicative = exports.Apply = exports.ap = exports.apW = exports.Pointed = exports.of = exports.asUnit = exports.as = exports.Functor = exports.map = exports.getAltValidation = exports.getApplicativeValidation = exports.getWitherable = exports.getFilterable = exports.getCompactable = exports.getSemigroup = exports.getEq = exports.getShow = exports.URI = exports.flatMap = exports.right = exports.left = void 0;
-exports.chainFirstW = exports.chainFirst = exports.chain = exports.chainW = exports.sequenceArray = exports.traverseArray = exports.traverseArrayWithIndex = exports.traverseReadonlyArrayWithIndex = exports.traverseReadonlyNonEmptyArrayWithIndex = exports.ApT = exports.apSW = exports.apS = exports.bindW = exports.bind = exports["let"] = exports.bindTo = exports.Do = exports.exists = exports.elem = exports.toError = exports.toUnion = exports.chainNullableK = exports.fromNullableK = exports.tryCatchK = exports.tryCatch = exports.fromNullable = exports.orElse = exports.orElseW = exports.swap = exports.filterOrElseW = exports.filterOrElse = exports.flatMapOption = exports.flatMapNullable = exports.liftOption = exports.liftNullable = exports.chainOptionKW = exports.chainOptionK = exports.fromOptionK = exports.duplicate = exports.flatten = exports.flattenW = exports.tap = exports.apSecondW = exports.apSecond = exports.apFirstW = exports.apFirst = exports.flap = exports.getOrElse = exports.getOrElseW = exports.fold = void 0;
-exports.getValidation = exports.getValidationMonoid = exports.getValidationSemigroup = exports.getApplyMonoid = exports.getApplySemigroup = exports.either = exports.stringifyJSON = exports.parseJSON = void 0;
+exports.either = exports.stringifyJSON = exports.chainFirstW = exports.chainFirst = exports.chain = exports.chainW = exports.sequenceArray = exports.traverseArray = exports.traverseArrayWithIndex = exports.traverseReadonlyArrayWithIndex = exports.traverseReadonlyNonEmptyArrayWithIndex = exports.ApT = exports.apSW = exports.apS = exports.bindW = exports.bind = exports["let"] = exports.bindTo = exports.Do = exports.exists = exports.toUnion = exports.chainNullableK = exports.fromNullableK = exports.tryCatchK = exports.tryCatch = exports.fromNullable = exports.orElse = exports.orElseW = exports.swap = exports.filterOrElseW = exports.filterOrElse = exports.flatMapOption = exports.flatMapNullable = exports.liftOption = exports.liftNullable = exports.chainOptionKW = exports.chainOptionK = exports.fromOptionK = exports.duplicate = exports.flatten = exports.flattenW = exports.tap = exports.apSecondW = exports.apSecond = exports.apFirstW = exports.apFirst = exports.flap = exports.getOrElse = exports.getOrElseW = exports.fold = void 0;
+exports.getValidationMonoid = exports.getValidationSemigroup = exports.getApplyMonoid = exports.getApplySemigroup = void 0;
+exports.toError = toError;
+exports.elem = elem;
+exports.parseJSON = parseJSON;
+exports.getValidation = getValidation;
 var Applicative_1 = __nccwpck_require__(4766);
 var Apply_1 = __nccwpck_require__(205);
 var chainable = __importStar(__nccwpck_require__(2372));
@@ -11351,7 +11352,6 @@ function toError(e) {
         return new Error();
     }
 }
-exports.toError = toError;
 function elem(E) {
     return function (a, ma) {
         if (ma === undefined) {
@@ -11361,7 +11361,6 @@ function elem(E) {
         return (0, exports.isLeft)(ma) ? false : E.equals(a, ma.right);
     };
 }
-exports.elem = elem;
 /**
  * Returns `false` if `Left` or returns the result of the application of the given predicate to the `Right` value.
  *
@@ -11529,7 +11528,6 @@ exports.chainFirstW = exports.tap;
 function parseJSON(s, onError) {
     return (0, exports.tryCatch)(function () { return JSON.parse(s); }, onError);
 }
-exports.parseJSON = parseJSON;
 /**
  * Use [`stringify`](./Json.ts.html#stringify) instead.
  *
@@ -11647,7 +11645,6 @@ function getValidation(SE) {
         alt: alt
     };
 }
-exports.getValidation = getValidation;
 
 
 /***/ }),
@@ -11917,14 +11914,21 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.tapEither = exports.filterOrElse = exports.chainFirstEitherK = exports.chainEitherK = exports.fromEitherK = exports.chainOptionK = exports.fromOptionK = exports.fromPredicate = exports.fromOption = void 0;
+exports.fromOption = fromOption;
+exports.fromPredicate = fromPredicate;
+exports.fromOptionK = fromOptionK;
+exports.chainOptionK = chainOptionK;
+exports.fromEitherK = fromEitherK;
+exports.chainEitherK = chainEitherK;
+exports.chainFirstEitherK = chainFirstEitherK;
+exports.filterOrElse = filterOrElse;
+exports.tapEither = tapEither;
 var Chain_1 = __nccwpck_require__(2372);
 var function_1 = __nccwpck_require__(6985);
 var _ = __importStar(__nccwpck_require__(1840));
 function fromOption(F) {
     return function (onNone) { return function (ma) { return F.fromEither(_.isNone(ma) ? _.left(onNone()) : _.right(ma.value)); }; };
 }
-exports.fromOption = fromOption;
 function fromPredicate(F) {
     return function (predicate, onFalse) {
         return function (a) {
@@ -11932,7 +11936,6 @@ function fromPredicate(F) {
         };
     };
 }
-exports.fromPredicate = fromPredicate;
 function fromOptionK(F) {
     var fromOptionF = fromOption(F);
     return function (onNone) {
@@ -11940,7 +11943,6 @@ function fromOptionK(F) {
         return function (f) { return (0, function_1.flow)(f, from); };
     };
 }
-exports.fromOptionK = fromOptionK;
 function chainOptionK(F, M) {
     var fromOptionKF = fromOptionK(F);
     return function (onNone) {
@@ -11948,21 +11950,17 @@ function chainOptionK(F, M) {
         return function (f) { return function (ma) { return M.chain(ma, from(f)); }; };
     };
 }
-exports.chainOptionK = chainOptionK;
 function fromEitherK(F) {
     return function (f) { return (0, function_1.flow)(f, F.fromEither); };
 }
-exports.fromEitherK = fromEitherK;
 function chainEitherK(F, M) {
     var fromEitherKF = fromEitherK(F);
     return function (f) { return function (ma) { return M.chain(ma, fromEitherKF(f)); }; };
 }
-exports.chainEitherK = chainEitherK;
 function chainFirstEitherK(F, M) {
     var tapEitherM = tapEither(F, M);
     return function (f) { return function (ma) { return tapEitherM(ma, f); }; };
 }
-exports.chainFirstEitherK = chainFirstEitherK;
 function filterOrElse(F, M) {
     return function (predicate, onFalse) {
         return function (ma) {
@@ -11970,14 +11968,12 @@ function filterOrElse(F, M) {
         };
     };
 }
-exports.filterOrElse = filterOrElse;
 /** @internal */
 function tapEither(F, M) {
     var fromEither = fromEitherK(F);
     var tapM = (0, Chain_1.tap)(M);
     return function (self, f) { return tapM(self, fromEither(f)); };
 }
-exports.tapEither = tapEither;
 
 
 /***/ }),
@@ -11988,7 +11984,13 @@ exports.tapEither = tapEither;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.asUnit = exports.as = exports.getFunctorComposition = exports["let"] = exports.bindTo = exports.flap = exports.map = void 0;
+exports.map = map;
+exports.flap = flap;
+exports.bindTo = bindTo;
+exports["let"] = let_;
+exports.getFunctorComposition = getFunctorComposition;
+exports.as = as;
+exports.asUnit = asUnit;
 /**
  * A `Functor` is a type constructor which supports a mapping operation `map`.
  *
@@ -12006,25 +12008,21 @@ var function_1 = __nccwpck_require__(6985);
 function map(F, G) {
     return function (f) { return function (fa) { return F.map(fa, function (ga) { return G.map(ga, f); }); }; };
 }
-exports.map = map;
 function flap(F) {
     return function (a) { return function (fab) { return F.map(fab, function (f) { return f(a); }); }; };
 }
-exports.flap = flap;
 function bindTo(F) {
     return function (name) { return function (fa) { return F.map(fa, function (a) {
         var _a;
         return (_a = {}, _a[name] = a, _a);
     }); }; };
 }
-exports.bindTo = bindTo;
 function let_(F) {
     return function (name, f) { return function (fa) { return F.map(fa, function (a) {
         var _a;
         return Object.assign({}, a, (_a = {}, _a[name] = f(a), _a));
     }); }; };
 }
-exports["let"] = let_;
 /** @deprecated */
 function getFunctorComposition(F, G) {
     var _map = map(F, G);
@@ -12032,18 +12030,15 @@ function getFunctorComposition(F, G) {
         map: function (fga, f) { return (0, function_1.pipe)(fga, _map(f)); }
     };
 }
-exports.getFunctorComposition = getFunctorComposition;
 /** @internal */
 function as(F) {
     return function (self, b) { return F.map(self, function () { return b; }); };
 }
-exports.as = as;
 /** @internal */
 function asUnit(F) {
     var asM = as(F);
     return function (self) { return asM(self, undefined); };
 }
-exports.asUnit = asUnit;
 
 
 /***/ }),
@@ -12177,9 +12172,16 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.mapWithIndex = exports.map = exports.flatten = exports.duplicate = exports.extend = exports.flatMap = exports.ap = exports.alt = exports.altW = exports.chunksOf = exports.splitAt = exports.chop = exports.chainWithIndex = exports.foldMap = exports.foldMapWithIndex = exports.intersperse = exports.prependAll = exports.unzip = exports.zip = exports.zipWith = exports.of = exports.copy = exports.modifyAt = exports.updateAt = exports.insertAt = exports.sort = exports.groupBy = exports.group = exports.reverse = exports.concat = exports.concatW = exports.unappend = exports.unprepend = exports.range = exports.replicate = exports.makeBy = exports.fromArray = exports.fromReadonlyNonEmptyArray = exports.rotate = exports.union = exports.sortBy = exports.uniq = exports.unsafeUpdateAt = exports.unsafeInsertAt = exports.append = exports.appendW = exports.prepend = exports.prependW = exports.isOutOfBound = exports.isNonEmpty = void 0;
-exports.chain = exports.intercalate = exports.updateLast = exports.modifyLast = exports.updateHead = exports.modifyHead = exports.matchRight = exports.matchLeft = exports.concatAll = exports.max = exports.min = exports.init = exports.last = exports.tail = exports.head = exports.apS = exports.bind = exports["let"] = exports.bindTo = exports.Do = exports.Comonad = exports.Alt = exports.TraversableWithIndex = exports.Traversable = exports.FoldableWithIndex = exports.Foldable = exports.Monad = exports.chainFirst = exports.Chain = exports.Applicative = exports.apSecond = exports.apFirst = exports.Apply = exports.FunctorWithIndex = exports.Pointed = exports.flap = exports.Functor = exports.getUnionSemigroup = exports.getEq = exports.getSemigroup = exports.getShow = exports.URI = exports.extract = exports.traverseWithIndex = exports.sequence = exports.traverse = exports.reduceRightWithIndex = exports.reduceRight = exports.reduceWithIndex = exports.reduce = void 0;
-exports.nonEmptyArray = exports.fold = exports.prependToAll = exports.snoc = exports.cons = exports.unsnoc = exports.uncons = exports.filterWithIndex = exports.filter = exports.groupSort = void 0;
+exports.reduceRightWithIndex = exports.reduceRight = exports.reduceWithIndex = exports.reduce = exports.mapWithIndex = exports.map = exports.flatten = exports.duplicate = exports.extend = exports.flatMap = exports.ap = exports.alt = exports.altW = exports.chunksOf = exports.splitAt = exports.chop = exports.chainWithIndex = exports.foldMap = exports.foldMapWithIndex = exports.intersperse = exports.prependAll = exports.unzip = exports.zipWith = exports.of = exports.copy = exports.modifyAt = exports.updateAt = exports.insertAt = exports.sort = exports.groupBy = exports.reverse = exports.unappend = exports.unprepend = exports.range = exports.replicate = exports.makeBy = exports.fromArray = exports.fromReadonlyNonEmptyArray = exports.rotate = exports.union = exports.sortBy = exports.uniq = exports.unsafeUpdateAt = exports.unsafeInsertAt = exports.append = exports.appendW = exports.prepend = exports.prependW = exports.isOutOfBound = exports.isNonEmpty = void 0;
+exports.snoc = exports.unsnoc = exports.uncons = exports.filterWithIndex = exports.chain = exports.intercalate = exports.updateLast = exports.modifyLast = exports.updateHead = exports.modifyHead = exports.matchRight = exports.matchLeft = exports.concatAll = exports.max = exports.min = exports.init = exports.last = exports.tail = exports.head = exports.apS = exports.bind = exports["let"] = exports.bindTo = exports.Do = exports.Comonad = exports.Alt = exports.TraversableWithIndex = exports.Traversable = exports.FoldableWithIndex = exports.Foldable = exports.Monad = exports.chainFirst = exports.Chain = exports.Applicative = exports.apSecond = exports.apFirst = exports.Apply = exports.FunctorWithIndex = exports.Pointed = exports.flap = exports.Functor = exports.getUnionSemigroup = exports.getEq = exports.getSemigroup = exports.getShow = exports.URI = exports.extract = exports.traverseWithIndex = exports.sequence = exports.traverse = void 0;
+exports.nonEmptyArray = exports.fold = exports.prependToAll = void 0;
+exports.concatW = concatW;
+exports.concat = concat;
+exports.group = group;
+exports.zip = zip;
+exports.groupSort = groupSort;
+exports.filter = filter;
+exports.cons = cons;
 var Apply_1 = __nccwpck_require__(205);
 var Chain_1 = __nccwpck_require__(2372);
 var function_1 = __nccwpck_require__(6985);
@@ -12460,11 +12462,9 @@ exports.unappend = unappend;
 function concatW(second) {
     return function (first) { return first.concat(second); };
 }
-exports.concatW = concatW;
 function concat(x, y) {
     return y ? x.concat(y) : function (y) { return y.concat(x); };
 }
-exports.concat = concat;
 /**
  * @since 2.0.0
  */
@@ -12494,7 +12494,6 @@ function group(E) {
         return out;
     };
 }
-exports.group = group;
 /**
  * Splits an array into sub-non-empty-arrays stored in an object, based on the result of calling a `string`-returning
  * function on each element, and grouping the results according to values returned
@@ -12588,7 +12587,6 @@ function zip(as, bs) {
     }
     return (0, exports.zipWith)(as, bs, function (a, b) { return [a, b]; });
 }
-exports.zip = zip;
 /**
  * @since 2.5.1
  */
@@ -13285,11 +13283,9 @@ function groupSort(O) {
     var groupO = group(O);
     return function (as) { return ((0, exports.isNonEmpty)(as) ? groupO(sortO(as)) : []); };
 }
-exports.groupSort = groupSort;
 function filter(predicate) {
     return (0, exports.filterWithIndex)(function (_, a) { return predicate(a); });
 }
-exports.filter = filter;
 /**
  * Use [`filterWithIndex`](./Array.ts.html#filterwithindex) instead.
  *
@@ -13322,7 +13318,6 @@ exports.unsnoc = exports.unappend;
 function cons(head, tail) {
     return tail === undefined ? (0, exports.prepend)(head) : (0, function_1.pipe)(tail, (0, exports.prepend)(head));
 }
-exports.cons = cons;
 /**
  * Use [`append`](./Array.ts.html#append) instead.
  *
@@ -13410,9 +13405,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Witherable = exports.wilt = exports.wither = exports.Traversable = exports.sequence = exports.traverse = exports.Filterable = exports.partitionMap = exports.partition = exports.filterMap = exports.filter = exports.Compactable = exports.separate = exports.compact = exports.Extend = exports.extend = exports.Alternative = exports.guard = exports.Zero = exports.zero = exports.Alt = exports.alt = exports.altW = exports.orElse = exports.Foldable = exports.reduceRight = exports.foldMap = exports.reduce = exports.Monad = exports.Chain = exports.flatMap = exports.Applicative = exports.Apply = exports.ap = exports.Pointed = exports.of = exports.asUnit = exports.as = exports.Functor = exports.map = exports.getMonoid = exports.getOrd = exports.getEq = exports.getShow = exports.URI = exports.getRight = exports.getLeft = exports.fromPredicate = exports.some = exports.none = void 0;
-exports.getFirstMonoid = exports.getApplyMonoid = exports.getApplySemigroup = exports.option = exports.mapNullable = exports.getRefinement = exports.chainFirst = exports.chain = exports.sequenceArray = exports.traverseArray = exports.traverseArrayWithIndex = exports.traverseReadonlyArrayWithIndex = exports.traverseReadonlyNonEmptyArrayWithIndex = exports.ApT = exports.apS = exports.bind = exports["let"] = exports.bindTo = exports.Do = exports.exists = exports.elem = exports.toUndefined = exports.toNullable = exports.chainNullableK = exports.fromNullableK = exports.tryCatchK = exports.tryCatch = exports.fromNullable = exports.chainFirstEitherK = exports.chainEitherK = exports.fromEitherK = exports.duplicate = exports.tapEither = exports.tap = exports.flatten = exports.apSecond = exports.apFirst = exports.flap = exports.getOrElse = exports.getOrElseW = exports.fold = exports.match = exports.foldW = exports.matchW = exports.isNone = exports.isSome = exports.FromEither = exports.fromEither = exports.MonadThrow = exports.throwError = void 0;
-exports.getLastMonoid = void 0;
+exports.throwError = exports.Witherable = exports.wilt = exports.wither = exports.Traversable = exports.sequence = exports.traverse = exports.Filterable = exports.partitionMap = exports.partition = exports.filterMap = exports.filter = exports.Compactable = exports.separate = exports.compact = exports.Extend = exports.extend = exports.Alternative = exports.guard = exports.Zero = exports.zero = exports.Alt = exports.alt = exports.altW = exports.orElse = exports.Foldable = exports.reduceRight = exports.foldMap = exports.reduce = exports.Monad = exports.Chain = exports.flatMap = exports.Applicative = exports.Apply = exports.ap = exports.Pointed = exports.of = exports.asUnit = exports.as = exports.Functor = exports.map = exports.getMonoid = exports.getOrd = exports.getEq = exports.getShow = exports.URI = exports.getRight = exports.getLeft = exports.some = exports.none = void 0;
+exports.getLastMonoid = exports.getFirstMonoid = exports.getApplyMonoid = exports.getApplySemigroup = exports.option = exports.mapNullable = exports.chainFirst = exports.chain = exports.sequenceArray = exports.traverseArray = exports.traverseArrayWithIndex = exports.traverseReadonlyArrayWithIndex = exports.traverseReadonlyNonEmptyArrayWithIndex = exports.ApT = exports.apS = exports.bind = exports["let"] = exports.bindTo = exports.Do = exports.exists = exports.toUndefined = exports.toNullable = exports.chainNullableK = exports.fromNullableK = exports.tryCatchK = exports.tryCatch = exports.fromNullable = exports.chainFirstEitherK = exports.chainEitherK = exports.fromEitherK = exports.duplicate = exports.tapEither = exports.tap = exports.flatten = exports.apSecond = exports.apFirst = exports.flap = exports.getOrElse = exports.getOrElseW = exports.fold = exports.match = exports.foldW = exports.matchW = exports.isNone = exports.isSome = exports.FromEither = exports.fromEither = exports.MonadThrow = void 0;
+exports.fromPredicate = fromPredicate;
+exports.elem = elem;
+exports.getRefinement = getRefinement;
 var Applicative_1 = __nccwpck_require__(4766);
 var Apply_1 = __nccwpck_require__(205);
 var chainable = __importStar(__nccwpck_require__(2372));
@@ -13445,7 +13442,6 @@ exports.some = _.some;
 function fromPredicate(predicate) {
     return function (a) { return (predicate(a) ? (0, exports.some)(a) : exports.none); };
 }
-exports.fromPredicate = fromPredicate;
 /**
  * Returns the `Left` value of an `Either` if possible.
  *
@@ -14382,7 +14378,6 @@ function elem(E) {
         return (0, exports.isNone)(ma) ? false : E.equals(a, ma.value);
     };
 }
-exports.elem = elem;
 /**
  * Returns `true` if the predicate is satisfied by the wrapped value
  *
@@ -14542,7 +14537,6 @@ exports.chainFirst = exports.tap;
 function getRefinement(getOption) {
     return function (a) { return (0, exports.isSome)(getOption(a)); };
 }
-exports.getRefinement = getRefinement;
 /**
  * Use [`chainNullableK`](#chainnullablek) instead.
  *
@@ -15273,10 +15267,24 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.sort = exports.lefts = exports.rights = exports.reverse = exports.modifyAt = exports.deleteAt = exports.updateAt = exports.insertAt = exports.findLastIndex = exports.findLastMap = exports.findLast = exports.findFirstMap = exports.findFirst = exports.findIndex = exports.dropLeftWhile = exports.dropRight = exports.dropLeft = exports.spanLeft = exports.takeLeftWhile = exports.takeRight = exports.takeLeft = exports.init = exports.tail = exports.last = exports.head = exports.lookup = exports.isOutOfBound = exports.size = exports.scanRight = exports.scanLeft = exports.chainWithIndex = exports.foldRight = exports.matchRight = exports.matchRightW = exports.foldLeft = exports.matchLeft = exports.matchLeftW = exports.match = exports.matchW = exports.fromEither = exports.fromOption = exports.fromPredicate = exports.replicate = exports.makeBy = exports.appendW = exports.append = exports.prependW = exports.prepend = exports.isNonEmpty = exports.isEmpty = void 0;
-exports.sequence = exports.traverse = exports.reduceRightWithIndex = exports.reduceRight = exports.reduceWithIndex = exports.foldMap = exports.reduce = exports.foldMapWithIndex = exports.duplicate = exports.extend = exports.filterWithIndex = exports.partitionMapWithIndex = exports.partitionMap = exports.partitionWithIndex = exports.partition = exports.compact = exports.filterMap = exports.filterMapWithIndex = exports.filter = exports.separate = exports.mapWithIndex = exports.map = exports.flatten = exports.flatMap = exports.ap = exports.alt = exports.altW = exports.zero = exports.of = exports._chainRecBreadthFirst = exports._chainRecDepthFirst = exports.difference = exports.intersection = exports.union = exports.concat = exports.concatW = exports.comprehension = exports.fromOptionK = exports.chunksOf = exports.splitAt = exports.chop = exports.sortBy = exports.uniq = exports.elem = exports.rotate = exports.intersperse = exports.prependAll = exports.unzip = exports.zip = exports.zipWith = void 0;
-exports.toArray = exports.unsafeDeleteAt = exports.unsafeUpdateAt = exports.unsafeInsertAt = exports.fromEitherK = exports.FromEither = exports.filterE = exports.Witherable = exports.ChainRecBreadthFirst = exports.chainRecBreadthFirst = exports.ChainRecDepthFirst = exports.chainRecDepthFirst = exports.TraversableWithIndex = exports.Traversable = exports.FoldableWithIndex = exports.Foldable = exports.FilterableWithIndex = exports.Filterable = exports.Compactable = exports.Extend = exports.Alternative = exports.guard = exports.Zero = exports.Alt = exports.Unfoldable = exports.chainFirst = exports.Monad = exports.Chain = exports.Applicative = exports.apSecond = exports.apFirst = exports.Apply = exports.FunctorWithIndex = exports.Pointed = exports.flap = exports.Functor = exports.getDifferenceMagma = exports.getIntersectionSemigroup = exports.getUnionMonoid = exports.getUnionSemigroup = exports.getOrd = exports.getEq = exports.getMonoid = exports.getSemigroup = exports.getShow = exports.URI = exports.unfold = exports.wilt = exports.wither = exports.traverseWithIndex = void 0;
-exports.readonlyArray = exports.prependToAll = exports.snoc = exports.cons = exports.range = exports.chain = exports.apS = exports.bind = exports["let"] = exports.bindTo = exports.Do = exports.intercalate = exports.exists = exports.some = exports.every = exports.empty = exports.fromArray = void 0;
+exports.sortBy = exports.uniq = exports.rotate = exports.intersperse = exports.prependAll = exports.unzip = exports.zipWith = exports.sort = exports.lefts = exports.rights = exports.reverse = exports.modifyAt = exports.deleteAt = exports.updateAt = exports.insertAt = exports.findLastIndex = exports.findLastMap = exports.findFirstMap = exports.findIndex = exports.dropRight = exports.dropLeft = exports.takeRight = exports.takeLeft = exports.init = exports.tail = exports.last = exports.head = exports.isOutOfBound = exports.size = exports.scanRight = exports.scanLeft = exports.chainWithIndex = exports.foldRight = exports.matchRight = exports.matchRightW = exports.foldLeft = exports.matchLeft = exports.matchLeftW = exports.match = exports.matchW = exports.fromEither = exports.fromOption = exports.replicate = exports.makeBy = exports.appendW = exports.append = exports.prependW = exports.prepend = exports.isNonEmpty = exports.isEmpty = void 0;
+exports.getIntersectionSemigroup = exports.getUnionMonoid = exports.getUnionSemigroup = exports.getOrd = exports.getEq = exports.getMonoid = exports.getSemigroup = exports.getShow = exports.URI = exports.unfold = exports.wilt = exports.wither = exports.traverseWithIndex = exports.sequence = exports.traverse = exports.reduceRightWithIndex = exports.reduceRight = exports.reduceWithIndex = exports.foldMap = exports.reduce = exports.foldMapWithIndex = exports.duplicate = exports.extend = exports.filterWithIndex = exports.partitionMapWithIndex = exports.partitionMap = exports.partitionWithIndex = exports.partition = exports.compact = exports.filterMap = exports.filterMapWithIndex = exports.filter = exports.separate = exports.mapWithIndex = exports.map = exports.flatten = exports.flatMap = exports.ap = exports.alt = exports.altW = exports.zero = exports.of = exports._chainRecBreadthFirst = exports._chainRecDepthFirst = exports.concat = exports.concatW = exports.fromOptionK = exports.chunksOf = exports.splitAt = exports.chop = void 0;
+exports.cons = exports.range = exports.chain = exports.apS = exports.bind = exports["let"] = exports.bindTo = exports.Do = exports.intercalate = exports.exists = exports.some = exports.empty = exports.fromArray = exports.toArray = exports.unsafeDeleteAt = exports.unsafeUpdateAt = exports.unsafeInsertAt = exports.fromEitherK = exports.FromEither = exports.filterE = exports.Witherable = exports.ChainRecBreadthFirst = exports.chainRecBreadthFirst = exports.ChainRecDepthFirst = exports.chainRecDepthFirst = exports.TraversableWithIndex = exports.Traversable = exports.FoldableWithIndex = exports.Foldable = exports.FilterableWithIndex = exports.Filterable = exports.Compactable = exports.Extend = exports.Alternative = exports.guard = exports.Zero = exports.Alt = exports.Unfoldable = exports.chainFirst = exports.Monad = exports.Chain = exports.Applicative = exports.apSecond = exports.apFirst = exports.Apply = exports.FunctorWithIndex = exports.Pointed = exports.flap = exports.Functor = exports.getDifferenceMagma = void 0;
+exports.readonlyArray = exports.prependToAll = exports.snoc = void 0;
+exports.fromPredicate = fromPredicate;
+exports.lookup = lookup;
+exports.takeLeftWhile = takeLeftWhile;
+exports.spanLeft = spanLeft;
+exports.dropLeftWhile = dropLeftWhile;
+exports.findFirst = findFirst;
+exports.findLast = findLast;
+exports.zip = zip;
+exports.elem = elem;
+exports.comprehension = comprehension;
+exports.union = union;
+exports.intersection = intersection;
+exports.difference = difference;
+exports.every = every;
 var Apply_1 = __nccwpck_require__(205);
 var Chain_1 = __nccwpck_require__(2372);
 var Eq_1 = __nccwpck_require__(6964);
@@ -15386,7 +15394,6 @@ exports.replicate = replicate;
 function fromPredicate(predicate) {
     return function (a) { return (predicate(a) ? [a] : exports.empty); };
 }
-exports.fromPredicate = fromPredicate;
 // -------------------------------------------------------------------------------------
 // conversions
 // -------------------------------------------------------------------------------------
@@ -15564,7 +15571,6 @@ exports.isOutOfBound = RNEA.isOutOfBound;
 function lookup(i, as) {
     return as === undefined ? function (as) { return lookup(i, as); } : (0, exports.isOutOfBound)(i, as) ? _.none : _.some(as[i]);
 }
-exports.lookup = lookup;
 /**
  * Get the first element in an array, or `None` if the array is empty
  *
@@ -15687,7 +15693,6 @@ function takeLeftWhile(predicate) {
         return len === as.length ? as : len === 0 ? exports.empty : out;
     };
 }
-exports.takeLeftWhile = takeLeftWhile;
 var spanLeftIndex = function (as, predicate) {
     var l = as.length;
     var i = 0;
@@ -15704,7 +15709,6 @@ function spanLeft(predicate) {
         return { init: init, rest: rest };
     };
 }
-exports.spanLeft = spanLeft;
 /**
  * Drop a max number of elements from the start of an `ReadonlyArray`, creating a new `ReadonlyArray`.
  *
@@ -15755,7 +15759,6 @@ function dropLeftWhile(predicate) {
         return i === 0 ? as : i === as.length ? exports.empty : as.slice(i);
     };
 }
-exports.dropLeftWhile = dropLeftWhile;
 /**
  * Find the first index for which a predicate holds
  *
@@ -15789,7 +15792,6 @@ function findFirst(predicate) {
         return _.none;
     };
 }
-exports.findFirst = findFirst;
 /**
  * Find the first element returned by an option based selector function
  *
@@ -15831,7 +15833,6 @@ function findLast(predicate) {
         return _.none;
     };
 }
-exports.findLast = findLast;
 /**
  * Find the last element returned by an option based selector function
  *
@@ -16063,7 +16064,6 @@ function zip(as, bs) {
     }
     return (0, exports.zipWith)(as, bs, function (a, b) { return [a, b]; });
 }
-exports.zip = zip;
 /**
  * The function is reverse of `zip`. Takes an array of pairs and return two corresponding arrays
  *
@@ -16145,7 +16145,6 @@ function elem(E) {
         return false;
     };
 }
-exports.elem = elem;
 /**
  * Remove duplicates from an array, keeping the first occurrence of an element.
  *
@@ -16286,7 +16285,6 @@ function comprehension(input, f, g) {
     };
     return go(exports.empty, input);
 }
-exports.comprehension = comprehension;
 /**
  * @since 2.11.0
  */
@@ -16310,7 +16308,6 @@ function union(E) {
         return (0, exports.isNonEmpty)(first) && (0, exports.isNonEmpty)(second) ? unionE(second)(first) : (0, exports.isNonEmpty)(first) ? first : second;
     };
 }
-exports.union = union;
 function intersection(E) {
     var elemE = elem(E);
     return function (xs, ys) {
@@ -16321,7 +16318,6 @@ function intersection(E) {
         return xs.filter(function (a) { return elemE(a, ys); });
     };
 }
-exports.intersection = intersection;
 function difference(E) {
     var elemE = elem(E);
     return function (xs, ys) {
@@ -16332,7 +16328,6 @@ function difference(E) {
         return xs.filter(function (a) { return !elemE(a, ys); });
     };
 }
-exports.difference = difference;
 var _map = function (fa, f) { return (0, function_1.pipe)(fa, (0, exports.map)(f)); };
 var _mapWithIndex = function (fa, f) { return (0, function_1.pipe)(fa, (0, exports.mapWithIndex)(f)); };
 var _ap = function (fab, fa) { return (0, function_1.pipe)(fab, (0, exports.ap)(fa)); };
@@ -17337,7 +17332,6 @@ exports.empty = RNEA.empty;
 function every(predicate) {
     return function (as) { return as.every(predicate); };
 }
-exports.every = every;
 /**
  * Check if a predicate holds true for any array member.
  *
@@ -17534,9 +17528,16 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.reduceRight = exports.foldMap = exports.reduce = exports.mapWithIndex = exports.map = exports.flatten = exports.duplicate = exports.extend = exports.flatMap = exports.ap = exports.alt = exports.altW = exports.of = exports.chunksOf = exports.splitAt = exports.chop = exports.chainWithIndex = exports.intersperse = exports.prependAll = exports.unzip = exports.zip = exports.zipWith = exports.modifyAt = exports.updateAt = exports.sort = exports.groupBy = exports.group = exports.reverse = exports.concat = exports.concatW = exports.fromArray = exports.unappend = exports.unprepend = exports.range = exports.replicate = exports.makeBy = exports.fromReadonlyArray = exports.rotate = exports.union = exports.sortBy = exports.uniq = exports.unsafeUpdateAt = exports.unsafeInsertAt = exports.append = exports.appendW = exports.prepend = exports.prependW = exports.isOutOfBound = exports.isNonEmpty = exports.empty = void 0;
-exports.groupSort = exports.chain = exports.intercalate = exports.updateLast = exports.modifyLast = exports.updateHead = exports.modifyHead = exports.matchRight = exports.matchLeft = exports.concatAll = exports.max = exports.min = exports.init = exports.last = exports.tail = exports.head = exports.apS = exports.bind = exports["let"] = exports.bindTo = exports.Do = exports.Comonad = exports.Alt = exports.TraversableWithIndex = exports.Traversable = exports.FoldableWithIndex = exports.Foldable = exports.Monad = exports.chainFirst = exports.Chain = exports.Applicative = exports.apSecond = exports.apFirst = exports.Apply = exports.FunctorWithIndex = exports.Pointed = exports.flap = exports.Functor = exports.getUnionSemigroup = exports.getEq = exports.getSemigroup = exports.getShow = exports.URI = exports.extract = exports.traverseWithIndex = exports.sequence = exports.traverse = exports.reduceRightWithIndex = exports.foldMapWithIndex = exports.reduceWithIndex = void 0;
-exports.readonlyNonEmptyArray = exports.fold = exports.prependToAll = exports.insertAt = exports.snoc = exports.cons = exports.unsnoc = exports.uncons = exports.filterWithIndex = exports.filter = void 0;
+exports.traverse = exports.reduceRightWithIndex = exports.foldMapWithIndex = exports.reduceWithIndex = exports.reduceRight = exports.foldMap = exports.reduce = exports.mapWithIndex = exports.map = exports.flatten = exports.duplicate = exports.extend = exports.flatMap = exports.ap = exports.alt = exports.altW = exports.of = exports.chunksOf = exports.splitAt = exports.chop = exports.chainWithIndex = exports.intersperse = exports.prependAll = exports.unzip = exports.zipWith = exports.modifyAt = exports.updateAt = exports.sort = exports.groupBy = exports.reverse = exports.fromArray = exports.unappend = exports.unprepend = exports.range = exports.replicate = exports.makeBy = exports.fromReadonlyArray = exports.rotate = exports.union = exports.sortBy = exports.uniq = exports.unsafeUpdateAt = exports.unsafeInsertAt = exports.append = exports.appendW = exports.prepend = exports.prependW = exports.isOutOfBound = exports.isNonEmpty = exports.empty = void 0;
+exports.insertAt = exports.snoc = exports.unsnoc = exports.uncons = exports.filterWithIndex = exports.chain = exports.intercalate = exports.updateLast = exports.modifyLast = exports.updateHead = exports.modifyHead = exports.matchRight = exports.matchLeft = exports.concatAll = exports.max = exports.min = exports.init = exports.last = exports.tail = exports.head = exports.apS = exports.bind = exports["let"] = exports.bindTo = exports.Do = exports.Comonad = exports.Alt = exports.TraversableWithIndex = exports.Traversable = exports.FoldableWithIndex = exports.Foldable = exports.Monad = exports.chainFirst = exports.Chain = exports.Applicative = exports.apSecond = exports.apFirst = exports.Apply = exports.FunctorWithIndex = exports.Pointed = exports.flap = exports.Functor = exports.getUnionSemigroup = exports.getEq = exports.getSemigroup = exports.getShow = exports.URI = exports.extract = exports.traverseWithIndex = exports.sequence = void 0;
+exports.readonlyNonEmptyArray = exports.fold = exports.prependToAll = void 0;
+exports.concatW = concatW;
+exports.concat = concat;
+exports.group = group;
+exports.zip = zip;
+exports.groupSort = groupSort;
+exports.filter = filter;
+exports.cons = cons;
 var Apply_1 = __nccwpck_require__(205);
 var Chain_1 = __nccwpck_require__(2372);
 var Eq_1 = __nccwpck_require__(6964);
@@ -17829,11 +17830,9 @@ exports.fromArray = fromArray;
 function concatW(second) {
     return function (first) { return first.concat(second); };
 }
-exports.concatW = concatW;
 function concat(x, y) {
     return y ? x.concat(y) : function (y) { return y.concat(x); };
 }
-exports.concat = concat;
 /**
  * @since 2.5.0
  */
@@ -17865,7 +17864,6 @@ function group(E) {
         return out;
     };
 }
-exports.group = group;
 /**
  * Splits an array into sub-non-empty-arrays stored in an object, based on the result of calling a `string`-returning
  * function on each element, and grouping the results according to values returned
@@ -17940,7 +17938,6 @@ function zip(as, bs) {
     }
     return (0, exports.zipWith)(as, bs, function (a, b) { return [a, b]; });
 }
-exports.zip = zip;
 /**
  * @since 2.5.1
  */
@@ -18711,11 +18708,9 @@ function groupSort(O) {
     var groupO = group(O);
     return function (as) { return ((0, exports.isNonEmpty)(as) ? groupO(sortO(as)) : exports.empty); };
 }
-exports.groupSort = groupSort;
 function filter(predicate) {
     return (0, exports.filterWithIndex)(function (_, a) { return predicate(a); });
 }
-exports.filter = filter;
 /**
  * Use [`filterWithIndex`](./ReadonlyArray.ts.html#filterwithindex) instead.
  *
@@ -18748,7 +18743,6 @@ exports.unsnoc = exports.unappend;
 function cons(head, tail) {
     return tail === undefined ? (0, exports.prepend)(head) : (0, function_1.pipe)(tail, (0, exports.prepend)(head));
 }
-exports.cons = cons;
 /**
  * Use [`append`](./ReadonlyArray.ts.html#append) instead.
  *
@@ -18849,8 +18843,38 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports._partition = exports._filterMap = exports._filter = exports._reduceRight = exports._foldMap = exports._reduce = exports._mapWithIndex = exports._map = exports.difference = exports.intersection = exports.union = exports.elem = exports.some = exports.every = exports.fromEntries = exports.toEntries = exports.fromFoldableMap = exports.fromFoldable = exports.filterWithIndex = exports.filterMapWithIndex = exports.partitionWithIndex = exports.partitionMapWithIndex = exports.wilt = exports.wither = exports.sequence = exports.traverse = exports.traverseWithIndex = exports.singleton = exports.reduceRightWithIndex = exports.foldMapWithIndex = exports.reduceWithIndex = exports.map = exports.mapWithIndex = exports.empty = exports.lookup = exports.isSubrecord = exports.pop = exports.modifyAt = exports.updateAt = exports.deleteAt = exports.has = exports.upsertAt = exports.toUnfoldable = exports.toReadonlyArray = exports.collect = exports.keys = exports.isEmpty = exports.size = exports.toRecord = exports.fromRecord = void 0;
-exports.readonlyRecord = exports.hasOwnProperty = exports.insertAt = exports.Witherable = exports.TraversableWithIndex = exports.Traversable = exports.FoldableWithIndex = exports.Foldable = exports.getDifferenceMagma = exports.getIntersectionSemigroup = exports.getUnionMonoid = exports.getUnionSemigroup = exports.getWitherable = exports.getTraversableWithIndex = exports.getTraversable = exports.FilterableWithIndex = exports.Filterable = exports.Compactable = exports.getFoldableWithIndex = exports.getFoldable = exports.FunctorWithIndex = exports.flap = exports.Functor = exports.getMonoid = exports.getEq = exports.getShow = exports.URI = exports.separate = exports.compact = exports.reduceRight = exports.foldMap = exports.reduce = exports.partitionMap = exports.partition = exports.filterMap = exports.filter = exports._sequence = exports._traverse = exports._filterWithIndex = exports._filterMapWithIndex = exports._partitionWithIndex = exports._partitionMapWithIndex = exports._reduceRightWithIndex = exports._foldMapWithIndex = exports._reduceWithIndex = exports._partitionMap = void 0;
+exports.Compactable = exports.getFoldableWithIndex = exports.getFoldable = exports.FunctorWithIndex = exports.flap = exports.Functor = exports.URI = exports.separate = exports.compact = exports.partitionMap = exports.partition = exports.filterMap = exports.filter = exports._sequence = exports._traverse = exports._filterWithIndex = exports._filterMapWithIndex = exports._partitionWithIndex = exports._partitionMapWithIndex = exports._reduceRightWithIndex = exports._foldMapWithIndex = exports._reduceWithIndex = exports._partitionMap = exports._partition = exports._filterMap = exports._filter = exports._reduceRight = exports._foldMap = exports._reduce = exports._mapWithIndex = exports._map = exports.difference = exports.intersection = exports.union = exports.fromEntries = exports.toEntries = exports.wilt = exports.wither = exports.singleton = exports.empty = exports.modifyAt = exports.updateAt = exports.has = exports.upsertAt = exports.toReadonlyArray = exports.keys = exports.isEmpty = exports.size = exports.toRecord = exports.fromRecord = void 0;
+exports.readonlyRecord = exports.insertAt = exports.Witherable = exports.TraversableWithIndex = exports.Traversable = exports.FoldableWithIndex = exports.Foldable = exports.getDifferenceMagma = exports.getIntersectionSemigroup = exports.getUnionMonoid = exports.getUnionSemigroup = exports.getWitherable = exports.getTraversableWithIndex = exports.getTraversable = exports.FilterableWithIndex = exports.Filterable = void 0;
+exports.collect = collect;
+exports.toUnfoldable = toUnfoldable;
+exports.deleteAt = deleteAt;
+exports.pop = pop;
+exports.isSubrecord = isSubrecord;
+exports.lookup = lookup;
+exports.mapWithIndex = mapWithIndex;
+exports.map = map;
+exports.reduceWithIndex = reduceWithIndex;
+exports.foldMapWithIndex = foldMapWithIndex;
+exports.reduceRightWithIndex = reduceRightWithIndex;
+exports.traverseWithIndex = traverseWithIndex;
+exports.traverse = traverse;
+exports.sequence = sequence;
+exports.partitionMapWithIndex = partitionMapWithIndex;
+exports.partitionWithIndex = partitionWithIndex;
+exports.filterMapWithIndex = filterMapWithIndex;
+exports.filterWithIndex = filterWithIndex;
+exports.fromFoldable = fromFoldable;
+exports.fromFoldableMap = fromFoldableMap;
+exports.every = every;
+exports.some = some;
+exports.elem = elem;
+exports.reduce = reduce;
+exports.foldMap = foldMap;
+exports.reduceRight = reduceRight;
+exports.getShow = getShow;
+exports.getEq = getEq;
+exports.getMonoid = getMonoid;
+exports.hasOwnProperty = hasOwnProperty;
 var Eq_1 = __nccwpck_require__(6964);
 var function_1 = __nccwpck_require__(6985);
 var Functor_1 = __nccwpck_require__(5533);
@@ -18946,7 +18970,6 @@ function collect(O) {
         };
     };
 }
-exports.collect = collect;
 /**
  * Get a sorted `ReadonlyArray` of the key/value pairs contained in a `ReadonlyRecord`.
  *
@@ -18972,7 +18995,6 @@ function toUnfoldable(U) {
         return U.unfold(0, function (b) { return (b < len ? _.some([sas[b], b + 1]) : _.none); });
     };
 }
-exports.toUnfoldable = toUnfoldable;
 /**
  * Insert or replace a key/value pair in a `ReadonlyRecord`.
  *
@@ -19020,7 +19042,6 @@ function deleteAt(k) {
         return out;
     };
 }
-exports.deleteAt = deleteAt;
 /**
  * Replace a key/value pair in a `ReadonlyRecord`.
  *
@@ -19087,7 +19108,6 @@ function pop(k) {
         return _.isNone(oa) ? _.none : _.some([oa.value, deleteAtk(r)]);
     };
 }
-exports.pop = pop;
 function isSubrecord(E) {
     return function (me, that) {
         if (that === undefined) {
@@ -19102,14 +19122,12 @@ function isSubrecord(E) {
         return true;
     };
 }
-exports.isSubrecord = isSubrecord;
 function lookup(k, r) {
     if (r === undefined) {
         return function (r) { return lookup(k, r); };
     }
     return _.has.call(r, k) ? _.some(r[k]) : _.none;
 }
-exports.lookup = lookup;
 /**
  * @since 2.5.0
  */
@@ -19125,11 +19143,9 @@ function mapWithIndex(f) {
         return out;
     };
 }
-exports.mapWithIndex = mapWithIndex;
 function map(f) {
     return mapWithIndex(function (_, a) { return f(a); });
 }
-exports.map = map;
 function reduceWithIndex() {
     var args = [];
     for (var _i = 0; _i < arguments.length; _i++) {
@@ -19150,7 +19166,6 @@ function reduceWithIndex() {
         return out;
     }; };
 }
-exports.reduceWithIndex = reduceWithIndex;
 function foldMapWithIndex(O) {
     if ('compare' in O) {
         var keysO_1 = keys_(O);
@@ -19171,7 +19186,6 @@ function foldMapWithIndex(O) {
     }
     return foldMapWithIndex(S.Ord)(O);
 }
-exports.foldMapWithIndex = foldMapWithIndex;
 function reduceRightWithIndex() {
     var args = [];
     for (var _i = 0; _i < arguments.length; _i++) {
@@ -19192,7 +19206,6 @@ function reduceRightWithIndex() {
         return out;
     }; };
 }
-exports.reduceRightWithIndex = reduceRightWithIndex;
 /**
  * Create a `ReadonlyRecord` with one key/value pair.
  *
@@ -19213,16 +19226,13 @@ function traverseWithIndex(F) {
     var traverseWithIndexOF = _traverseWithIndex(S.Ord)(F);
     return function (f) { return function (ta) { return traverseWithIndexOF(ta, f); }; };
 }
-exports.traverseWithIndex = traverseWithIndex;
 function traverse(F) {
     var traverseOF = (0, exports._traverse)(S.Ord)(F);
     return function (f) { return function (ta) { return traverseOF(ta, f); }; };
 }
-exports.traverse = traverse;
 function sequence(F) {
     return (0, exports._sequence)(S.Ord)(F);
 }
-exports.sequence = sequence;
 /**
  * @category filtering
  * @since 2.6.5
@@ -19261,7 +19271,6 @@ function partitionMapWithIndex(f) {
         return (0, Separated_1.separated)(left, right);
     };
 }
-exports.partitionMapWithIndex = partitionMapWithIndex;
 function partitionWithIndex(predicateWithIndex) {
     return function (r) {
         var left = {};
@@ -19280,7 +19289,6 @@ function partitionWithIndex(predicateWithIndex) {
         return (0, Separated_1.separated)(left, right);
     };
 }
-exports.partitionWithIndex = partitionWithIndex;
 function filterMapWithIndex(f) {
     return function (r) {
         var out = {};
@@ -19295,7 +19303,6 @@ function filterMapWithIndex(f) {
         return out;
     };
 }
-exports.filterMapWithIndex = filterMapWithIndex;
 function filterWithIndex(predicateWithIndex) {
     return function (fa) {
         var out = {};
@@ -19314,12 +19321,10 @@ function filterWithIndex(predicateWithIndex) {
         return changed ? out : fa;
     };
 }
-exports.filterWithIndex = filterWithIndex;
 function fromFoldable(M, F) {
     var fromFoldableMapM = fromFoldableMap(M, F);
     return function (fka) { return fromFoldableMapM(fka, function_1.identity); };
 }
-exports.fromFoldable = fromFoldable;
 function fromFoldableMap(M, F) {
     return function (ta, f) {
         return F.reduce(ta, {}, function (r, a) {
@@ -19329,7 +19334,6 @@ function fromFoldableMap(M, F) {
         });
     };
 }
-exports.fromFoldableMap = fromFoldableMap;
 /**
  * Alias of [`toReadonlyArray`](#toreadonlyarray).
  *
@@ -19372,7 +19376,6 @@ function every(predicate) {
         return true;
     };
 }
-exports.every = every;
 /**
  * Test if at least one value in a `ReadonlyRecord` satisfies the predicate.
  *
@@ -19394,7 +19397,6 @@ function some(predicate) {
         return false;
     };
 }
-exports.some = some;
 function elem(E) {
     return function (a, fa) {
         if (fa === undefined) {
@@ -19409,7 +19411,6 @@ function elem(E) {
         return false;
     };
 }
-exports.elem = elem;
 /**
  * Union of two `ReadonlyRecord`s.
  * Takes two `ReadonlyRecord`s and produces a `ReadonlyRecord` combining all the
@@ -19754,7 +19755,6 @@ function reduce() {
     }
     return reduce(S.Ord).apply(void 0, args);
 }
-exports.reduce = reduce;
 function foldMap(O) {
     if ('compare' in O) {
         var foldMapWithIndexO_1 = foldMapWithIndex(O);
@@ -19765,7 +19765,6 @@ function foldMap(O) {
     }
     return foldMap(S.Ord)(O);
 }
-exports.foldMap = foldMap;
 function reduceRight() {
     var args = [];
     for (var _i = 0; _i < arguments.length; _i++) {
@@ -19777,7 +19776,6 @@ function reduceRight() {
     }
     return reduceRight(S.Ord).apply(void 0, args);
 }
-exports.reduceRight = reduceRight;
 /**
  * Compact a `ReadonlyRecord` of `Option`s discarding the `None` values and
  * keeping the `Some` values.
@@ -19863,12 +19861,10 @@ function getShow(O) {
     }
     return getShow(S.Ord)(O);
 }
-exports.getShow = getShow;
 function getEq(E) {
     var isSubrecordE = isSubrecord(E);
     return (0, Eq_1.fromEquals)(function (x, y) { return isSubrecordE(x)(y) && isSubrecordE(y)(x); });
 }
-exports.getEq = getEq;
 function getMonoid(S) {
     return {
         concat: function (first, second) {
@@ -19889,7 +19885,6 @@ function getMonoid(S) {
         empty: exports.empty
     };
 }
-exports.getMonoid = getMonoid;
 /**
  * @category instances
  * @since 2.7.0
@@ -20258,7 +20253,6 @@ exports.insertAt = exports.upsertAt;
 function hasOwnProperty(k, r) {
     return _.has.call(r === undefined ? this : r, k);
 }
-exports.hasOwnProperty = hasOwnProperty;
 /**
  * This instance is deprecated, use small, specific instances instead.
  * For example if a function needs a `Functor` instance, pass `RR.Functor` instead of `RR.readonlyRecord`
@@ -20338,8 +20332,26 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getShow = exports.URI = exports.separate = exports.compact = exports.reduceRight = exports.foldMap = exports.reduce = exports.partitionMap = exports.partition = exports.filterMap = exports.filter = exports.difference = exports.intersection = exports.union = exports.elem = exports.some = exports.every = exports.fromFoldableMap = exports.fromEntries = exports.toEntries = exports.fromFoldable = exports.filterWithIndex = exports.filterMapWithIndex = exports.partitionWithIndex = exports.partitionMapWithIndex = exports.wilt = exports.wither = exports.sequence = exports.traverse = exports.traverseWithIndex = exports.singleton = exports.reduceRightWithIndex = exports.foldMapWithIndex = exports.reduceWithIndex = exports.map = exports.mapWithIndex = exports.lookup = exports.isSubrecord = exports.pop = exports.modifyAt = exports.updateAt = exports.deleteAt = exports.has = exports.upsertAt = exports.toUnfoldable = exports.toArray = exports.collect = exports.keys = exports.isEmpty = exports.size = void 0;
-exports.record = exports.hasOwnProperty = exports.insertAt = exports.empty = exports.Witherable = exports.TraversableWithIndex = exports.Traversable = exports.FoldableWithIndex = exports.Foldable = exports.getDifferenceMagma = exports.getIntersectionSemigroup = exports.getUnionMonoid = exports.getUnionSemigroup = exports.getWitherable = exports.getTraversableWithIndex = exports.getTraversable = exports.FilterableWithIndex = exports.Filterable = exports.Compactable = exports.getFoldableWithIndex = exports.getFoldable = exports.FunctorWithIndex = exports.flap = exports.Functor = exports.getMonoid = exports.getEq = void 0;
+exports.Foldable = exports.getDifferenceMagma = exports.getIntersectionSemigroup = exports.getUnionMonoid = exports.getUnionSemigroup = exports.getWitherable = exports.getTraversableWithIndex = exports.getTraversable = exports.FilterableWithIndex = exports.Filterable = exports.Compactable = exports.getFoldableWithIndex = exports.getFoldable = exports.FunctorWithIndex = exports.flap = exports.Functor = exports.getMonoid = exports.getEq = exports.URI = exports.separate = exports.compact = exports.partitionMap = exports.partition = exports.filterMap = exports.filter = exports.difference = exports.intersection = exports.union = exports.elem = exports.some = exports.every = exports.fromEntries = exports.toEntries = exports.filterMapWithIndex = exports.partitionMapWithIndex = exports.wilt = exports.wither = exports.singleton = exports.map = exports.mapWithIndex = exports.lookup = exports.isSubrecord = exports.modifyAt = exports.updateAt = exports.has = exports.upsertAt = exports.toArray = exports.keys = exports.isEmpty = exports.size = void 0;
+exports.record = exports.hasOwnProperty = exports.insertAt = exports.empty = exports.Witherable = exports.TraversableWithIndex = exports.Traversable = exports.FoldableWithIndex = void 0;
+exports.collect = collect;
+exports.toUnfoldable = toUnfoldable;
+exports.deleteAt = deleteAt;
+exports.pop = pop;
+exports.reduceWithIndex = reduceWithIndex;
+exports.foldMapWithIndex = foldMapWithIndex;
+exports.reduceRightWithIndex = reduceRightWithIndex;
+exports.traverseWithIndex = traverseWithIndex;
+exports.traverse = traverse;
+exports.sequence = sequence;
+exports.partitionWithIndex = partitionWithIndex;
+exports.filterWithIndex = filterWithIndex;
+exports.fromFoldable = fromFoldable;
+exports.fromFoldableMap = fromFoldableMap;
+exports.reduce = reduce;
+exports.foldMap = foldMap;
+exports.reduceRight = reduceRight;
+exports.getShow = getShow;
 var A = __importStar(__nccwpck_require__(3834));
 var function_1 = __nccwpck_require__(6985);
 var Functor_1 = __nccwpck_require__(5533);
@@ -20406,7 +20418,6 @@ function collect(O) {
         };
     };
 }
-exports.collect = collect;
 /**
  * Get a sorted `Array` of the key/value pairs contained in a `Record`.
  * Sorted alphabetically by key.
@@ -20435,7 +20446,6 @@ function toUnfoldable(U) {
         return U.unfold(0, function (b) { return (b < len ? _.some([sas[b], b + 1]) : _.none); });
     };
 }
-exports.toUnfoldable = toUnfoldable;
 /**
  * Insert or replace a key/value pair in a `Record`.
  *
@@ -20472,7 +20482,6 @@ function deleteAt(k) {
         return out;
     };
 }
-exports.deleteAt = deleteAt;
 /**
  * Replace a key/value pair in a `Record`.
  *
@@ -20525,7 +20534,6 @@ function pop(k) {
         return _.isNone(oa) ? _.none : _.some([oa.value, deleteAtk(r)]);
     };
 }
-exports.pop = pop;
 // TODO: remove non-curried overloading in v3
 /**
  * Test whether one `Record` contains all of the keys and values
@@ -20604,11 +20612,9 @@ function reduceWithIndex() {
     }
     return args.length === 1 ? RR.reduceWithIndex(args[0]) : RR.reduceWithIndex(S.Ord).apply(void 0, args);
 }
-exports.reduceWithIndex = reduceWithIndex;
 function foldMapWithIndex(O) {
     return 'compare' in O ? RR.foldMapWithIndex(O) : RR.foldMapWithIndex(S.Ord)(O);
 }
-exports.foldMapWithIndex = foldMapWithIndex;
 function reduceRightWithIndex() {
     var args = [];
     for (var _i = 0; _i < arguments.length; _i++) {
@@ -20616,7 +20622,6 @@ function reduceRightWithIndex() {
     }
     return args.length === 1 ? RR.reduceRightWithIndex(args[0]) : RR.reduceRightWithIndex(S.Ord).apply(void 0, args);
 }
-exports.reduceRightWithIndex = reduceRightWithIndex;
 /**
  * Create a `Record` with one key/value pair.
  *
@@ -20631,15 +20636,12 @@ exports.singleton = RR.singleton;
 function traverseWithIndex(F) {
     return RR.traverseWithIndex(F);
 }
-exports.traverseWithIndex = traverseWithIndex;
 function traverse(F) {
     return RR.traverse(F);
 }
-exports.traverse = traverse;
 function sequence(F) {
     return RR.sequence(F);
 }
-exports.sequence = sequence;
 /**
  * @category filtering
  * @since 2.6.5
@@ -20684,7 +20686,6 @@ exports.partitionMapWithIndex = RR.partitionMapWithIndex;
 function partitionWithIndex(predicateWithIndex) {
     return RR.partitionWithIndex(predicateWithIndex);
 }
-exports.partitionWithIndex = partitionWithIndex;
 /**
  * Maps a `Record` with an iterating function that takes key and value and
  * returns an `Option`, keeping only the `Some` values and discarding `None`s.
@@ -20705,11 +20706,9 @@ exports.filterMapWithIndex = RR.filterMapWithIndex;
 function filterWithIndex(predicateWithIndex) {
     return RR.filterWithIndex(predicateWithIndex);
 }
-exports.filterWithIndex = filterWithIndex;
 function fromFoldable(M, F) {
     return RR.fromFoldable(M, F);
 }
-exports.fromFoldable = fromFoldable;
 /**
  * Alias of [`toArray`](#toArray).
  *
@@ -20738,7 +20737,6 @@ exports.fromEntries = fromEntries;
 function fromFoldableMap(M, F) {
     return RR.fromFoldableMap(M, F);
 }
-exports.fromFoldableMap = fromFoldableMap;
 /**
  * Test if every value in a `Record` satisfies the predicate.
  *
@@ -20990,11 +20988,9 @@ function reduce() {
     }
     return args.length === 1 ? RR.reduce(args[0]) : RR.reduce(S.Ord).apply(void 0, args);
 }
-exports.reduce = reduce;
 function foldMap(O) {
     return 'compare' in O ? RR.foldMap(O) : RR.foldMap(S.Ord)(O);
 }
-exports.foldMap = foldMap;
 function reduceRight() {
     var args = [];
     for (var _i = 0; _i < arguments.length; _i++) {
@@ -21002,7 +20998,6 @@ function reduceRight() {
     }
     return args.length === 1 ? RR.reduceRight(args[0]) : RR.reduceRight(S.Ord).apply(void 0, args);
 }
-exports.reduceRight = reduceRight;
 /**
  * Compact a `Record` of `Option`s discarding the `None` values and
  * keeping the `Some` values.
@@ -21052,7 +21047,6 @@ exports.URI = 'Record';
 function getShow(O) {
     return 'compare' in O ? RR.getShow(O) : RR.getShow(S.Ord)(O);
 }
-exports.getShow = getShow;
 /**
  * Given an `Eq` for the base type, it produces an `Eq`
  * for a `Record` of that base type.
@@ -21536,7 +21530,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.semigroupProduct = exports.semigroupSum = exports.semigroupString = exports.getFunctionSemigroup = exports.semigroupAny = exports.semigroupAll = exports.fold = exports.getIntercalateSemigroup = exports.getMeetSemigroup = exports.getJoinSemigroup = exports.getDualSemigroup = exports.getStructSemigroup = exports.getTupleSemigroup = exports.getFirstSemigroup = exports.getLastSemigroup = exports.getObjectSemigroup = exports.semigroupVoid = exports.concatAll = exports.last = exports.first = exports.intercalate = exports.tuple = exports.struct = exports.reverse = exports.constant = exports.max = exports.min = void 0;
+exports.semigroupProduct = exports.semigroupSum = exports.semigroupString = exports.getFunctionSemigroup = exports.semigroupAny = exports.semigroupAll = exports.getIntercalateSemigroup = exports.getMeetSemigroup = exports.getJoinSemigroup = exports.getDualSemigroup = exports.getStructSemigroup = exports.getTupleSemigroup = exports.getFirstSemigroup = exports.getLastSemigroup = exports.getObjectSemigroup = exports.semigroupVoid = exports.concatAll = exports.last = exports.first = exports.intercalate = exports.tuple = exports.struct = exports.reverse = exports.constant = exports.max = exports.min = void 0;
+exports.fold = fold;
 /**
  * If a type `A` can form a `Semigroup` it has an **associative** binary operation.
  *
@@ -21861,7 +21856,6 @@ function fold(S) {
     var concatAllS = (0, exports.concatAll)(S);
     return function (startWith, as) { return (as === undefined ? concatAllS(startWith) : concatAllS(startWith)(as)); };
 }
-exports.fold = fold;
 /**
  * Use [`SemigroupAll`](./boolean.ts.html#SemigroupAll) instead.
  *
@@ -22067,7 +22061,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.filterE = exports.witherDefault = exports.wiltDefault = void 0;
+exports.wiltDefault = wiltDefault;
+exports.witherDefault = witherDefault;
+exports.filterE = filterE;
 var _ = __importStar(__nccwpck_require__(1840));
 function wiltDefault(T, C) {
     return function (F) {
@@ -22075,21 +22071,18 @@ function wiltDefault(T, C) {
         return function (wa, f) { return F.map(traverseF(wa, f), C.separate); };
     };
 }
-exports.wiltDefault = wiltDefault;
 function witherDefault(T, C) {
     return function (F) {
         var traverseF = T.traverse(F);
         return function (wa, f) { return F.map(traverseF(wa, f), C.compact); };
     };
 }
-exports.witherDefault = witherDefault;
 function filterE(W) {
     return function (F) {
         var witherF = W.wither(F);
         return function (predicate) { return function (ga) { return witherF(ga, function (a) { return F.map(predicate(a), function (b) { return (b ? _.some(a) : _.none); }); }); }; };
     };
 }
-exports.filterE = filterE;
 
 
 /***/ }),
@@ -22100,11 +22093,10 @@ exports.filterE = filterE;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.guard = void 0;
+exports.guard = guard;
 function guard(F, P) {
     return function (b) { return (b ? P.of(undefined) : F.zero()); };
 }
-exports.guard = guard;
 
 
 /***/ }),
@@ -22124,7 +22116,19 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.dual = exports.getEndomorphismMonoid = exports.not = exports.SK = exports.hole = exports.pipe = exports.untupled = exports.tupled = exports.absurd = exports.decrement = exports.increment = exports.tuple = exports.flow = exports.flip = exports.constVoid = exports.constUndefined = exports.constNull = exports.constFalse = exports.constTrue = exports.constant = exports.unsafeCoerce = exports.identity = exports.apply = exports.getRing = exports.getSemiring = exports.getMonoid = exports.getSemigroup = exports.getBooleanAlgebra = void 0;
+exports.dual = exports.getEndomorphismMonoid = exports.SK = exports.hole = exports.constVoid = exports.constUndefined = exports.constNull = exports.constFalse = exports.constTrue = exports.unsafeCoerce = exports.apply = exports.getRing = exports.getSemiring = exports.getMonoid = exports.getSemigroup = exports.getBooleanAlgebra = void 0;
+exports.identity = identity;
+exports.constant = constant;
+exports.flip = flip;
+exports.flow = flow;
+exports.tuple = tuple;
+exports.increment = increment;
+exports.decrement = decrement;
+exports.absurd = absurd;
+exports.tupled = tupled;
+exports.untupled = untupled;
+exports.pipe = pipe;
+exports.not = not;
 // -------------------------------------------------------------------------------------
 // instances
 // -------------------------------------------------------------------------------------
@@ -22248,7 +22252,6 @@ exports.apply = apply;
 function identity(a) {
     return a;
 }
-exports.identity = identity;
 /**
  * @since 2.0.0
  */
@@ -22259,7 +22262,6 @@ exports.unsafeCoerce = identity;
 function constant(a) {
     return function () { return a; };
 }
-exports.constant = constant;
 /**
  * A thunk that returns always `true`.
  *
@@ -22302,7 +22304,6 @@ function flip(f) {
         return function (a) { return f(a)(args[0]); };
     };
 }
-exports.flip = flip;
 function flow(ab, bc, cd, de, ef, fg, gh, hi, ij) {
     switch (arguments.length) {
         case 1:
@@ -22342,7 +22343,6 @@ function flow(ab, bc, cd, de, ef, fg, gh, hi, ij) {
     }
     return;
 }
-exports.flow = flow;
 /**
  * @since 2.0.0
  */
@@ -22353,28 +22353,24 @@ function tuple() {
     }
     return t;
 }
-exports.tuple = tuple;
 /**
  * @since 2.0.0
  */
 function increment(n) {
     return n + 1;
 }
-exports.increment = increment;
 /**
  * @since 2.0.0
  */
 function decrement(n) {
     return n - 1;
 }
-exports.decrement = decrement;
 /**
  * @since 2.0.0
  */
 function absurd(_) {
     throw new Error('Called `absurd` function which should be uncallable');
 }
-exports.absurd = absurd;
 /**
  * Creates a tupled version of this function: instead of `n` arguments, it accepts a single tuple argument.
  *
@@ -22390,7 +22386,6 @@ exports.absurd = absurd;
 function tupled(f) {
     return function (a) { return f.apply(void 0, a); };
 }
-exports.tupled = tupled;
 /**
  * Inverse function of `tupled`
  *
@@ -22405,7 +22400,6 @@ function untupled(f) {
         return f(a);
     };
 }
-exports.untupled = untupled;
 function pipe(a, ab, bc, cd, de, ef, fg, gh, hi) {
     switch (arguments.length) {
         case 1:
@@ -22435,7 +22429,6 @@ function pipe(a, ab, bc, cd, de, ef, fg, gh, hi) {
         }
     }
 }
-exports.pipe = pipe;
 /**
  * Type hole simulation
  *
@@ -22457,7 +22450,6 @@ exports.SK = SK;
 function not(predicate) {
     return function (a) { return !predicate(a); };
 }
-exports.not = not;
 /**
  * Use `Endomorphism` module instead.
  *
@@ -22781,116 +22773,117 @@ exports.Field = {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.pipe = exports.pipeable = exports.compose = exports.promap = exports.partitionMapWithIndex = exports.partitionWithIndex = exports.filterMapWithIndex = exports.filterWithIndex = exports.partitionMap = exports.partition = exports.filterMap = exports.filter = exports.alt = exports.reduceRightWithIndex = exports.foldMapWithIndex = exports.reduceWithIndex = exports.reduceRight = exports.foldMap = exports.reduce = exports.extend = exports.mapLeft = exports.bimap = exports.chain = exports.ap = exports.mapWithIndex = exports.contramap = exports.map = void 0;
+exports.pipe = void 0;
+exports.map = map;
+exports.contramap = contramap;
+exports.mapWithIndex = mapWithIndex;
+exports.ap = ap;
+exports.chain = chain;
+exports.bimap = bimap;
+exports.mapLeft = mapLeft;
+exports.extend = extend;
+exports.reduce = reduce;
+exports.foldMap = foldMap;
+exports.reduceRight = reduceRight;
+exports.reduceWithIndex = reduceWithIndex;
+exports.foldMapWithIndex = foldMapWithIndex;
+exports.reduceRightWithIndex = reduceRightWithIndex;
+exports.alt = alt;
+exports.filter = filter;
+exports.filterMap = filterMap;
+exports.partition = partition;
+exports.partitionMap = partitionMap;
+exports.filterWithIndex = filterWithIndex;
+exports.filterMapWithIndex = filterMapWithIndex;
+exports.partitionWithIndex = partitionWithIndex;
+exports.partitionMapWithIndex = partitionMapWithIndex;
+exports.promap = promap;
+exports.compose = compose;
+exports.pipeable = pipeable;
 var Apply_1 = __nccwpck_require__(205);
 var Chain_1 = __nccwpck_require__(2372);
 var function_1 = __nccwpck_require__(6985);
 function map(F) {
     return function (f) { return function (fa) { return F.map(fa, f); }; };
 }
-exports.map = map;
 function contramap(F) {
     return function (f) { return function (fa) { return F.contramap(fa, f); }; };
 }
-exports.contramap = contramap;
 function mapWithIndex(F) {
     return function (f) { return function (fa) { return F.mapWithIndex(fa, f); }; };
 }
-exports.mapWithIndex = mapWithIndex;
 function ap(F) {
     return function (fa) { return function (fab) { return F.ap(fab, fa); }; };
 }
-exports.ap = ap;
 function chain(F) {
     return function (f) { return function (fa) { return F.chain(fa, f); }; };
 }
-exports.chain = chain;
 function bimap(F) {
     return function (f, g) { return function (fea) { return F.bimap(fea, f, g); }; };
 }
-exports.bimap = bimap;
 function mapLeft(F) {
     return function (f) { return function (fea) { return F.mapLeft(fea, f); }; };
 }
-exports.mapLeft = mapLeft;
 function extend(F) {
     return function (f) { return function (wa) { return F.extend(wa, f); }; };
 }
-exports.extend = extend;
 function reduce(F) {
     return function (b, f) { return function (fa) { return F.reduce(fa, b, f); }; };
 }
-exports.reduce = reduce;
 function foldMap(F) {
     return function (M) {
         var foldMapM = F.foldMap(M);
         return function (f) { return function (fa) { return foldMapM(fa, f); }; };
     };
 }
-exports.foldMap = foldMap;
 function reduceRight(F) {
     return function (b, f) { return function (fa) { return F.reduceRight(fa, b, f); }; };
 }
-exports.reduceRight = reduceRight;
 function reduceWithIndex(F) {
     return function (b, f) { return function (fa) { return F.reduceWithIndex(fa, b, f); }; };
 }
-exports.reduceWithIndex = reduceWithIndex;
 function foldMapWithIndex(F) {
     return function (M) {
         var foldMapWithIndexM = F.foldMapWithIndex(M);
         return function (f) { return function (fa) { return foldMapWithIndexM(fa, f); }; };
     };
 }
-exports.foldMapWithIndex = foldMapWithIndex;
 function reduceRightWithIndex(F) {
     return function (b, f) { return function (fa) { return F.reduceRightWithIndex(fa, b, f); }; };
 }
-exports.reduceRightWithIndex = reduceRightWithIndex;
 function alt(F) {
     return function (that) { return function (fa) { return F.alt(fa, that); }; };
 }
-exports.alt = alt;
 function filter(F) {
     return function (predicate) { return function (fa) { return F.filter(fa, predicate); }; };
 }
-exports.filter = filter;
 function filterMap(F) {
     return function (f) { return function (fa) { return F.filterMap(fa, f); }; };
 }
-exports.filterMap = filterMap;
 function partition(F) {
     return function (f) { return function (fa) { return F.partition(fa, f); }; };
 }
-exports.partition = partition;
 function partitionMap(F) {
     return function (f) { return function (fa) { return F.partitionMap(fa, f); }; };
 }
-exports.partitionMap = partitionMap;
 function filterWithIndex(F) {
     return function (predicate) { return function (fa) { return F.filterWithIndex(fa, predicate); }; };
 }
-exports.filterWithIndex = filterWithIndex;
 function filterMapWithIndex(F) {
     return function (f) { return function (fa) { return F.filterMapWithIndex(fa, f); }; };
 }
-exports.filterMapWithIndex = filterMapWithIndex;
 function partitionWithIndex(F) {
     return function (f) { return function (fa) { return F.partitionWithIndex(fa, f); }; };
 }
-exports.partitionWithIndex = partitionWithIndex;
 function partitionMapWithIndex(F) {
     return function (f) { return function (fa) { return F.partitionMapWithIndex(fa, f); }; };
 }
-exports.partitionMapWithIndex = partitionMapWithIndex;
 function promap(F) {
     return function (f, g) { return function (fbc) { return F.promap(fbc, f, g); }; };
 }
-exports.promap = promap;
 function compose(F) {
     return function (ea) { return function (ab) { return F.compose(ab, ea); }; };
 }
-exports.compose = compose;
 var isFunctor = function (I) { return typeof I.map === 'function'; };
 var isContravariant = function (I) { return typeof I.contramap === 'function'; };
 var isFunctorWithIndex = function (I) { return typeof I.mapWithIndex === 'function'; };
@@ -22998,7 +22991,6 @@ function pipeable(I) {
     }
     return r;
 }
-exports.pipeable = pipeable;
 /**
  * Use [`pipe`](https://gcanti.github.io/fp-ts/modules/function.ts.html#pipe) from `function` module instead.
  *
@@ -72873,10 +72865,11 @@ class Minimatch {
         for (let i = 0; i < globParts.length - 1; i++) {
             for (let j = i + 1; j < globParts.length; j++) {
                 const matched = this.partsMatch(globParts[i], globParts[j], !this.preserveMultipleSlashes);
-                if (!matched)
-                    continue;
-                globParts[i] = matched;
-                globParts[j] = [];
+                if (matched) {
+                    globParts[i] = [];
+                    globParts[j] = matched;
+                    break;
+                }
             }
         }
         return globParts.filter(gs => gs.length);
