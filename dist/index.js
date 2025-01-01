@@ -25303,6 +25303,9 @@ function isUnionC(codec) {
 function isRecursiveC(codec) {
     return codec._tag === 'RecursiveType';
 }
+function isReadonlyC(codec) {
+    return codec._tag === 'ReadonlyType';
+}
 var lazyCodecs = [];
 /**
  * @internal
@@ -25325,7 +25328,7 @@ function getTags(codec) {
         }
         return index;
     }
-    else if (isExactC(codec) || isRefinementC(codec)) {
+    else if (isExactC(codec) || isRefinementC(codec) || isReadonlyC(codec)) {
         return getTags(codec.type);
     }
     else if (isIntersectionC(codec)) {
