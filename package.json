@@ -24,7 +24,7 @@
     "io-ts": "^2.2.22",
     "io-ts-reporters": "^2.0.1",
     "js-yaml": "^4.1.0",
-    "lodash": "^4.17.21",
+    "lodash": "^4.17.23",
     "minimatch": "^9.0.5"
   },
   "devDependencies": {
