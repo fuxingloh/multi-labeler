@@ -69,7 +69,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # follows semantic versioning. Lock to different version: v1, v1.5, v1.5.0 or use a commit hash.
-      - uses: fuxingloh/multi-labeler@v4 # v4
+      - uses: fuxingloh/multi-labeler@v5 # v5
         with:
           github-token: ${{secrets.GITHUB_TOKEN}} # optional, default to '${{ github.token }}'
           config-path: .github/labeler.yml # optional, default to '.github/labeler.yml'
@@ -139,7 +139,7 @@ jobs:
     name: Labeler
     runs-on: ubuntu-latest
     steps:
-      - uses: fuxingloh/multi-labeler@v4
+      - uses: fuxingloh/multi-labeler@v5
 ```
 
 #### `.github/labeler.yml`
@@ -200,7 +200,7 @@ jobs:
     name: Labeler
     runs-on: ubuntu-latest
     steps:
-      - uses: fuxingloh/multi-labeler@v4
+      - uses: fuxingloh/multi-labeler@v5
 ```
 
 #### `.github/labeler.yml`
@@ -243,7 +243,7 @@ jobs:
     name: Labeler
     runs-on: ubuntu-latest
     steps:
-      - uses: fuxingloh/multi-labeler@v4
+      - uses: fuxingloh/multi-labeler@v5
 ```
 
 #### `.github/labeler.yml`
@@ -274,7 +274,7 @@ jobs:
     name: Labeler
     runs-on: ubuntu-latest
     steps:
-      - uses: fuxingloh/multi-labeler@v4
+      - uses: fuxingloh/multi-labeler@v5
 ```
 
 #### `.github/labeler.yml`
